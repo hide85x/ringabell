@@ -29,6 +29,12 @@ Always use `formatDate()` and `nowUtc()` from `@utils/date.ts`. Never use `new D
 
 Never run `git push` — the user handles all pushes manually.
 
+## Cloudflare access boundary
+
+Agent may run: `wrangler whoami`, `wrangler pages deployment list`, `wrangler pages deployment tail`, `wrangler pages secret list`, `wrangler deploy` (staging/preview only).
+
+Never run without explicit user approval: deleting a project, rotating secrets, changing DNS, any `wrangler delete` or destructive operation. User performs these manually in the Cloudflare dashboard.
+
 ## Known gaps (to add)
 
 - No test runner configured yet
