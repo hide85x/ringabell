@@ -28,6 +28,28 @@ Nuxt 4 minimal scaffold (NuxtWelcome page) — no application logic yet. Goal: v
 - `package.json` — renamed from `bootstrap-scaffold` to `ringabell`
 - `.env.example` — created with MongoDB, OAuth, Resend placeholders
 
+### Manual accounts & services required
+
+| Service | Status | When needed |
+|---|---|---|
+| Cloudflare (account + wrangler login) | ✅ done | Deploy |
+| GitHub repo (hide85x/ringabell) | ✅ done | Source control |
+| Cloudflare Pages ↔ GitHub connection | ⬜ optional | Auto-deploy on push |
+| MongoDB Atlas (free M0 cluster) | ⬜ pending | When implementing data layer |
+| Resend (or MailChannels) | ⬜ pending | When implementing email (STWÓRZ GALĘ) |
+| OAuth provider app (GitHub or Google) | ⬜ pending | When implementing login |
+
+### Secrets to configure
+
+All secrets go into Cloudflare Pages → Settings → Environment variables (Production). Never commit to repo.
+
+| Variable | Value source | When needed |
+|---|---|---|
+| `MONGODB_URI` | MongoDB Atlas → Connect → connection string | When adding mongoose |
+| `NUXT_OAUTH_GITHUB_CLIENT_ID` | GitHub → Settings → OAuth Apps | When implementing auth |
+| `NUXT_OAUTH_GITHUB_CLIENT_SECRET` | GitHub → Settings → OAuth Apps | When implementing auth |
+| `RESEND_API_KEY` | resend.com → API Keys | When implementing email |
+
 ### Next steps
 
 - Wire GitHub → Cloudflare Pages for auto-deploy on push
