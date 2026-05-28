@@ -70,11 +70,11 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 - **Unlocks:** F-02 (model User potrzebny do powiązania z encjami), S-01, S-02, S-03, S-04, S-05, S-06 — każdy slice wymaga zalogowanego użytkownika z rolą
 - **Prerequisites:** —
 - **Parallel with:** —
-- **Blockers:** OAuth provider app credentials (GitHub lub Google) — wymaga ręcznego utworzenia OAuth App i wpisania secrets do Cloudflare Pages dashboard przed pierwszym deployem auth
+- **Blockers:** —
 - **Unknowns:**
-  - Czy nuxt-auth-utils sesje działają poprawnie na Cloudflare Workers (Web Crypto vs Node.js crypto)? — Owner: dev. Block: yes. Weryfikacja smoke-testem po instalacji przed przejściem do F-02.
+  - ~~Czy nuxt-auth-utils sesje działają poprawnie na Cloudflare Workers (Web Crypto vs Node.js crypto)?~~ — Zweryfikowane smoke-testem 2026-05-28. Google OAuth + sesje działają na Workers. NUXT_SESSION_PASSWORD wymagany w Cloudflare Pages env vars.
 - **Risk:** Pierwsze wdrożenie auth na Workers może wymagać debugowania Web Crypto — zablokuje cały downstream. Najważniejsza weryfikacja całego projektu.
-- **Status:** blocked
+- **Status:** ready
 
 ### F-02: Data scaffold
 
