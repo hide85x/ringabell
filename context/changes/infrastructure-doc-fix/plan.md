@@ -130,10 +130,10 @@ Six text replacements in `context/foundation/infrastructure.md`. All changes are
 
 #### Automated
 
-- [x] 1.1 grep "Cloudflare Pages" returns only Platform Comparison table lines
-- [x] 1.2 grep "wrangler pages" returns no results
+- [x] 1.1 grep "Cloudflare Pages" returns only Platform Comparison table lines — de15481
+- [x] 1.2 grep "wrangler pages" returns no results — de15481
 
 #### Manual
 
-- [x] 1.3 Recommendation, Shortlisted, Anti-Bias, Operational Story read correctly
-- [x] 1.4 Getting Started section (L89–96) is unchanged
+- [x] 1.3 Recommendation, Shortlisted, Anti-Bias, Operational Story read correctly — de15481
+- [x] 1.4 Getting Started section (L89–96) is unchanged — de15481
