@@ -175,8 +175,8 @@ No automated test runner is configured yet. Verification relies on:
 
 #### Automated
 
-- [x] 2.1 `wrangler deploy` exits 0 and outputs a Workers URL
+- [x] 2.1 `wrangler deploy` exits 0 and outputs a Workers URL — 8eda243
 
 #### Manual
 
-- [x] 2.2 `curl https://ringabell.<account>.workers.dev/healthz` returns `{"status":"ok","db":"connected",...}`
+- [x] 2.2 `curl https://ringabell.<account>.workers.dev/healthz` returns `{"status":"ok","db":"connected",...}` — 8eda243
