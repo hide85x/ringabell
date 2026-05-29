@@ -5,6 +5,7 @@
 
     <div v-if="loggedIn">
       <p>Zalogowany: <strong>{{ user?.name }}</strong> ({{ user?.email }})</p>
+      <p>Rola: <strong>{{ user?.role }}</strong></p>
       <button @click="clear()">Wyloguj</button>
     </div>
     <div v-else>
