@@ -198,8 +198,8 @@ No automated test runner is configured for this project yet. Verification relies
 ### Phase 3: /healthz endpoint
 
 #### Automated
-- [x] 3.1 `npm run build` passes after endpoint file is added
+- [x] 3.1 `npm run build` passes after endpoint file is added — b5396b1
 
 #### Manual
-- [x] 3.2 `curl http://localhost:3000/healthz` → `{"status":"ok","db":"connected","timestamp":"..."}` (dev server)
-- [x] 3.3 `curl https://<preview>.pages.dev/healthz` → BLOCKED: MongoDB SCRAM-SHA-1 requires node:crypto which Nitro/unenv polyfills incorrectly on Cloudflare Pages M0. Infrastructure blocker — tracked as separate change `cloudflare-migration`.
+- [x] 3.2 `curl http://localhost:3000/healthz` → `{"status":"ok","db":"connected","timestamp":"..."}` (dev server) — b5396b1
+- [x] 3.3 `curl https://<preview>.pages.dev/healthz` → BLOCKED: MongoDB SCRAM-SHA-1 requires node:crypto which Nitro/unenv polyfills incorrectly on Cloudflare Pages M0. Infrastructure blocker — tracked as separate change `cloudflare-migration`. — b5396b1
