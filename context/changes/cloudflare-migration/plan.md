@@ -164,19 +164,19 @@ No automated test runner is configured yet. Verification relies on:
 
 #### Automated
 
-- [x] 1.1 `npm run build` passes without TypeScript errors or missing-module errors
+- [x] 1.1 `npm run build` passes without TypeScript errors or missing-module errors — 5d30ab3
 
 #### Manual
 
-- [x] 1.2 `npm run dev` starts without errors
-- [x] 1.3 `nuxt.config.ts` uses `cloudflare-module`; `wrangler.toml` has `main`, `[assets]`, `nodejs_compat`; `db.ts` has `checkServerIdentity`
+- [x] 1.2 `npm run dev` starts without errors — 5d30ab3
+- [x] 1.3 `nuxt.config.ts` uses `cloudflare-module`; `wrangler.toml` has `main`, `[assets]`, `nodejs_compat`; `db.ts` has `checkServerIdentity` — 5d30ab3
 
 ### Phase 2: Workers deploy + healthz smoke test
 
 #### Automated
 
-- [ ] 2.1 `wrangler deploy` exits 0 and outputs a Workers URL
+- [x] 2.1 `wrangler deploy` exits 0 and outputs a Workers URL
 
 #### Manual
 
-- [ ] 2.2 `curl https://ringabell.<account>.workers.dev/healthz` returns `{"status":"ok","db":"connected",...}`
+- [x] 2.2 `curl https://ringabell.<account>.workers.dev/healthz` returns `{"status":"ok","db":"connected",...}`
