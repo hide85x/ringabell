@@ -1,7 +1,7 @@
 ---
 project: RingAbell
 researched_at: 2026-05-25
-recommended_platform: Cloudflare Pages + Workers
+recommended_platform: Cloudflare Workers
 runner_up: Render
 context_type: mvp
 tech_stack:
@@ -13,7 +13,7 @@ tech_stack:
 
 ## Recommendation
 
-**Deploy on Cloudflare Pages + Workers.**
+**Deploy on Cloudflare Workers.**
 
 Nuxt/Nitro ships an official Cloudflare adapter (GA) with zero-config wrangler integration. At MVP scale the free tier covers 100k requests/day with no cold-start penalty, `wrangler` CLI is fully agent-operable, and Cloudflare publishes `llms.txt` + per-product markdown — the best agent-readable doc surface of any candidate. MongoDB Atlas is supported via TCP sockets (GA, March 2026); email delivery requires a Workers-compatible SDK (Resend or MailChannels) instead of nodemailer. The decision to remove the persistent-connections requirement (`has_realtime: false`) unlocked Cloudflare as viable; without that change, Railway (native Node.js) would have been the call.
 
@@ -32,7 +32,7 @@ Nuxt/Nitro ships an official Cloudflare adapter (GA) with zero-config wrangler i
 
 ### Shortlisted Platforms
 
-#### 1. Cloudflare Pages + Workers (Recommended)
+#### 1. Cloudflare Workers (Recommended)
 
 Official Nitro adapter (GA), `wrangler` covers deploy/rollback/log tail from CLI, free tier (100k req/day), `llms.txt` and per-product markdown published, official MCP server with OAuth — the best agent-friendly surface. MongoDB Atlas works via TCP sockets (GA March 2026). Email: Resend or MailChannels Workers integration required (nodemailer incompatible with V8 isolates).
 
@@ -44,7 +44,7 @@ Native Node.js (persistent processes, mongoose/nuxt-auth-utils work out of the b
 
 Native Node.js, $5/month Hobby, Docker MongoDB template (closest to co-location), MCP GA, llms.txt. Loses to Cloudflare on cost (no free tier), and to both on agent-readable docs. The EU region is only available on Pro ($20/seat) — a real concern for a Polish user base on Hobby plan.
 
-## Anti-Bias Cross-Check: Cloudflare Pages + Workers
+## Anti-Bias Cross-Check: Cloudflare Workers
 
 ### Devil's Advocate — Weaknesses
 
@@ -69,10 +69,9 @@ The failure path: event publication triggers a server route that loops through a
 
 ## Operational Story
 
-- **Preview deploys**: every `git push` to a non-main branch creates a preview URL via Cloudflare Pages automatic builds. Preview URLs are public by default — protect with Cloudflare Access (Zero Trust) if event data is sensitive. Fork PRs from external contributors do not get preview builds.
-- **Secrets**: env vars and API tokens (MongoDB Atlas URI, OAuth client secret, email API key) live in Cloudflare Pages → Settings → Environment variables. Production secrets are never in `wrangler.toml` committed to the repo. Rotation: update in Pages dashboard, then redeploy.
-- **Rollback**: `wrangler rollback <deployment-id>` restores a previous deployment in ~30 seconds. Database schema changes (if any) do not auto-rollback — handle separately. Pages deployments list: `wrangler pages deployment list`.
-- **Approval**: agent may run `wrangler deploy` (staging/preview), `wrangler tail` (log read), `wrangler pages deployment list`. Deleting a project, rotating the primary API token, or changing DNS records are human-only panel operations.
+- **Secrets**: env vars and API tokens (MongoDB Atlas URI, OAuth client secret, email API key) live in Cloudflare dashboard → Workers & Pages → ringabell → Settings → Variables and Secrets. Production secrets are never in `wrangler.toml` committed to the repo. Rotation: update in Workers dashboard, then redeploy.
+- **Rollback**: `wrangler rollback <deployment-id>` restores a previous deployment in ~30 seconds. Database schema changes (if any) do not auto-rollback — handle separately. Deployments list: `wrangler deployment list`.
+- **Approval**: agent may run `wrangler deploy` (staging/preview), `wrangler tail` (log read), `wrangler deployment list`. Deleting a project, rotating the primary API token, or changing DNS records are human-only panel operations.
 - **Logs**: `wrangler tail --format pretty` streams live request logs. Filter errors: `wrangler tail --status error`. Retention: 7 days on paid plan, 1 day on free.
 
 ## Risk Register
