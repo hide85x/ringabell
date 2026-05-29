@@ -121,8 +121,8 @@ No automated test runner is configured for this project yet. Verification relies
 ### Phase 2: Route protection middleware
 
 #### Automated
-- [x] 2.1 npm run build passes after middleware added
+- [x] 2.1 npm run build passes after middleware added — 9067b2c
 
 #### Manual
-- [x] 2.2 Unauthenticated /admin → redirected to /
-- [x] 2.3 Authenticated user — no redirect on protected routes
+- [x] 2.2 Unauthenticated /admin → redirected to / — 9067b2c
+- [x] 2.3 Authenticated user — no redirect on protected routes — 9067b2c
