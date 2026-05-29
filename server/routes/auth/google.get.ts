@@ -5,6 +5,7 @@ export default defineOAuthGoogleEventHandler({
         email: user.email,
         name: user.name,
         avatar: user.picture,
+        role: 'Personel',
       },
     })
     return sendRedirect(event, '/')
