@@ -61,7 +61,7 @@ Dwie chirurgiczne zmiany: MongoClient dostaje `connectTimeoutMS` + `socketTimeou
 
 **Intent**: Opakować `await db.command({ ping: 1 })` w `Promise.race` z 4000ms timeoutem — chroni przed hangiem gdy Atlas staje się niedostępny po nawiązaniu połączenia.
 
-**Contract**: Linia `await db.command({ ping: 1 })` zastąpiona przez `Promise.race([db.command({ ping: 1 }), timeoutPromise])` — ten sam wzorzec co w db.ts (lokalny `const timeoutPromise`). Odpowiedź route handlera bez zmian: `{status, db, timestamp}` lub `{status, error}` ze statusem 503.
+**Contract**: Linia `await db.command({ ping: 1 })` zastąpiona przez `Promise.race([db.command({ ping: 1 }), timeoutPromise])` — ten sam wzorzec co w db.ts (lokalny `const timeoutPromise`). Odpowiedź route handlera: sukces `{status: 'ok', db: 'connected', timestamp}` lub błąd `{status: 'error', db: 'disconnected'}` ze statusem 503 (bez pola error — credentials safety).
 
 ---
 

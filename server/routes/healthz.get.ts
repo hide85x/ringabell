@@ -10,9 +10,9 @@ export default defineEventHandler(async (event) => {
     )
     await Promise.race([db.command({ ping: 1 }), pingTimeout])
     return { status: 'ok', db: 'connected', timestamp: nowUtc() }
-  } catch (err) {
+  } catch {
     clearDbCache()
     setResponseStatus(event, 503)
-    return { status: 'error', db: 'disconnected', error: String(err) }
+    return { status: 'error', db: 'disconnected' }
   }
 })

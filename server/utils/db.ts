@@ -37,7 +37,13 @@ export async function getDb(config?: { mongodbUri?: string }): Promise<Db> {
     const connectTimeout = new Promise<never>((_, reject) =>
       setTimeout(() => reject(new Error('MongoDB connect timed out after 4000ms')), 4000)
     )
-    await Promise.race([_client.connect(), connectTimeout])
+    try {
+      await Promise.race([_client.connect(), connectTimeout])
+    } catch (e) {
+      await _client.close().catch(() => {})
+      _client = null
+      throw e
+    }
 
     const dbName = new URL(uri).pathname.replace(/^\//, '') || 'ringabell'
     _db = _client.db(dbName)
