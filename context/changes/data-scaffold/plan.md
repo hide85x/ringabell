@@ -179,21 +179,21 @@ No automated test runner is configured for this project yet. Verification relies
 ### Phase 1: Driver installation + Atlas connection
 
 #### Automated
-- [x] 1.1 `npm run build` passes — `mongodb` in `node_modules`, `wrangler.toml` valid, `nuxt.config.ts` compiles cleanly
+- [x] 1.1 `npm run build` passes — `mongodb` in `node_modules`, `wrangler.toml` valid, `nuxt.config.ts` compiles cleanly — 5b1deb2
 
 #### Manual
-- [x] 1.2 `npm run dev` starts without errors
-- [x] 1.3 `MONGODB_URI` is set in `.env`; Phase 3 healthz verifies the connection end-to-end
-- [x] 1.4 `CLAUDE.md` updated — no references to Mongoose or Vercel remain
+- [x] 1.2 `npm run dev` starts without errors — 5b1deb2
+- [x] 1.3 `MONGODB_URI` is set in `.env`; Phase 3 healthz verifies the connection end-to-end — 5b1deb2
+- [x] 1.4 `CLAUDE.md` updated — no references to Mongoose or Vercel remain — 5b1deb2
 
 ### Phase 2: TypeScript model interfaces
 
 #### Automated
-- [ ] 2.1 `npm run build` passes — all five model files compile without TypeScript errors
+- [x] 2.1 `npm run build` passes — all five model files compile without TypeScript errors
 
 #### Manual
-- [ ] 2.2 Each interface has correct fields and optional markers
-- [ ] 2.3 Each file exports its collection name constant
+- [x] 2.2 Each interface has correct fields and optional markers
+- [x] 2.3 Each file exports its collection name constant
 
 ### Phase 3: /healthz endpoint
 
