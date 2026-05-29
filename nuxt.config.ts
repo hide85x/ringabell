@@ -10,7 +10,7 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['nuxt-auth-utils'],
   nitro: {
-    preset: 'cloudflare-pages',
+    preset: 'cloudflare-module',
     // Stub optional MongoDB driver deps that aren't installed and aren't needed
     // for Atlas connections (AWS auth, GCP auth, compression, encryption, SOCKS proxy).
     alias: {

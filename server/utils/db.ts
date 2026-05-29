@@ -16,6 +16,8 @@ export async function getDb(config?: { mongodbUri?: string }): Promise<Db> {
   _client = new MongoClient(uri, {
     maxPoolSize: 1,
     serverSelectionTimeoutMS: 5000,
+    tls: true,
+    checkServerIdentity: () => undefined,
   })
   await _client.connect()
 
