@@ -1,7 +1,7 @@
 ---
 change_id: cloudflare-migration
 title: Migrate from Cloudflare Pages to Workers so MongoDB Atlas can connect
-status: implemented
+status: impl_reviewed
 created: 2026-05-29
 updated: 2026-05-29
 archived_at: null

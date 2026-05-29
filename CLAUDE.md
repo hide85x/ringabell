@@ -19,7 +19,7 @@ Stack decisions: `@context/foundation/tech-stack.md`
 
 ## Stack
 
-MongoDB via native `mongodb` driver (installed, see `server/utils/db.ts`). Auth via `nuxt-auth-utils` (OAuth social login only, no passwords stored). Deploy target: Cloudflare Pages.
+MongoDB via native `mongodb` driver (installed, see `server/utils/db.ts`). Auth via `nuxt-auth-utils` (OAuth social login only, no passwords stored). Deploy target: Cloudflare Workers.
 
 ## Date handling
 

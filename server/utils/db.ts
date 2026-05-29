@@ -17,6 +17,7 @@ export async function getDb(config?: { mongodbUri?: string }): Promise<Db> {
     maxPoolSize: 1,
     serverSelectionTimeoutMS: 5000,
     tls: true,
+    // Workers TLS stack does not expose hostname verification hook; required for MongoDB Atlas on Cloudflare Workers.
     checkServerIdentity: () => undefined,
   })
   await _client.connect()

@@ -90,10 +90,10 @@ The failure path: event publication triggers a server route that loops through a
 
 1. **Install wrangler**: `npm install -g wrangler` (requires Node >= 18; use `nvm use 20`)
 2. **Authenticate**: `npx wrangler login` — opens browser OAuth with Cloudflare account
-3. **Verify Nuxt Cloudflare adapter**: confirm `nitro.preset` in `nuxt.config.ts` is set to `'cloudflare-pages'`
-4. **Add `wrangler.toml`**: create at repo root with `name = "ringabell"`, `compatibility_date = "2026-05-25"`, `pages_build_output_dir = ".output/public"`
-5. **First deploy**: `npm run build && npx wrangler pages deploy .output/public --project-name ringabell`
-6. **Wire env vars**: add `MONGODB_URI`, OAuth client secret, and email API key in Cloudflare Pages dashboard → Environment variables → Production
+3. **Verify Nuxt Cloudflare adapter**: confirm `nitro.preset` in `nuxt.config.ts` is set to `'cloudflare-module'`
+4. **Add `wrangler.toml`**: create at repo root with `name = "ringabell"`, `main = ".output/server/index.mjs"`, `compatibility_date = "2026-05-25"`, `compatibility_flags = ["nodejs_compat"]`, and `[assets]` section with `directory = ".output/public/"` and `binding = "ASSETS"`
+5. **First deploy**: `npm run build && npx wrangler deploy`
+6. **Wire env vars**: add `MONGODB_URI`, OAuth client secret, and email API key in Cloudflare dashboard → Workers & Pages → ringabell → Settings → Variables and Secrets
 
 ## Out of Scope
 
