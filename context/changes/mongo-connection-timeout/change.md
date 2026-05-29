@@ -1,7 +1,7 @@
 ---
 change_id: mongo-connection-timeout
 title: Fix MongoDB connection hang on Workers — serverSelectionTimeoutMS doesn't interrupt V8 isolate network ops
-status: implementing
+status: implemented
 created: 2026-05-29
 updated: 2026-05-29
 archived_at: null

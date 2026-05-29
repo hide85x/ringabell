@@ -106,9 +106,9 @@ Dwie chirurgiczne zmiany: MongoClient dostaje `connectTimeoutMS` + `socketTimeou
 
 #### Automated
 
-- [x] 1.1 npm run build przechodzi bez błędów TypeScript
+- [x] 1.1 npm run build przechodzi bez błędów TypeScript — 9d40032
 
 #### Manual
 
-- [x] 1.2 /healthz nie rzuca error 1101 przy kilkukrotnym odświeżeniu
-- [x] 1.3 /healthz zwraca 503 w maks ~4.1s gdy MongoDB URI jest nieprawidłowy
+- [x] 1.2 /healthz nie rzuca error 1101 przy kilkukrotnym odświeżeniu — 9d40032
+- [x] 1.3 /healthz zwraca 503 w maks ~4.1s gdy MongoDB URI jest nieprawidłowy — 9d40032
