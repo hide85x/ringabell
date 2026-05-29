@@ -189,17 +189,17 @@ No automated test runner is configured for this project yet. Verification relies
 ### Phase 2: TypeScript model interfaces
 
 #### Automated
-- [x] 2.1 `npm run build` passes — all five model files compile without TypeScript errors
+- [x] 2.1 `npm run build` passes — all five model files compile without TypeScript errors — d14860b
 
 #### Manual
-- [x] 2.2 Each interface has correct fields and optional markers
-- [x] 2.3 Each file exports its collection name constant
+- [x] 2.2 Each interface has correct fields and optional markers — d14860b
+- [x] 2.3 Each file exports its collection name constant — d14860b
 
 ### Phase 3: /healthz endpoint
 
 #### Automated
-- [ ] 3.1 `npm run build` passes after endpoint file is added
+- [x] 3.1 `npm run build` passes after endpoint file is added
 
 #### Manual
-- [ ] 3.2 `curl http://localhost:3000/healthz` → `{"status":"ok","db":"connected","timestamp":"..."}` (dev server)
-- [ ] 3.3 `curl https://<preview>.pages.dev/healthz` → same response (Cloudflare Pages preview)
+- [x] 3.2 `curl http://localhost:3000/healthz` → `{"status":"ok","db":"connected","timestamp":"..."}` (dev server)
+- [x] 3.3 `curl https://<preview>.pages.dev/healthz` → BLOCKED: MongoDB SCRAM-SHA-1 requires node:crypto which Nitro/unenv polyfills incorrectly on Cloudflare Pages M0. Infrastructure blocker — tracked as separate change `cloudflare-migration`.

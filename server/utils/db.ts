@@ -4,7 +4,7 @@ let _client: MongoClient | null = null
 let _db: Db | null = null
 
 export async function getDb(config?: { mongodbUri?: string }): Promise<Db> {
-  if (_db) return _db
+  if (_db && _client) return _db
 
   const uri = config?.mongodbUri || process.env.MONGODB_URI
   if (!uri) {
@@ -13,13 +13,11 @@ export async function getDb(config?: { mongodbUri?: string }): Promise<Db> {
     )
   }
 
-  if (!_client) {
-    _client = new MongoClient(uri, {
-      maxPoolSize: 1,
-      serverSelectionTimeoutMS: 5000,
-    })
-    await _client.connect()
-  }
+  _client = new MongoClient(uri, {
+    maxPoolSize: 1,
+    serverSelectionTimeoutMS: 5000,
+  })
+  await _client.connect()
 
   const dbName = new URL(uri).pathname.replace(/^\//, '') || 'ringabell'
   _db = _client.db(dbName)
