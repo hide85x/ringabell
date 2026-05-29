@@ -113,16 +113,16 @@ No automated test runner is configured for this project yet. Verification relies
 ### Phase 1: Session type + OAuth handler update
 
 #### Automated
-- [x] 1.1 npm run build passes — no TypeScript errors
+- [x] 1.1 npm run build passes — no TypeScript errors — 008cd52
 
 #### Manual
-- [x] 1.2 Session contains role: 'Personel' after Google login
+- [x] 1.2 Session contains role: 'Personel' after Google login — 008cd52
 
 ### Phase 2: Route protection middleware
 
 #### Automated
-- [ ] 2.1 npm run build passes after middleware added
+- [x] 2.1 npm run build passes after middleware added
 
 #### Manual
-- [ ] 2.2 Unauthenticated /admin → redirected to /
-- [ ] 2.3 Authenticated user — no redirect on protected routes
+- [x] 2.2 Unauthenticated /admin → redirected to /
+- [x] 2.3 Authenticated user — no redirect on protected routes
