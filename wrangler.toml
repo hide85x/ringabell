@@ -1,3 +1,4 @@
 name = "ringabell"
 compatibility_date = "2026-05-25"
+compatibility_flags = ["nodejs_compat_v2"]
 pages_build_output_dir = "dist"
