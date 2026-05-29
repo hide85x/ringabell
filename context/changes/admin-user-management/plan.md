@@ -261,25 +261,25 @@ Admin middleware (client) + strona `/admin/users` w Persona 5 stylu: dark backgr
 
 #### Automated
 
-- [x] 1.1 npm run build przechodzi bez błędów TypeScript
+- [x] 1.1 npm run build przechodzi bez błędów TypeScript — b2a5af3
 
 #### Manual
 
-- [x] 1.2 Login przez Google → dokument w MongoDB z role: 'Personel', createdAt
-- [x] 1.3 Role ustawiona na 'Admin' w Atlas → kolejny login → sesja z role: 'Admin'
+- [x] 1.2 Login przez Google → dokument w MongoDB z role: 'Personel', createdAt — b2a5af3
+- [x] 1.3 Role ustawiona na 'Admin' w Atlas → kolejny login → sesja z role: 'Admin' — b2a5af3
 
 ### Phase 2: Server API routes for admin
 
 #### Automated
 
-- [ ] 2.1 npm run build przechodzi bez błędów TypeScript
+- [x] 2.1 npm run build przechodzi bez błędów TypeScript
 
 #### Manual
 
-- [ ] 2.2 GET /api/admin/users → 200 dla Admina, 403 dla non-Admin
-- [ ] 2.3 PATCH /api/admin/users/:id z poprawną rolą → 200, MongoDB zaktualizowane
-- [ ] 2.4 PATCH z nieprawidłową rolą → 400
-- [ ] 2.5 DELETE /api/admin/users/:id → 200, dokument usunięty
+- [x] 2.2 GET /api/admin/users → 200 dla Admina, 403 dla non-Admin
+- [x] 2.3 PATCH /api/admin/users/:id z poprawną rolą → 200, MongoDB zaktualizowane
+- [x] 2.4 PATCH z nieprawidłową rolą → 400
+- [x] 2.5 DELETE /api/admin/users/:id → 200, dokument usunięty
 
 ### Phase 3: Client-side Admin UI
 
