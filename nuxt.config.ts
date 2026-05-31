@@ -25,5 +25,12 @@ export default defineNuxtConfig({
   },
   runtimeConfig: {
     mongodbUri: ''
-  }
+  },
+  auth: {
+    hash: {
+      scrypt: {
+        cost: 4096,
+      },
+    },
+  },
 })

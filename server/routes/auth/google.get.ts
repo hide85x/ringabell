@@ -7,21 +7,23 @@ export default defineOAuthGoogleEventHandler({
     const config = useRuntimeConfig(event)
     const db = await getDb({ mongodbUri: config.mongodbUri })
 
-    const doc = await db.collection<User>(USERS_COLLECTION).findOneAndUpdate(
+    const doc = await db.collection<User>(USERS_COLLECTION).findOne({ email: user.email })
+
+    if (!doc) {
+      return sendRedirect(event, '/?error=unauthorized')
+    }
+
+    await db.collection<User>(USERS_COLLECTION).updateOne(
       { email: user.email },
-      {
-        $setOnInsert: { role: 'Personel' as const, createdAt: new Date(nowUtc()) },
-        $set: { name: user.name, avatar: user.picture },
-      },
-      { upsert: true, returnDocument: 'after' }
+      { $set: { name: user.name, avatar: user.picture } }
     )
 
     await setUserSession(event, {
       user: {
-        email: doc!.email,
-        name: doc!.name,
-        avatar: doc!.avatar,
-        role: doc!.role,
+        email: doc.email,
+        name: user.name,
+        avatar: user.picture,
+        role: doc.role,
       },
     })
     return sendRedirect(event, '/')

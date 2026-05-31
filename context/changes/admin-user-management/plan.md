@@ -20,12 +20,17 @@ Reszta slice'a: trzy API routes za server-side `requireAdmin` guardem, client mi
 
 ## Desired End State
 
-- Każdy login przez Google upsertuje użytkownika w MongoDB; rola ładowana z bazy do sesji.
+- OAuth callback sprawdza czy email istnieje w MongoDB — jeśli nie, odmawia logowania (redirect do `/` z błędem).
+- Admin może dodać użytkownika przez email z poziomu `/admin/users` — opcjonalnie ustawia hasło przy tworzeniu.
+- Po zalogowaniu: name i avatar uzupełniane z Google, rola ładowana z bazy do sesji.
 - `GET /api/admin/users` — lista wszystkich użytkowników (Admin only, 403 dla innych).
+- `POST /api/admin/users` — dodanie nowego użytkownika przez email + opcjonalne hasło (Admin only).
 - `PATCH /api/admin/users/:id` — zmiana roli (Admin only).
 - `DELETE /api/admin/users/:id` — usunięcie użytkownika (Admin only, hard delete).
-- `/admin/users` — strona z tabelą + modalem edycji, niedostępna dla non-Admin.
-- Bootstrap pierwszego Admina: ręczna edycja `role: 'Admin'` w MongoDB Atlas console.
+- `POST /api/auth/login` — logowanie przez email + hasło (credentials), dostępne dla każdego.
+- `/admin/users` — strona z tabelą + modalem edycji + formularzem dodawania, niedostępna dla non-Admin.
+- Strona główna (`/`) — formularz credentials obok przycisku Google; inline error przy złych danych.
+- Bootstrap pierwszego Admina: ręczne wstawienie dokumentu `{ email, role: 'Admin', name: '', avatar: '', createdAt: now }` w MongoDB Atlas console + ustawienie hasła przez POST /api/admin/users albo bezpośrednio w Atlas.
 
 ### Key Discoveries
 
@@ -38,11 +43,14 @@ Reszta slice'a: trzy API routes za server-side `requireAdmin` guardem, client mi
 
 ## What We're NOT Doing
 
-- Brak pre-create kont przez Admina (invite flow) — tylko post-OAuth management.
+- Brak invite emaili (link z tokenem) — Admin dodaje email i opcjonalnie hasło, komunikuje out-of-band.
 - Brak search/filter w tym slice'ie.
 - Brak soft-delete — hard delete (PRD §FR-001 akceptuje lukę w obsadzie przyszłej gali).
 - Brak cascade delete przypisań — osobny slice S-04.
 - Brak ADMIN_EMAIL env var bootstrap — manual Atlas console.
+- Brak admin reset/change hasła dla istniejącego usera — osobna faza w przyszłości.
+- Brak "zmień hasło" dla zalogowanego usera — osobna faza.
+- Brak walidacji siły hasła (min. długość, znaki specjalne) — nie w tym scope.
 
 ## Critical Implementation Details
 
@@ -243,6 +251,231 @@ Admin middleware (client) + strona `/admin/users` w Persona 5 stylu: dark backgr
 
 ---
 
+## Phase 4: Invite flow — Admin dodaje userów, OAuth odrzuca nieznane emaile
+
+### Overview
+
+Zmiana bezpieczeństwa: OAuth callback przestaje akceptować każdy email Google — sprawdza czy email istnieje w MongoDB. Admin dostaje formularz dodawania użytkownika przez email w `/admin/users`.
+
+### Changes Required
+
+#### 1. OAuth callback — check-not-create
+
+**File**: `server/routes/auth/google.get.ts`
+
+**Intent**: Zastąpić upsert logiką: znajdź email w MongoDB, odmów jeśli nie ma.
+
+**Contract**:
+- `findOne({ email: user.email })` zamiast `findOneAndUpdate`
+- Jeśli `doc === null` → `return sendRedirect(event, '/?error=unauthorized')`
+- Jeśli znaleziony → `updateOne({ $set: { name: user.name, avatar: user.picture } })` → `setUserSession` z danymi z doc (role z bazy)
+- Bootstrap: pierwsze konto musi być wstawione ręcznie do Atlas przed pierwszym logowaniem
+
+---
+
+#### 2. POST /api/admin/users — dodaj użytkownika przez email
+
+**File**: `server/api/admin/users/index.post.ts` (nowy plik)
+
+**Contract**:
+- Pierwsza linia: `await requireAdmin(event)`
+- `const { email, role } = await readBody<{ email: string; role: string }>(event)`
+- Walidacja email: podstawowy format (zawiera `@`) — 400 jeśli brak
+- Walidacja role: whitelist `['Admin', 'Manager', 'Personel']` — 400 jeśli nieznana
+- Sprawdź duplikat: `findOne({ email })` → 409 jeśli już istnieje
+- `insertOne({ email, role, name: '', avatar: '', createdAt: new Date(nowUtc()) })`
+- Zwraca `{ ok: true }`
+- Import explicit: `import { nowUtc } from '~~/utils/date'` i `USERS_COLLECTION` z `~~/server/models/user`
+
+---
+
+#### 3. UI — przycisk "DODAJ UŻYTKOWNIKA" + modal invite
+
+**File**: `app/pages/admin/users.vue` (aktualizacja)
+
+**Contract**:
+- Przycisk `[DODAJ UŻYTKOWNIKA]` nad tabelą (styl Persona 5: border white, hover fill)
+- Klik → otwiera modal invite z: pole email (`<input type="email">`), role select (default: Personel), [DODAJ] + [ANULUJ]
+- `$fetch('/api/admin/users', { method: 'POST', body: { email, role } })` → `refresh()` → zamknij modal
+- Obsługa błędu 409: "Ten email już istnieje w systemie"
+- Nowo dodany user pojawia się w tabeli bez imienia i avatara (wypełni się po pierwszym logowaniu)
+
+#### 4. Strona główna — komunikat o błędzie logowania
+
+**File**: `app/pages/index.vue` (aktualizacja)
+
+**Contract**:
+- Odczytaj `?error=unauthorized` z query params (`useRoute().query.error`)
+- Jeśli `error === 'unauthorized'` → wyświetl komunikat: "Twój email nie jest autoryzowany. Skontaktuj się z Administratorem."
+- Komunikat w stylu Persona 5 (czerwone tło, bold)
+
+---
+
+### Success Criteria
+
+#### Automated Verification
+
+- `npm run build` bez błędów TypeScript
+
+#### Manual Verification
+
+- Admin dodaje nowy email przez formularz → pojawia się w tabeli
+- Nowo dodany user loguje się przez Google → sesja ok, name/avatar uzupełnione
+- Nieznany email próbuje się zalogować → redirect do `/?error=unauthorized` z komunikatem
+- Duplikat emaila → 409, formularz pokazuje błąd
+
+---
+
+---
+
+## Phase 5: Credentials backend
+
+### Overview
+
+Fundament credentials auth: konfiguracja scrypt, rozszerzenie modelu User o `passwordHash`, rozszerzenie endpoint invite o opcjonalne hasło, nowy endpoint logowania email+hasło.
+
+### Changes Required
+
+#### 1. Scrypt cost — konfiguracja
+
+**File**: `nuxt.config.ts`
+
+**Intent**: Obniżyć domyślny koszt scrypt z 16384 do 4096, żeby uniknąć CPU timeout na Cloudflare Workers (free tier limit: 50ms).
+
+**Contract**: Dodaj klucz `auth` na tym samym poziomie co `runtimeConfig`:
+```ts
+auth: {
+  hash: {
+    scrypt: {
+      cost: 4096,
+    },
+  },
+},
+```
+
+---
+
+#### 2. User model — passwordHash
+
+**File**: `server/models/user.ts`
+
+**Intent**: Dodać opcjonalne pole `passwordHash` do interfejsu User — przechowuje zahashowane hasło dla credentials login.
+
+**Contract**: Dodaj `passwordHash?: string` do interfejsu `User`. Pole opcjonalne — użytkownicy bez hasła logują się tylko przez OAuth.
+
+---
+
+#### 3. POST /api/admin/users — opcjonalne hasło
+
+**File**: `server/api/admin/users/index.post.ts`
+
+**Intent**: Rozszerzyć endpoint invite o opcjonalne pole `password`. Jeśli podane — zahashuj przez `hashPassword()` i zapisz w dokumencie.
+
+**Contract**:
+- Rozszerz typ body: `readBody<{ email: string; role: string; password?: string }>(event)`
+- Jeśli `password` jest niepustym stringiem: `const passwordHash = await hashPassword(password)`
+- `insertOne` z `passwordHash` jeśli istnieje, bez jeśli nie podano
+- `hashPassword` auto-importowane z nuxt-auth-utils — brak explicit import
+
+---
+
+#### 4. POST /api/auth/login — nowy endpoint
+
+**File**: `server/api/auth/login.post.ts` (nowy plik)
+
+**Intent**: Endpoint credentials login — weryfikuje email + hasło, tworzy sesję identyczną jak po OAuth.
+
+**Contract**:
+- Brak `requireAdmin` — dostępny dla każdego (niezalogowanego)
+- `const { email, password } = await readBody<{ email: string; password: string }>(event)`
+- Walidacja obecności obu pól — 400 jeśli brak
+- `findOne({ email })` — jeśli `doc === null` lub `!doc.passwordHash` → `throw createError({ statusCode: 401, statusMessage: 'Invalid credentials' })`
+- `const valid = await verifyPassword(doc.passwordHash, password)` — jeśli `false` → 401 "Invalid credentials"
+- `await setUserSession(event, { user: { email: doc.email, name: doc.name, avatar: doc.avatar, role: doc.role } })`
+- Zwraca `{ ok: true }` — klient robi `useUserSession().fetch()` po sukcesie
+- Import explicit: `import type { User } from '~~/server/models/user'` i `USERS_COLLECTION` z `~~/server/models/user`
+- `getDb`, `useRuntimeConfig`, `verifyPassword`, `setUserSession`, `createError` — auto-importowane
+
+---
+
+### Success Criteria
+
+#### Automated Verification
+
+- `npm run build` przechodzi bez błędów TypeScript
+
+#### Manual Verification
+
+- `curl -X POST /api/auth/login -d '{"email":"...", "password":"..."}'` z poprawnym email+hasłem → 200 `{ ok: true }`
+- Jak wyżej z złym hasłem → 401
+- Jak wyżej z emailem który nie ma passwordHash → 401
+- `curl -X POST /api/admin/users -d '{"email":"...", "role":"Personel", "password":"test123"}'` → 200, MongoDB zawiera `passwordHash`
+- `curl -X POST /api/admin/users -d '{"email":"...", "role":"Personel"}'` (bez hasła) → 200, MongoDB bez `passwordHash`
+
+---
+
+## Phase 6: Credentials UI
+
+### Overview
+
+Dwa zmiany w UI: pole hasło w invite modal na `/admin/users` + formularz credentials na stronie głównej z inline error handling.
+
+### Changes Required
+
+#### 1. Invite modal — opcjonalne pole hasło
+
+**File**: `app/pages/admin/users.vue`
+
+**Intent**: Dodać opcjonalne pole "HASŁO" do modalu "DODAJ UŻYTKOWNIKA". Pole puste = user może logować się tylko przez Google.
+
+**Contract**:
+- Nowy `ref`: `invitePassword = ref('')`
+- W invite modal body: pole `<input type="password" v-model="invitePassword" class="text-input" placeholder="Opcjonalne">` pod select roli
+- Label: `HASŁO (OPCJONALNE)`
+- W `inviteUser()`: include `password: invitePassword.value || undefined` w body POST
+- Po zamknięciu modalu: `invitePassword.value = ''` (reset)
+- Style: identyczny jak `.text-input` — już zdefiniowany w `<style scoped>`
+
+---
+
+#### 2. Strona główna — formularz credentials
+
+**File**: `app/pages/index.vue`
+
+**Intent**: Dodać formularz email + hasło obok przycisku "Zaloguj przez Google". Inline error przy błędzie, `useUserSession().fetch()` po sukcesie.
+
+**Contract**:
+- Nowe refs: `loginEmail = ref('')`, `loginPassword = ref('')`, `loginError = ref('')`, `loginLoading = ref(false)`
+- Nowa funkcja `async loginCredentials()`:
+  - `loginError.value = ''`, `loginLoading.value = true`
+  - `await $fetch('/api/auth/login', { method: 'POST', body: { email: loginEmail.value, password: loginPassword.value } })`
+  - On success: `await useUserSession().fetch()` — odświeża session state reaktywnie
+  - On error: `loginError.value = 'Nieprawidłowy email lub hasło.'`
+  - `finally`: `loginLoading.value = false`
+- Formularz widoczny tylko jeśli `!loggedIn.value`
+- `<p v-if="loginError" class="error-banner">{{ loginError }}</p>` — pod formularzem
+- Style Persona 5: input `background: #221010`, `border: 2px solid #f20d0d`, `color: white`, `font-family: 'Space Grotesk'`; submit button `background: #f20d0d`, `color: white`, `font-weight: 900`; separacja od Google button wizualnym dividerem "lub"
+
+---
+
+### Success Criteria
+
+#### Automated Verification
+
+- `npm run build` bez błędów TypeScript
+
+#### Manual Verification
+
+- Strona `/` wyświetla formularz email + hasło obok Google button (niezalogowany)
+- Credentials login z poprawnym emailem + hasłem → sesja ok, user widoczny
+- Credentials login z złym hasłem → inline error "Nieprawidłowy email lub hasło." (bez reload strony)
+- Credentials login z emailem bez `passwordHash` → inline error
+- `/admin/users` → modal DODAJ UŻYTKOWNIKA ma pole hasło (opcjonalne)
+- Dodanie usera z hasłem → login przez credentials → sesja ok
+- Dodanie usera bez hasła → login przez Google → sesja ok (invite flow bez zmian)
+
+---
+
 ## References
 
 - PRD: `context/foundation/prd.md` — FR-001, FR-002, Access Control
@@ -272,20 +505,20 @@ Admin middleware (client) + strona `/admin/users` w Persona 5 stylu: dark backgr
 
 #### Automated
 
-- [x] 2.1 npm run build przechodzi bez błędów TypeScript
+- [x] 2.1 npm run build przechodzi bez błędów TypeScript — 695f431
 
 #### Manual
 
-- [x] 2.2 GET /api/admin/users → 200 dla Admina, 403 dla non-Admin
-- [x] 2.3 PATCH /api/admin/users/:id z poprawną rolą → 200, MongoDB zaktualizowane
-- [x] 2.4 PATCH z nieprawidłową rolą → 400
-- [x] 2.5 DELETE /api/admin/users/:id → 200, dokument usunięty
+- [x] 2.2 GET /api/admin/users → 200 dla Admina, 403 dla non-Admin — 695f431
+- [x] 2.3 PATCH /api/admin/users/:id z poprawną rolą → 200, MongoDB zaktualizowane — 695f431
+- [ ] 2.4 PATCH z nieprawidłową rolą → 400
+- [ ] 2.5 DELETE /api/admin/users/:id → 200, dokument usunięty
 
 ### Phase 3: Client-side Admin UI
 
 #### Automated
 
-- [ ] 3.1 npm run build bez błędów TypeScript
+- [x] 3.1 npm run build bez błędów TypeScript
 
 #### Manual
 
@@ -293,3 +526,45 @@ Admin middleware (client) + strona `/admin/users` w Persona 5 stylu: dark backgr
 - [ ] 3.3 Modal edycji zapisuje rolę, tabela odświeżona
 - [ ] 3.4 Delete z potwierdzeniem usuwa użytkownika z listy
 - [ ] 3.5 Non-Admin przekierowany z /admin/users do /
+
+### Phase 4: Invite flow — Admin dodaje userów, OAuth odrzuca nieznane emaile
+
+#### Automated
+
+- [x] 4.1 npm run build bez błędów TypeScript
+
+#### Manual
+
+- [ ] 4.2 Nieznany email próbuje się zalogować → redirect do /?error=unauthorized z komunikatem
+- [ ] 4.3 Admin dodaje nowy email przez formularz → pojawia się w tabeli
+- [ ] 4.4 Nowo dodany user loguje się przez Google → sesja ok, name/avatar uzupełnione
+- [ ] 4.5 Duplikat emaila w formularzu → błąd 409
+
+### Phase 5: Credentials backend
+
+#### Automated
+
+- [x] 5.1 npm run build przechodzi bez błędów TypeScript
+
+#### Manual
+
+- [ ] 5.2 curl POST /api/auth/login z poprawnym email+hasłem → 200 { ok: true }
+- [ ] 5.3 curl POST /api/auth/login z złym hasłem → 401
+- [ ] 5.4 curl POST /api/auth/login z emailem bez passwordHash → 401
+- [ ] 5.5 curl POST /api/admin/users z password → MongoDB zawiera passwordHash
+- [ ] 5.6 curl POST /api/admin/users bez password → MongoDB bez passwordHash
+
+### Phase 6: Credentials UI
+
+#### Automated
+
+- [ ] 6.1 npm run build bez błędów TypeScript
+
+#### Manual
+
+- [ ] 6.2 Strona / wyświetla formularz credentials obok Google button
+- [ ] 6.3 Login credentials z poprawnym hasłem → sesja ok, user widoczny
+- [ ] 6.4 Login credentials z złym hasłem → inline error (bez reload)
+- [ ] 6.5 Modal DODAJ UŻYTKOWNIKA ma pole hasło (opcjonalne)
+- [ ] 6.6 Dodanie usera z hasłem → login przez credentials → sesja ok
+- [ ] 6.7 Dodanie usera bez hasła → login przez Google → sesja ok

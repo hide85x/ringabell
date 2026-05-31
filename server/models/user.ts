@@ -7,6 +7,7 @@ export interface User {
   avatar: string
   role: 'Admin' | 'Manager' | 'Personel'
   createdAt: Date
+  passwordHash?: string
 }
 
 export const USERS_COLLECTION = 'users' as const
