@@ -511,34 +511,34 @@ Dwa zmiany w UI: pole hasło w invite modal na `/admin/users` + formularz creden
 
 - [x] 2.2 GET /api/admin/users → 200 dla Admina, 403 dla non-Admin — 695f431
 - [x] 2.3 PATCH /api/admin/users/:id z poprawną rolą → 200, MongoDB zaktualizowane — 695f431
-- [ ] 2.4 PATCH z nieprawidłową rolą → 400
-- [x] 2.5 DELETE /api/admin/users/:id → 200, dokument usunięty
+- [x] 2.4 PATCH z nieprawidłową rolą → 400 — dcfd000
+- [x] 2.5 DELETE /api/admin/users/:id → 200, dokument usunięty — dcfd000
 
 ### Phase 3: Client-side Admin UI
 
 #### Automated
 
-- [x] 3.1 npm run build bez błędów TypeScript
+- [x] 3.1 npm run build bez błędów TypeScript — e69cc07
 
 #### Manual
 
-- [ ] 3.2 /admin/users ładuje tabelę użytkowników dla Admina
-- [x] 3.3 Modal edycji zapisuje rolę, tabela odświeżona
-- [x] 3.4 Delete z potwierdzeniem usuwa użytkownika z listy
-- [x] 3.5 Non-Admin przekierowany z /admin/users do /
+- [x] 3.2 /admin/users ładuje tabelę użytkowników dla Admina — dcfd000
+- [x] 3.3 Modal edycji zapisuje rolę, tabela odświeżona — dcfd000
+- [x] 3.4 Delete z potwierdzeniem usuwa użytkownika z listy — dcfd000
+- [x] 3.5 Non-Admin przekierowany z /admin/users do / — dcfd000
 
 ### Phase 4: Invite flow — Admin dodaje userów, OAuth odrzuca nieznane emaile
 
 #### Automated
 
-- [x] 4.1 npm run build bez błędów TypeScript
+- [x] 4.1 npm run build bez błędów TypeScript — e69cc07
 
 #### Manual
 
 - [ ] 4.2 Nieznany email próbuje się zalogować → redirect do /?error=unauthorized z komunikatem
-- [ ] 4.3 Admin dodaje nowy email przez formularz → pojawia się w tabeli
-- [ ] 4.4 Nowo dodany user loguje się przez Google → sesja ok, name/avatar uzupełnione
-- [ ] 4.5 Duplikat emaila w formularzu → błąd 409
+- [x] 4.3 Admin dodaje nowy email przez formularz → pojawia się w tabeli — dcfd000
+- [x] 4.4 Nowo dodany user loguje się przez Google → sesja ok, name/avatar uzupełnione — dcfd000
+- [x] 4.5 Duplikat emaila w formularzu → błąd 409 — dcfd000
 
 ### Phase 5: Credentials backend
 
@@ -558,13 +558,13 @@ Dwa zmiany w UI: pole hasło w invite modal na `/admin/users` + formularz creden
 
 #### Automated
 
-- [x] 6.1 npm run build bez błędów TypeScript
+- [x] 6.1 npm run build bez błędów TypeScript — dcfd000
 
 #### Manual
 
-- [x] 6.2 Strona / wyświetla formularz credentials obok Google button
-- [x] 6.3 Login credentials z poprawnym hasłem → sesja ok, user widoczny
-- [x] 6.4 Login credentials z złym hasłem → inline error (bez reload)
-- [x] 6.5 Modal DODAJ UŻYTKOWNIKA ma pole hasło (opcjonalne)
-- [x] 6.6 Dodanie usera z hasłem → login przez credentials → sesja ok
-- [x] 6.7 Dodanie usera bez hasła → login przez Google → sesja ok
+- [x] 6.2 Strona / wyświetla formularz credentials obok Google button — dcfd000
+- [x] 6.3 Login credentials z poprawnym hasłem → sesja ok, user widoczny — dcfd000
+- [x] 6.4 Login credentials z złym hasłem → inline error (bez reload) — dcfd000
+- [x] 6.5 Modal DODAJ UŻYTKOWNIKA ma pole hasło (opcjonalne) — dcfd000
+- [x] 6.6 Dodanie usera z hasłem → login przez credentials → sesja ok — dcfd000
+- [x] 6.7 Dodanie usera bez hasła → login przez Google → sesja ok — dcfd000
