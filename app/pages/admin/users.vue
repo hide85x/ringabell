@@ -26,6 +26,7 @@ const deleting = ref(false)
 const showInvite = ref(false)
 const inviteEmail = ref('')
 const inviteRole = ref<'Admin' | 'Manager' | 'Personel'>('Personel')
+const invitePassword = ref('')
 const inviting = ref(false)
 const inviteError = ref('')
 
@@ -41,11 +42,13 @@ function closeModal() {
 function openInvite() {
   inviteEmail.value = ''
   inviteRole.value = 'Personel'
+  invitePassword.value = ''
   inviteError.value = ''
   showInvite.value = true
 }
 
 function closeInvite() {
+  invitePassword.value = ''
   showInvite.value = false
 }
 
@@ -85,7 +88,11 @@ async function inviteUser() {
   try {
     await $fetch('/api/admin/users', {
       method: 'POST',
-      body: { email: inviteEmail.value, role: inviteRole.value },
+      body: {
+        email: inviteEmail.value,
+        role: inviteRole.value,
+        ...(invitePassword.value ? { password: invitePassword.value } : {}),
+      },
     })
     await refresh()
     closeInvite()
@@ -196,6 +203,10 @@ async function inviteUser() {
               <option value="Manager">Manager</option>
               <option value="Personel">Personel</option>
             </select>
+          </div>
+          <div class="field">
+            <label>HASŁO (OPCJONALNE)</label>
+            <input v-model="invitePassword" type="password" class="text-input" placeholder="Opcjonalne">
           </div>
           <p v-if="inviteError" class="invite-error">{{ inviteError }}</p>
         </div>

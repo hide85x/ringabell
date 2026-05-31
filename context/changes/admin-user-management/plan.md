@@ -512,7 +512,7 @@ Dwa zmiany w UI: pole hasło w invite modal na `/admin/users` + formularz creden
 - [x] 2.2 GET /api/admin/users → 200 dla Admina, 403 dla non-Admin — 695f431
 - [x] 2.3 PATCH /api/admin/users/:id z poprawną rolą → 200, MongoDB zaktualizowane — 695f431
 - [ ] 2.4 PATCH z nieprawidłową rolą → 400
-- [ ] 2.5 DELETE /api/admin/users/:id → 200, dokument usunięty
+- [x] 2.5 DELETE /api/admin/users/:id → 200, dokument usunięty
 
 ### Phase 3: Client-side Admin UI
 
@@ -523,9 +523,9 @@ Dwa zmiany w UI: pole hasło w invite modal na `/admin/users` + formularz creden
 #### Manual
 
 - [ ] 3.2 /admin/users ładuje tabelę użytkowników dla Admina
-- [ ] 3.3 Modal edycji zapisuje rolę, tabela odświeżona
-- [ ] 3.4 Delete z potwierdzeniem usuwa użytkownika z listy
-- [ ] 3.5 Non-Admin przekierowany z /admin/users do /
+- [x] 3.3 Modal edycji zapisuje rolę, tabela odświeżona
+- [x] 3.4 Delete z potwierdzeniem usuwa użytkownika z listy
+- [x] 3.5 Non-Admin przekierowany z /admin/users do /
 
 ### Phase 4: Invite flow — Admin dodaje userów, OAuth odrzuca nieznane emaile
 
@@ -544,27 +544,27 @@ Dwa zmiany w UI: pole hasło w invite modal na `/admin/users` + formularz creden
 
 #### Automated
 
-- [x] 5.1 npm run build przechodzi bez błędów TypeScript
+- [x] 5.1 npm run build przechodzi bez błędów TypeScript — e69cc07
 
 #### Manual
 
-- [ ] 5.2 curl POST /api/auth/login z poprawnym email+hasłem → 200 { ok: true }
-- [ ] 5.3 curl POST /api/auth/login z złym hasłem → 401
-- [ ] 5.4 curl POST /api/auth/login z emailem bez passwordHash → 401
-- [ ] 5.5 curl POST /api/admin/users z password → MongoDB zawiera passwordHash
-- [ ] 5.6 curl POST /api/admin/users bez password → MongoDB bez passwordHash
+- [x] 5.2 curl POST /api/auth/login z poprawnym email+hasłem → 200 { ok: true }
+- [x] 5.3 curl POST /api/auth/login z złym hasłem → 401
+- [x] 5.4 curl POST /api/auth/login z emailem bez passwordHash → 401
+- [x] 5.5 curl POST /api/admin/users z password → MongoDB zawiera passwordHash
+- [x] 5.6 curl POST /api/admin/users bez password → MongoDB bez passwordHash
 
 ### Phase 6: Credentials UI
 
 #### Automated
 
-- [ ] 6.1 npm run build bez błędów TypeScript
+- [x] 6.1 npm run build bez błędów TypeScript
 
 #### Manual
 
-- [ ] 6.2 Strona / wyświetla formularz credentials obok Google button
-- [ ] 6.3 Login credentials z poprawnym hasłem → sesja ok, user widoczny
-- [ ] 6.4 Login credentials z złym hasłem → inline error (bez reload)
-- [ ] 6.5 Modal DODAJ UŻYTKOWNIKA ma pole hasło (opcjonalne)
-- [ ] 6.6 Dodanie usera z hasłem → login przez credentials → sesja ok
-- [ ] 6.7 Dodanie usera bez hasła → login przez Google → sesja ok
+- [x] 6.2 Strona / wyświetla formularz credentials obok Google button
+- [x] 6.3 Login credentials z poprawnym hasłem → sesja ok, user widoczny
+- [x] 6.4 Login credentials z złym hasłem → inline error (bez reload)
+- [x] 6.5 Modal DODAJ UŻYTKOWNIKA ma pole hasło (opcjonalne)
+- [x] 6.6 Dodanie usera z hasłem → login przez credentials → sesja ok
+- [x] 6.7 Dodanie usera bez hasła → login przez Google → sesja ok
