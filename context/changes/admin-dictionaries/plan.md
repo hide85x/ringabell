@@ -163,30 +163,30 @@ Strona `/admin/dictionaries` z sekcjami ról i wymagań. Komponent `AdminNav`. D
 
 ### Phase 2: API — CRUD dla słowników
 #### Automated
-- [x] 2.1 roles index.get.ts
-- [x] 2.2 roles index.post.ts
-- [x] 2.3 roles [id].patch.ts
-- [x] 2.4 roles [id].delete.ts (409 guard)
-- [x] 2.5 requirements index.get.ts
-- [x] 2.6 requirements index.post.ts
-- [x] 2.7 requirements [id].patch.ts
-- [x] 2.8 requirements [id].delete.ts
-- [x] 2.9 wrangler dev starts clean
+- [x] 2.1 roles index.get.ts — f84ba8c
+- [x] 2.2 roles index.post.ts — f84ba8c
+- [x] 2.3 roles [id].patch.ts — f84ba8c
+- [x] 2.4 roles [id].delete.ts (409 guard) — f84ba8c
+- [x] 2.5 requirements index.get.ts — f84ba8c
+- [x] 2.6 requirements index.post.ts — f84ba8c
+- [x] 2.7 requirements [id].patch.ts — f84ba8c
+- [x] 2.8 requirements [id].delete.ts — f84ba8c
+- [x] 2.9 wrangler dev starts clean — f84ba8c
 
 #### Manual
-- [x] 2.10 GET roles returns []
-- [x] 2.11 POST + DELETE with 409 guard works
+- [x] 2.10 GET roles returns [] — f84ba8c
+- [x] 2.11 POST + DELETE with 409 guard works — f84ba8c
 
 ### Phase 3: UI — strona słowników + design system + nawigacja admin
 #### Automated
-- [ ] 3.1 AdminNav.vue created
-- [ ] 3.2 admin/dictionaries.vue created
-- [ ] 3.3 index.vue design system applied
-- [ ] 3.4 users.vue AdminNav + design polish
-- [ ] 3.5 roadmap.md updated
-- [ ] 3.6 npm run build passes
+- [x] 3.1 AdminNav.vue created
+- [x] 3.2 admin/dictionaries.vue created
+- [x] 3.3 index.vue design system applied
+- [x] 3.4 users.vue AdminNav + design polish
+- [x] 3.5 roadmap.md updated
+- [x] 3.6 npm run build passes
 
 #### Manual
-- [ ] 3.7 /admin/dictionaries — add role, add requirement
-- [ ] 3.8 AdminNav visible on users + dictionaries
-- [ ] 3.9 Skewed buttons hard hover on all pages
+- [x] 3.7 /admin/dictionaries — add role, add requirement
+- [x] 3.8 AdminNav visible on users + dictionaries
+- [x] 3.9 Skewed buttons hard hover on all pages

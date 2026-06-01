@@ -113,39 +113,43 @@ async function inviteUser() {
 
 <template>
   <div class="page">
-    <div class="header">
-      <div class="title-badge">USERS</div>
-      <button class="add-btn" @click="openInvite">+ DODAJ UŻYTKOWNIKA</button>
-    </div>
+    <AdminNav />
 
-    <table class="user-table">
-      <thead>
-        <tr>
-          <th>UŻYTKOWNIK</th>
-          <th>EMAIL</th>
-          <th>ROLA</th>
-          <th />
-        </tr>
-      </thead>
-      <tbody>
-        <tr v-for="user in users" :key="user.id">
-          <td>
-            <div class="user-cell">
-              <img v-if="user.avatar" :src="user.avatar" :alt="user.name" class="avatar">
-              <span v-else class="avatar-placeholder">?</span>
-              <strong>{{ user.name || '—' }}</strong>
-            </div>
-          </td>
-          <td>{{ user.email }}</td>
-          <td>
-            <span class="role-badge" :class="user.role.toLowerCase()">{{ user.role.toUpperCase() }}</span>
-          </td>
-          <td>
-            <button class="edit-btn" @click="openModal(user)">EDIT</button>
-          </td>
-        </tr>
-      </tbody>
-    </table>
+    <div class="content">
+      <div class="section-header">
+        <div class="title-badge">USERS</div>
+        <button class="add-btn" @click="openInvite">+ DODAJ UŻYTKOWNIKA</button>
+      </div>
+
+      <table class="user-table">
+        <thead>
+          <tr>
+            <th>UŻYTKOWNIK</th>
+            <th>EMAIL</th>
+            <th>ROLA</th>
+            <th />
+          </tr>
+        </thead>
+        <tbody>
+          <tr v-for="user in users" :key="user.id">
+            <td>
+              <div class="user-cell">
+                <img v-if="user.avatar" :src="user.avatar" :alt="user.name" class="avatar">
+                <span v-else class="avatar-placeholder">?</span>
+                <strong>{{ user.name || '—' }}</strong>
+              </div>
+            </td>
+            <td>{{ user.email }}</td>
+            <td>
+              <span class="role-badge" :class="user.role.toLowerCase()">{{ user.role.toUpperCase() }}</span>
+            </td>
+            <td>
+              <button class="edit-btn" @click="openModal(user)">EDIT</button>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
 
     <!-- Edit modal -->
     <div v-if="selectedUser" class="modal-overlay" @click.self="closeModal">
@@ -227,10 +231,13 @@ async function inviteUser() {
   background: #221010;
   color: white;
   font-family: 'Space Grotesk', sans-serif;
-  padding: 48px 32px;
 }
 
-.header {
+.content {
+  padding: 40px 32px;
+}
+
+.section-header {
   display: flex;
   align-items: center;
   gap: 24px;
@@ -261,12 +268,14 @@ async function inviteUser() {
   letter-spacing: 0.08em;
   padding: 8px 18px;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transform: skewX(-8deg);
+  transition: none;
 }
 
 .add-btn:hover {
   background: white;
   color: #221010;
+  transform: skewX(-8deg) rotate(-3deg);
 }
 
 .user-table {
@@ -291,7 +300,8 @@ async function inviteUser() {
 }
 
 .user-table tr:hover td {
-  background: rgba(242, 13, 13, 0.08);
+  background: rgba(242, 13, 13, 0.1);
+  transition: none;
 }
 
 .user-cell {
@@ -323,6 +333,7 @@ async function inviteUser() {
 }
 
 .role-badge {
+  display: inline-block;
   font-size: 0.7rem;
   font-weight: 900;
   letter-spacing: 0.08em;
@@ -330,6 +341,7 @@ async function inviteUser() {
   background: rgba(242, 13, 13, 0.2);
   border: 1px solid #f20d0d;
   color: #f20d0d;
+  transform: skewX(-8deg);
 }
 
 .role-badge.admin {
@@ -347,18 +359,20 @@ async function inviteUser() {
   letter-spacing: 0.08em;
   padding: 4px 14px;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transform: skewX(-8deg);
+  transition: none;
 }
 
 .edit-btn:hover {
   background: white;
   color: #221010;
+  transform: skewX(-8deg) rotate(-3deg);
 }
 
 .modal-overlay {
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.7);
+  background: rgba(0, 0, 0, 0.75);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -381,7 +395,9 @@ async function inviteUser() {
   padding: 12px 20px;
   font-weight: 900;
   font-size: 1rem;
+  font-style: italic;
   letter-spacing: 0.05em;
+  transform: skewX(-4deg);
 }
 
 .close-btn {
@@ -466,7 +482,12 @@ async function inviteUser() {
   letter-spacing: 0.08em;
   padding: 10px;
   cursor: pointer;
-  transition: opacity 0.15s;
+  transform: skewX(-8deg);
+  transition: none;
+}
+
+.save-btn:hover:not(:disabled) {
+  transform: skewX(-8deg) rotate(-3deg);
 }
 
 .save-btn:disabled {
@@ -484,12 +505,14 @@ async function inviteUser() {
   letter-spacing: 0.05em;
   padding: 10px 14px;
   cursor: pointer;
-  transition: background 0.15s, color 0.15s;
+  transform: skewX(-8deg);
+  transition: none;
 }
 
 .delete-btn:hover:not(:disabled) {
   background: #f20d0d;
   color: white;
+  transform: skewX(-8deg) rotate(-3deg);
 }
 
 .delete-btn:disabled {
