@@ -29,7 +29,7 @@ Firma promocji bokserskiej zarządza dziesiątkami ludzi w ściśle określonych
 |------|------------------------------|--------------------------------------------------------------------------|--------------------|----------------------------------------|----------|
 | F-01 | auth-scaffold                | (fundament) OAuth social login działa; sesje i role systemowe dostępne   | —                  | Access Control, FR-001, FR-002         | ready    |
 | F-02 | data-scaffold                | (fundament) Native mongodb driver podłączony do Atlas; modele bazowe zdefiniowane | F-01          | FR-001–FR-015, Business Logic          | ready    |
-| S-01 | admin-user-management        | Admin zarządza kontami użytkowników i przypisuje role systemowe          | F-01, F-02         | FR-001, FR-002                         | proposed |
+| S-01 | admin-user-management        | Admin zarządza kontami użytkowników i przypisuje role systemowe          | F-01, F-02         | FR-001, FR-002                         | ready    |
 | S-02 | admin-dictionaries           | Admin zarządza słownikami ról personelu i wymagań per walka              | F-01, F-02         | FR-003                                 | proposed |
 | S-03 | personnel-management         | Manager dodaje, edytuje i dezaktywuje osoby z bazy personelu             | F-01, F-02         | FR-004, FR-005                         | proposed |
 | S-04 | event-and-fight-management   | Manager tworzy galę, dodaje walki i przypisuje personel z walidacją live | F-01, F-02, S-02, S-03 | FR-006, FR-007, FR-008, FR-009, FR-010, FR-012 | proposed |
@@ -95,7 +95,7 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 
 ### S-01: Zarządzanie użytkownikami (Admin)
 
-- **Outcome:** Admin może dodawać, edytować i usuwać konta użytkowników oraz przypisywać im role systemowe (Admin/Manager/Personel).
+- **Outcome:** Admin może dodawać, edytować i usuwać konta użytkowników oraz przypisywać im role systemowe (Admin/Manager/Personel). Login przez Google OAuth (email musi być w bazie) lub email+hasło (credentials, hasło ustawiane przez Admina przy tworzeniu konta). Strona główna `/` z formularzem credentials + Google button. Strona `/admin/users` z tabelą, modalem edycji i formularzem dodawania.
 - **Change ID:** admin-user-management
 - **PRD refs:** FR-001, FR-002
 - **Prerequisites:** F-01, F-02
@@ -103,7 +103,7 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Usunięcie użytkownika przypisanego do przyszłej gali zostawia lukę w obsadzie — PRD akceptuje to zachowanie (manager widzi błąd walidacji). Upewnić się że cascade delete nie usuwa historycznych przypisań.
-- **Status:** proposed
+- **Status:** ready
 
 ### S-02: Słowniki ról i wymagań (Admin)
 
