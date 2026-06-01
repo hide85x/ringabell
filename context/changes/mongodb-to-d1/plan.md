@@ -455,11 +455,11 @@ Baza na produkcji jest pusta — brak danych do migracji. MongoDB Atlas cluster 
 
 #### Automated
 
-- [x] 4.1 `wrangler d1 migrations apply ringabell --remote` bez błędów
-- [x] 4.2 `wrangler deploy` bez błędów
-- [x] 4.3 `curl /healthz` na produkcji zwraca `{status: 'ok', db: 'connected'}`
+- [x] 4.1 `wrangler d1 migrations apply ringabell --remote` bez błędów — 1122094
+- [x] 4.2 `wrangler deploy` bez błędów — 1122094
+- [x] 4.3 `curl /healthz` na produkcji zwraca `{status: 'ok', db: 'connected'}` — 1122094
 
 #### Manual
 
-- [x] 4.4 Login przez Google < 2s, brak Exception Thrown w `wrangler tail`
-- [x] 4.5 `GET /admin/users` na produkcji zwraca pustą tablicę
+- [x] 4.4 Login przez Google < 2s, brak Exception Thrown w `wrangler tail` — 1122094
+- [x] 4.5 `GET /admin/users` na produkcji zwraca pustą tablicę — 1122094
