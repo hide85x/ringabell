@@ -6,3 +6,8 @@ compatibility_flags = ["nodejs_compat"]
 [assets]
 directory = ".output/public/"
 binding = "ASSETS"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "ringabell"
+database_id = "PLACEHOLDER"
