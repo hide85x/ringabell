@@ -4,6 +4,13 @@ export default defineNuxtConfig({
   devtools: { enabled: true },
   modules: ['nuxt-auth-utils'],
   nitro: {
-    preset: 'cloudflare-pages'
-  }
+    preset: 'cloudflare-module',
+  },
+  auth: {
+    hash: {
+      scrypt: {
+        cost: 4096,
+      },
+    },
+  },
 })

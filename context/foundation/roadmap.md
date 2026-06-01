@@ -28,9 +28,9 @@ Firma promocji bokserskiej zarządza dziesiątkami ludzi w ściśle określonych
 | ID   | Change ID                    | Outcome (użytkownik może …)                                              | Prerequisites      | PRD refs                               | Status   |
 |------|------------------------------|--------------------------------------------------------------------------|--------------------|----------------------------------------|----------|
 | F-01 | auth-scaffold                | (fundament) OAuth social login działa; sesje i role systemowe dostępne   | —                  | Access Control, FR-001, FR-002         | ready    |
-| F-02 | data-scaffold                | (fundament) Mongoose podłączony do Atlas; modele bazowe zdefiniowane     | F-01               | FR-001–FR-015, Business Logic          | proposed |
-| S-01 | admin-user-management        | Admin zarządza kontami użytkowników i przypisuje role systemowe          | F-01, F-02         | FR-001, FR-002                         | proposed |
-| S-02 | admin-dictionaries           | Admin zarządza słownikami ról personelu i wymagań per walka              | F-01, F-02         | FR-003                                 | proposed |
+| F-02 | data-scaffold                | (fundament) Native mongodb driver podłączony do Atlas; modele bazowe zdefiniowane | F-01          | FR-001–FR-015, Business Logic          | ready    |
+| S-01 | admin-user-management        | Admin zarządza kontami użytkowników i przypisuje role systemowe          | F-01, F-02         | FR-001, FR-002                         | ready    |
+| S-02 | admin-dictionaries           | Admin zarządza słownikami ról personelu i wymagań per walka              | F-01, F-02         | FR-003                                 | ready    |
 | S-03 | personnel-management         | Manager dodaje, edytuje i dezaktywuje osoby z bazy personelu             | F-01, F-02         | FR-004, FR-005                         | proposed |
 | S-04 | event-and-fight-management   | Manager tworzy galę, dodaje walki i przypisuje personel z walidacją live | F-01, F-02, S-02, S-03 | FR-006, FR-007, FR-008, FR-009, FR-010, FR-012 | proposed |
 | S-05 | event-publish-and-email      | Manager publikuje galę i cały przypisany personel otrzymuje email        | S-04               | US-01, FR-011                          | proposed |
@@ -72,13 +72,13 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 - **Parallel with:** —
 - **Blockers:** —
 - **Unknowns:**
-  - ~~Czy nuxt-auth-utils sesje działają poprawnie na Cloudflare Workers (Web Crypto vs Node.js crypto)?~~ — Zweryfikowane smoke-testem 2026-05-28. Google OAuth + sesje działają na Workers. NUXT_SESSION_PASSWORD wymagany w Cloudflare Pages env vars.
+  - ~~Czy nuxt-auth-utils sesje działają poprawnie na Cloudflare Workers (Web Crypto vs Node.js crypto)?~~ — Zweryfikowane smoke-testem 2026-05-28. Google OAuth + sesje działają na Workers. NUXT_SESSION_PASSWORD wymagany w Cloudflare Workers env vars.
 - **Risk:** Pierwsze wdrożenie auth na Workers może wymagać debugowania Web Crypto — zablokuje cały downstream. Najważniejsza weryfikacja całego projektu.
 - **Status:** ready
 
 ### F-02: Data scaffold
 
-- **Outcome:** (fundament) Mongoose zainstalowany i podłączony do MongoDB Atlas; modele bazowe zdefiniowane: User (rozszerzony o role i profil), Person (baza personelu), Event (gala), Fight (walka), Assignment (przypisanie personelu do walki/gali); połączenie z Atlas zweryfikowane przez `/healthz`.
+- **Outcome:** (fundament) Native `mongodb` driver zainstalowany i podłączony do MongoDB Atlas; modele bazowe zdefiniowane: User (rozszerzony o role i profil), Person (baza personelu), BoxingEvent (gala), Fight (walka), Assignment (przypisanie personelu do walki/gali); połączenie z Atlas zweryfikowane przez `/healthz` na Workers.
 - **Change ID:** data-scaffold
 - **PRD refs:** FR-001–FR-015, Business Logic, NFR (walidacja poniżej 1s)
 - **Unlocks:** S-01, S-02, S-03, S-04, S-05, S-06 — wszystkie slice'y czytają/piszą do bazy
@@ -86,15 +86,16 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 - **Parallel with:** —
 - **Blockers:** —
 - **Unknowns:**
-  - Czy CPU limit 30ms na Workers nie będzie przekroczony przy złożonych zapytaniach Mongoose? — Owner: dev. Block: no. Monitorować przez `wrangler tail` po wdrożeniu S-04.
+  - ~~Czy MongoDB Atlas połączy się poprawnie na Cloudflare Workers?~~ — Zweryfikowane 2026-05-29. `/healthz` zwraca `{status:ok, db:connected}` na `ringabell.lukasz-pelc.workers.dev`. Wymagało migracji z `cloudflare-pages` → `cloudflare-module` (change: cloudflare-migration).
+  - Czy CPU limit 30ms na Workers nie będzie przekroczony przy złożonych zapytaniach? — Owner: dev. Block: no. Monitorować przez `wrangler tail` po wdrożeniu S-04.
 - **Risk:** Schemat zdefiniowany tutaj determinuje walidację biznesową w S-04. Błąd w modelu Assignment (wymagane role per walka) odkryty późno kosztuje refactor wszystkich slice'ów downstream.
-- **Status:** proposed
+- **Status:** ready
 
 ## Slices
 
 ### S-01: Zarządzanie użytkownikami (Admin)
 
-- **Outcome:** Admin może dodawać, edytować i usuwać konta użytkowników oraz przypisywać im role systemowe (Admin/Manager/Personel).
+- **Outcome:** Admin może dodawać, edytować i usuwać konta użytkowników oraz przypisywać im role systemowe (Admin/Manager/Personel). Login przez Google OAuth (email musi być w bazie) lub email+hasło (credentials, hasło ustawiane przez Admina przy tworzeniu konta). Strona główna `/` z formularzem credentials + Google button. Strona `/admin/users` z tabelą, modalem edycji i formularzem dodawania.
 - **Change ID:** admin-user-management
 - **PRD refs:** FR-001, FR-002
 - **Prerequisites:** F-01, F-02
@@ -102,7 +103,7 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Usunięcie użytkownika przypisanego do przyszłej gali zostawia lukę w obsadzie — PRD akceptuje to zachowanie (manager widzi błąd walidacji). Upewnić się że cascade delete nie usuwa historycznych przypisań.
-- **Status:** proposed
+- **Status:** ready
 
 ### S-02: Słowniki ról i wymagań (Admin)
 
@@ -114,7 +115,7 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Słownik wymagań per walka jest twardym prerequisite dla logiki walidacji w S-04. Jeśli struktura słownika zmieni się po S-04, refactor walidacji będzie konieczny. Zdefiniować schemat raz, przed S-04.
-- **Status:** proposed
+- **Status:** ready
 
 ### S-03: Zarządzanie personelem (Manager)
 
