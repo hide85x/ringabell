@@ -10,4 +10,4 @@ binding = "ASSETS"
 [[d1_databases]]
 binding = "DB"
 database_name = "ringabell"
-database_id = "PLACEHOLDER"
+database_id = "289e211b-113d-4329-b2a6-8035fce8127a"

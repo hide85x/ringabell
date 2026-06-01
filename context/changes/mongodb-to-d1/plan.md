@@ -423,7 +423,7 @@ Baza na produkcji jest pusta — brak danych do migracji. MongoDB Atlas cluster 
 
 #### Automated
 
-- [x] 1.1 `npm run build` przechodzi po usunięciu `mongodb` i stubów
+- [x] 1.1 `npm run build` przechodzi po usunięciu `mongodb` i stubów — f0466eb
 - [x] 1.2 Plik `migrations/0001_init.sql` istnieje z 6 tabelami — 4dec8f8
 - [x] 1.3 `wrangler.toml` zawiera `[[d1_databases]]` — 4dec8f8
 
@@ -442,24 +442,24 @@ Baza na produkcji jest pusta — brak danych do migracji. MongoDB Atlas cluster 
 
 #### Automated
 
-- [x] 3.1 `npm run build` przechodzi bez błędów TypeScript
-- [x] 3.2 Brak importów `from 'mongodb'` w całym projekcie
+- [x] 3.1 `npm run build` przechodzi bez błędów TypeScript — f0466eb
+- [x] 3.2 Brak importów `from 'mongodb'` w całym projekcie — f0466eb
 
 #### Manual
 
-- [x] 3.3 `npx wrangler dev` startuje, `/healthz` zwraca `{status: 'ok', db: 'connected'}`
-- [x] 3.4 Login przez credentials działa lokalnie
-- [x] 3.5 `GET /admin/users` zwraca pustą tablicę lokalnie
+- [x] 3.3 `npx wrangler dev` startuje, `/healthz` zwraca `{status: 'ok', db: 'connected'}` — f0466eb
+- [x] 3.4 Login przez credentials działa lokalnie — f0466eb
+- [x] 3.5 `GET /admin/users` zwraca pustą tablicę lokalnie — f0466eb
 
 ### Phase 4: Deploy & Verify
 
 #### Automated
 
-- [ ] 4.1 `wrangler d1 migrations apply ringabell --remote` bez błędów
-- [ ] 4.2 `wrangler deploy` bez błędów
-- [ ] 4.3 `curl /healthz` na produkcji zwraca `{status: 'ok', db: 'connected'}`
+- [x] 4.1 `wrangler d1 migrations apply ringabell --remote` bez błędów
+- [x] 4.2 `wrangler deploy` bez błędów
+- [x] 4.3 `curl /healthz` na produkcji zwraca `{status: 'ok', db: 'connected'}`
 
 #### Manual
 
-- [ ] 4.4 Login przez Google < 2s, brak Exception Thrown w `wrangler tail`
-- [ ] 4.5 `GET /admin/users` na produkcji zwraca pustą tablicę
+- [x] 4.4 Login przez Google < 2s, brak Exception Thrown w `wrangler tail`
+- [x] 4.5 `GET /admin/users` na produkcji zwraca pustą tablicę
