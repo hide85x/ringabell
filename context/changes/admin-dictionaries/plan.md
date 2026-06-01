@@ -179,14 +179,14 @@ Strona `/admin/dictionaries` z sekcjami ról i wymagań. Komponent `AdminNav`. D
 
 ### Phase 3: UI — strona słowników + design system + nawigacja admin
 #### Automated
-- [x] 3.1 AdminNav.vue created
-- [x] 3.2 admin/dictionaries.vue created
-- [x] 3.3 index.vue design system applied
-- [x] 3.4 users.vue AdminNav + design polish
-- [x] 3.5 roadmap.md updated
-- [x] 3.6 npm run build passes
+- [x] 3.1 AdminNav.vue created — 43380eb
+- [x] 3.2 admin/dictionaries.vue created — 43380eb
+- [x] 3.3 index.vue design system applied — 43380eb
+- [x] 3.4 users.vue AdminNav + design polish — 43380eb
+- [x] 3.5 roadmap.md updated — 43380eb
+- [x] 3.6 npm run build passes — 43380eb
 
 #### Manual
-- [x] 3.7 /admin/dictionaries — add role, add requirement
-- [x] 3.8 AdminNav visible on users + dictionaries
-- [x] 3.9 Skewed buttons hard hover on all pages
+- [x] 3.7 /admin/dictionaries — add role, add requirement — 43380eb
+- [x] 3.8 AdminNav visible on users + dictionaries — 43380eb
+- [x] 3.9 Skewed buttons hard hover on all pages — 43380eb
