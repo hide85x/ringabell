@@ -1,6 +1,3 @@
-import { ObjectId } from 'mongodb'
-import { USERS_COLLECTION } from '~~/server/models/user'
-
 const VALID_ROLES = ['Admin', 'Manager', 'Personel'] as const
 
 export default defineEventHandler(async (event) => {
@@ -12,11 +9,10 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Invalid role' })
   }
 
-  const config = useRuntimeConfig(event)
-  const db = await getDb({ mongodbUri: config.mongodbUri })
-  await db.collection(USERS_COLLECTION).updateOne(
-    { _id: new ObjectId(id) },
-    { $set: { role } }
-  )
+  const db = getD1(event)
+  const result = await db.prepare('UPDATE users SET role = ? WHERE id = ?').bind(role, id).run()
+  if (result.meta.changes === 0) {
+    throw createError({ statusCode: 404, statusMessage: 'User not found' })
+  }
   return { ok: true }
 })

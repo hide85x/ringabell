@@ -6,7 +6,7 @@ useHead({
 })
 
 interface UserDoc {
-  _id: string
+  id: string
   email: string
   name: string
   avatar: string
@@ -56,7 +56,7 @@ async function saveRole() {
   if (!selectedUser.value) return
   saving.value = true
   try {
-    await $fetch(`/api/admin/users/${selectedUser.value._id}`, {
+    await $fetch(`/api/admin/users/${selectedUser.value.id}`, {
       method: 'PATCH',
       body: { role: selectedRole.value },
     })
@@ -73,7 +73,7 @@ async function deleteUser() {
   if (!window.confirm(`Usuń użytkownika ${selectedUser.value.name || selectedUser.value.email}?`)) return
   deleting.value = true
   try {
-    await $fetch(`/api/admin/users/${selectedUser.value._id}`, { method: 'DELETE' })
+    await $fetch(`/api/admin/users/${selectedUser.value.id}`, { method: 'DELETE' })
     await refresh()
     closeModal()
   }
@@ -128,7 +128,7 @@ async function inviteUser() {
         </tr>
       </thead>
       <tbody>
-        <tr v-for="user in users" :key="user._id">
+        <tr v-for="user in users" :key="user.id">
           <td>
             <div class="user-cell">
               <img v-if="user.avatar" :src="user.avatar" :alt="user.name" class="avatar">

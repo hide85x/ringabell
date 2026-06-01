@@ -332,6 +332,14 @@ Przepisuje wszystkie 6 handlerów na D1 raw SQL API. Każdy handler używa `getD
 
 #### 7. server/routes/healthz.get.ts
 
+#### 8. app/pages/admin/users.vue
+
+**File**: `app/pages/admin/users.vue`
+
+**Intent**: Zaktualizować interfejs `UserDoc` i odwołania do pola id — MongoDB używało `_id`, D1 zwraca `id`.
+
+**Contract**: Zmienić `_id` → `id` w: interfejsie `UserDoc`, `:key="user._id"`, `selectedUser.value._id` (2x).
+
 **File**: `server/routes/healthz.get.ts`
 
 **Intent**: Zastąpić MongoDB ping przez D1 SELECT 1.
@@ -427,8 +435,8 @@ Baza na produkcji jest pusta — brak danych do migracji. MongoDB Atlas cluster 
 
 #### Automated
 
-- [x] 2.1 `npm run build` przechodzi bez błędów TypeScript
-- [x] 2.2 Brak importów `from 'mongodb'` w `server/` po grep
+- [x] 2.1 `npm run build` przechodzi bez błędów TypeScript — b66d67a
+- [x] 2.2 Brak importów `from 'mongodb'` w `server/` po grep — b66d67a
 
 ### Phase 3: API Routes
 
@@ -439,9 +447,9 @@ Baza na produkcji jest pusta — brak danych do migracji. MongoDB Atlas cluster 
 
 #### Manual
 
-- [ ] 3.3 `npx wrangler dev` startuje, `/healthz` zwraca `{status: 'ok', db: 'connected'}`
-- [ ] 3.4 Login przez credentials działa lokalnie
-- [ ] 3.5 `GET /admin/users` zwraca pustą tablicę lokalnie
+- [x] 3.3 `npx wrangler dev` startuje, `/healthz` zwraca `{status: 'ok', db: 'connected'}`
+- [x] 3.4 Login przez credentials działa lokalnie
+- [x] 3.5 `GET /admin/users` zwraca pustą tablicę lokalnie
 
 ### Phase 4: Deploy & Verify
 

@@ -1,5 +1,4 @@
 import { nowUtc } from '~~/utils/date'
-import { USERS_COLLECTION } from '~~/server/models/user'
 
 const VALID_ROLES = ['Admin', 'Manager', 'Personel'] as const
 
@@ -15,24 +14,19 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'Invalid role' })
   }
 
-  const config = useRuntimeConfig(event)
-  const db = await getDb({ mongodbUri: config.mongodbUri })
+  const db = getD1(event)
 
-  const existing = await db.collection(USERS_COLLECTION).findOne({ email })
+  const existing = await db.prepare('SELECT id FROM users WHERE email = ? LIMIT 1').bind(email).first()
   if (existing) {
     throw createError({ statusCode: 409, statusMessage: 'Email already exists' })
   }
 
-  const passwordHash = password ? await hashPassword(password) : undefined
+  const passwordHash = password ? await hashPassword(password) : null
+  const id = crypto.randomUUID()
 
-  await db.collection(USERS_COLLECTION).insertOne({
-    email,
-    role,
-    name: '',
-    avatar: '',
-    createdAt: new Date(nowUtc()),
-    ...(passwordHash ? { passwordHash } : {}),
-  })
+  await db.prepare(
+    'INSERT INTO users (id, email, name, avatar, role, password_hash, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)'
+  ).bind(id, email, '', '', role, passwordHash, nowUtc()).run()
 
   return { ok: true }
 })
