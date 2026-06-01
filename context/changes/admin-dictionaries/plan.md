@@ -155,27 +155,27 @@ Strona `/admin/dictionaries` z sekcjami ról i wymagań. Komponent `AdminNav`. D
 
 ### Phase 1: DB schema — migracja i modele
 #### Automated
-- [x] 1.1 Apply migration 0002_dictionaries.sql locally
-- [x] 1.2 Verify tables in sqlite_master
+- [x] 1.1 Apply migration 0002_dictionaries.sql locally — 4d2f46f
+- [x] 1.2 Verify tables in sqlite_master — 4d2f46f
 
 #### Manual
-- [x] 1.3 Tables visible in local DB
+- [x] 1.3 Tables visible in local DB — 4d2f46f
 
 ### Phase 2: API — CRUD dla słowników
 #### Automated
-- [ ] 2.1 roles index.get.ts
-- [ ] 2.2 roles index.post.ts
-- [ ] 2.3 roles [id].patch.ts
-- [ ] 2.4 roles [id].delete.ts (409 guard)
-- [ ] 2.5 requirements index.get.ts
-- [ ] 2.6 requirements index.post.ts
-- [ ] 2.7 requirements [id].patch.ts
-- [ ] 2.8 requirements [id].delete.ts
-- [ ] 2.9 wrangler dev starts clean
+- [x] 2.1 roles index.get.ts
+- [x] 2.2 roles index.post.ts
+- [x] 2.3 roles [id].patch.ts
+- [x] 2.4 roles [id].delete.ts (409 guard)
+- [x] 2.5 requirements index.get.ts
+- [x] 2.6 requirements index.post.ts
+- [x] 2.7 requirements [id].patch.ts
+- [x] 2.8 requirements [id].delete.ts
+- [x] 2.9 wrangler dev starts clean
 
 #### Manual
-- [ ] 2.10 GET roles returns []
-- [ ] 2.11 POST + DELETE with 409 guard works
+- [x] 2.10 GET roles returns []
+- [x] 2.11 POST + DELETE with 409 guard works
 
 ### Phase 3: UI — strona słowników + design system + nawigacja admin
 #### Automated
