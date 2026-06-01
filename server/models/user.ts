@@ -1,13 +1,9 @@
-import type { ObjectId } from 'mongodb'
-
 export interface User {
-  _id?: ObjectId
+  id?: string
   email: string
   name: string
   avatar: string
   role: 'Admin' | 'Manager' | 'Personel'
-  createdAt: Date
   passwordHash?: string
+  createdAt: string
 }
-
-export const USERS_COLLECTION = 'users' as const

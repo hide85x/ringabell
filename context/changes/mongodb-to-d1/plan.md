@@ -415,27 +415,27 @@ Baza na produkcji jest pusta — brak danych do migracji. MongoDB Atlas cluster 
 
 #### Automated
 
-- [ ] 1.1 `npm run build` przechodzi po usunięciu `mongodb` i stubów
-- [x] 1.2 Plik `migrations/0001_init.sql` istnieje z 6 tabelami
-- [x] 1.3 `wrangler.toml` zawiera `[[d1_databases]]`
+- [x] 1.1 `npm run build` przechodzi po usunięciu `mongodb` i stubów
+- [x] 1.2 Plik `migrations/0001_init.sql` istnieje z 6 tabelami — 4dec8f8
+- [x] 1.3 `wrangler.toml` zawiera `[[d1_databases]]` — 4dec8f8
 
 #### Manual
 
-- [x] 1.4 `wrangler d1 execute ringabell --local --command "SELECT name FROM sqlite_master WHERE type='table'"` zwraca 6 tabel
+- [x] 1.4 `wrangler d1 execute ringabell --local --command "SELECT name FROM sqlite_master WHERE type='table'"` zwraca 6 tabel — 4dec8f8
 
 ### Phase 2: DB Layer
 
 #### Automated
 
-- [ ] 2.1 `npm run build` przechodzi bez błędów TypeScript
-- [ ] 2.2 Brak importów `from 'mongodb'` w `server/` po grep
+- [x] 2.1 `npm run build` przechodzi bez błędów TypeScript
+- [x] 2.2 Brak importów `from 'mongodb'` w `server/` po grep
 
 ### Phase 3: API Routes
 
 #### Automated
 
-- [ ] 3.1 `npm run build` przechodzi bez błędów TypeScript
-- [ ] 3.2 Brak importów `from 'mongodb'` w całym projekcie
+- [x] 3.1 `npm run build` przechodzi bez błędów TypeScript
+- [x] 3.2 Brak importów `from 'mongodb'` w całym projekcie
 
 #### Manual
 

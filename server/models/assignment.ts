@@ -1,13 +1,9 @@
-import type { ObjectId } from 'mongodb'
-
 export interface Assignment {
-  _id?: ObjectId
-  personId: ObjectId
+  id?: string
+  personId: string
   type: 'fight' | 'event'
-  fightId?: ObjectId
-  eventId?: ObjectId
+  fightId?: string
+  eventId?: string
   role: string
-  createdAt: Date
+  createdAt: string
 }
-
-export const ASSIGNMENTS_COLLECTION = 'assignments' as const

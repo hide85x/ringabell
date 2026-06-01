@@ -1,11 +1,7 @@
-import type { ObjectId } from 'mongodb'
-
 export interface Fight {
-  _id?: ObjectId
-  eventId: ObjectId
+  id?: string
+  eventId: string
   orderNumber: number
   requirements: Array<{ role: string; count: number }>
-  createdAt: Date
+  createdAt: string
 }
-
-export const FIGHTS_COLLECTION = 'fights' as const
