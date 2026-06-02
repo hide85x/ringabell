@@ -68,7 +68,7 @@ Status zmienia się przez: `not started` → `change opened` → `researched` �
 
 | # | Nazwa fazy | Cel (jedna linia) | Risks | Typy testów | Status | Change folder |
 |---|---|---|---|---|---|---|
-| 1 | Bootstrap + guardrail walidacji | Bootstrap test runner (Vitest) i pierwsze integration testy weryfikujące blokadę publikacji gali | #1, #2 | unit, integration | planned | context/changes/testing-bootstrap-guardrail/ |
+| 1 | Bootstrap + guardrail walidacji | Bootstrap test runner (Vitest) i pierwsze integration testy weryfikujące blokadę publikacji gali | #1, #2 | unit, integration | implementing | context/changes/testing-bootstrap-guardrail/ |
 | 2 | RBAC i walidacja wejść API | Integration testy middleware autoryzacji i server-side walidacji wejść | #3, #4 | integration | not started | — |
 | 3 | Integracja D1 i modele danych | Integration testy schema integrity Assignment/Fight/Person przez lokalny D1 | #5 | integration | not started | — |
 | 4 | Email dispatch i quality gates | Smoke test CPU budget na Workers staging + wiring lint/typecheck/testy do CI | #6 | integration, smoke (staging) | not started | — |
@@ -113,7 +113,7 @@ Jak dodawać nowe testy w tym projekcie. Każda sekcja wypełnia się gdy dana f
 
 ### 6.1 Dodawanie unit testu (logika walidacji)
 
-TBD — see §3 Phase 1 (guardrail walidacji obsady gali).
+Utwórz plik `*.test.ts` co-located z testowanym modułem (np. `utils/foo.test.ts` obok `utils/foo.ts`). Importuj funkcje bezpośrednio i używaj `describe` / `it` / `expect` z `vitest`. Uruchom: `npm run test`. Runner (`@cloudflare/vitest-pool-workers` via `cloudflarePool` w `vitest.config.ts`) wykonuje testy w Workers V8 isolate identycznym z produkcją — nie w Node.js. Wzorzec referencyjny: `utils/date.test.ts`.
 
 ### 6.2 Dodawanie integration testu server route (D1)
 

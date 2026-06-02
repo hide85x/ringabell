@@ -196,24 +196,24 @@ These questions from research must be resolved in S-04 planning before guardrail
 
 #### Automated
 
-- [x] 1.1 `npm install` completes without errors
-- [x] 1.2 `npx vitest run --reporter=verbose` exits 0 with "No test files found"
-- [x] 1.3 `npm run typecheck` passes
+- [x] 1.1 `npm install` completes without errors — 499f22f
+- [x] 1.2 `npx vitest run --reporter=verbose` exits 0 with "No test files found" — 499f22f
+- [x] 1.3 `npm run typecheck` passes — 499f22f
 
 #### Manual
 
-- [x] 1.4 `npm run test` outputs "No test files found" without error exit code
+- [x] 1.4 `npm run test` outputs "No test files found" without error exit code — 499f22f
 
 ### Phase 2: Smoke Test + CI Wiring + Cookbook
 
 #### Automated
 
-- [ ] 2.1 `npm run test` exits 0 with 2 tests passing
-- [ ] 2.2 `npm run typecheck` passes
-- [ ] 2.3 §6.1 is no longer a TBD placeholder
+- [x] 2.1 `npm run test` exits 0 with 2 tests passing
+- [x] 2.2 `npm run typecheck` passes
+- [x] 2.3 §6.1 is no longer a TBD placeholder
 
 #### Manual
 
-- [ ] 2.4 `npm run test` output confirms Workers runtime, not Node.js
-- [ ] 2.5 Breaking `formatDate` return turns test red
-- [ ] 2.6 `test-plan.md §6.1` reads as actionable, copy-paste-ready pattern
+- [x] 2.4 `npm run test` output confirms Workers runtime, not Node.js
+- [x] 2.5 Breaking `formatDate` return turns test red
+- [x] 2.6 `test-plan.md §6.1` reads as actionable, copy-paste-ready pattern
