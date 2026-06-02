@@ -1,0 +1,1 @@
+remmbver to focus on elements such as buttons/tabs/modals etc, in the mock they are a lil bi tilted/skewed, we can also tilt them in diferent direction on hover actions, we dont wnat ease animation, should 0-1, hard , no animations. Look closely to png mocks
