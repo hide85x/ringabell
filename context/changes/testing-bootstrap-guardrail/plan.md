@@ -208,12 +208,12 @@ These questions from research must be resolved in S-04 planning before guardrail
 
 #### Automated
 
-- [x] 2.1 `npm run test` exits 0 with 2 tests passing
-- [x] 2.2 `npm run typecheck` passes
-- [x] 2.3 §6.1 is no longer a TBD placeholder
+- [x] 2.1 `npm run test` exits 0 with 2 tests passing — 77b6150
+- [x] 2.2 `npm run typecheck` passes — 77b6150
+- [x] 2.3 §6.1 is no longer a TBD placeholder — 77b6150
 
 #### Manual
 
-- [x] 2.4 `npm run test` output confirms Workers runtime, not Node.js
-- [x] 2.5 Breaking `formatDate` return turns test red
-- [x] 2.6 `test-plan.md §6.1` reads as actionable, copy-paste-ready pattern
+- [x] 2.4 `npm run test` output confirms Workers runtime, not Node.js — 77b6150
+- [x] 2.5 Breaking `formatDate` return turns test red — 77b6150
+- [x] 2.6 `test-plan.md §6.1` reads as actionable, copy-paste-ready pattern — 77b6150
