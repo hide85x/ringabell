@@ -85,13 +85,13 @@ Merge tabel w `dictionaries.vue`, dodanie back button w `AdminNav.vue`, update t
 
 #### Automated
 
-- [x] 1.1 npm run build passes
+- [x] 1.1 npm run build passes — c506f34
 
 #### Manual
 
-- [ ] 1.2 One table with MIN. NA WALKĘ column
-- [ ] 1.3 BRAK shown when no count set
-- [ ] 1.4 Add role with count — badge visible
-- [ ] 1.5 Edit role — name + count in one modal
-- [ ] 1.6 AdminNav WRÓĆ button navigates to /
-- [ ] 1.7 Hover rotate(-2deg) on all buttons
+- [x] 1.2 One table with MIN. NA WALKĘ column — c506f34
+- [x] 1.3 BRAK shown when no count set — c506f34
+- [x] 1.4 Add role with count — badge visible — c506f34
+- [x] 1.5 Edit role — name + count in one modal — c506f34
+- [x] 1.6 AdminNav WRÓĆ button navigates to / — c506f34
+- [x] 1.7 Hover rotate(-2deg) on all buttons — c506f34
