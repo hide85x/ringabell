@@ -268,14 +268,14 @@ async function inviteUser() {
   letter-spacing: 0.08em;
   padding: 8px 18px;
   cursor: pointer;
-  transform: skewX(-8deg);
+  transform: rotate(2deg);
   transition: none;
 }
 
 .add-btn:hover {
   background: white;
   color: #221010;
-  transform: skewX(-8deg) rotate(-3deg);
+  transform: rotate(-2deg);
 }
 
 .user-table {
@@ -366,7 +366,7 @@ async function inviteUser() {
 .edit-btn:hover {
   background: white;
   color: #221010;
-  transform: skewX(-8deg) rotate(-3deg);
+  transform: rotate(-2deg);
 }
 
 .modal-overlay {
@@ -487,7 +487,7 @@ async function inviteUser() {
 }
 
 .save-btn:hover:not(:disabled) {
-  transform: skewX(-8deg) rotate(-3deg);
+  transform: rotate(-2deg);
 }
 
 .save-btn:disabled {
@@ -512,7 +512,7 @@ async function inviteUser() {
 .delete-btn:hover:not(:disabled) {
   background: #f20d0d;
   color: white;
-  transform: skewX(-8deg) rotate(-3deg);
+  transform: rotate(-2deg);
 }
 
 .delete-btn:disabled {

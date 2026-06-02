@@ -4,6 +4,13 @@ const route = useRoute()
 
 <template>
   <nav class="admin-nav">
+    <a href="/" class="back-link">
+      <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
+        <path d="M13.73 21a2 2 0 0 1-3.46 0" />
+      </svg>
+      WRÓĆ
+    </a>
     <a href="/" class="nav-logo">RING<span class="logo-accent">ABELL</span></a>
     <div class="nav-links">
       <a href="/admin/users" class="nav-link" :class="{ active: route.path === '/admin/users' }">USERS</a>
@@ -16,11 +23,39 @@ const route = useRoute()
 .admin-nav {
   display: flex;
   align-items: center;
-  gap: 32px;
+  gap: 24px;
   background: #1a0808;
   border-bottom: 3px solid #f20d0d;
   padding: 14px 32px;
   font-family: 'Space Grotesk', sans-serif;
+}
+
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: rgba(255, 255, 255, 0.5);
+  text-decoration: none;
+  font-weight: 700;
+  font-size: 0.72rem;
+  letter-spacing: 0.1em;
+  padding: 5px 12px;
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transform: rotate(2deg);
+  transition: none;
+}
+
+.back-link:hover {
+  color: white;
+  border-color: white;
+  transform: rotate(-2deg);
+  box-shadow: 2px 2px 0px white;
+}
+
+.bell-icon {
+  width: 14px;
+  height: 14px;
+  flex-shrink: 0;
 }
 
 .nav-logo {
@@ -41,6 +76,7 @@ const route = useRoute()
 .nav-links {
   display: flex;
   gap: 12px;
+  margin-left: auto;
 }
 
 .nav-link {
@@ -52,14 +88,14 @@ const route = useRoute()
   letter-spacing: 0.1em;
   padding: 6px 14px;
   border: 2px solid rgba(255, 255, 255, 0.2);
-  transform: skewX(-8deg);
+  transform: rotate(2deg);
   transition: none;
 }
 
 .nav-link:hover {
   color: white;
   border-color: white;
-  transform: skewX(-8deg) rotate(-3deg);
+  transform: rotate(-2deg);
   box-shadow: 3px 3px 0px white;
 }
 
