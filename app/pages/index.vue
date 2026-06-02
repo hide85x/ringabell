@@ -200,7 +200,7 @@ async function loginCredentials() {
   padding: 12px;
   cursor: pointer;
   width: 100%;
-  transform: skewX(-8deg);
+  transform: rotate(2deg);
   transition: none;
 }
 
@@ -210,7 +210,7 @@ async function loginCredentials() {
 }
 
 .btn-login:not(:disabled):hover {
-  transform: skewX(-8deg) rotate(-3deg);
+  transform: rotate(-2deg);
 }
 
 .divider {
@@ -241,14 +241,14 @@ async function loginCredentials() {
   font-weight: 700;
   font-size: 0.85rem;
   letter-spacing: 0.05em;
-  transform: skewX(-8deg);
+  transform: rotate(2deg);
   transition: none;
 }
 
 .btn-google:hover {
   border-color: white;
   background: rgba(255, 255, 255, 0.08);
-  transform: skewX(-8deg) rotate(-3deg);
+  transform: rotate(-2deg);
 }
 
 .logged-in {
@@ -308,14 +308,14 @@ async function loginCredentials() {
   letter-spacing: 0.08em;
   padding: 8px;
   cursor: pointer;
-  transform: skewX(-8deg);
+  transform: rotate(2deg);
   transition: none;
 }
 
 .btn-logout:hover {
   border-color: white;
   color: white;
-  transform: skewX(-8deg) rotate(-3deg);
+  transform: rotate(-2deg);
 }
 
 .btn-admin {
@@ -330,12 +330,12 @@ async function loginCredentials() {
   letter-spacing: 0.05em;
   border: 2px solid white;
   box-shadow: 4px 4px 0px white;
-  transform: skewX(-8deg);
+  transform: rotate(2deg);
   transition: none;
 }
 
 .btn-admin:hover {
-  transform: skewX(-8deg) rotate(-3deg);
+  transform: rotate(-2deg);
   box-shadow: 4px 4px 0px white;
 }
 </style>
