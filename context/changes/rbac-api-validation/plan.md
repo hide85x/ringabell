@@ -293,6 +293,8 @@ Write 5 integration tests (3 RBAC, 2 validation) and fill `test-plan.md ยง6.2, ย
 - [x] 1.3 `npm run test -- --reporter=verbose` shows unit project label in output
 - [x] 1.4 `npm run test:integration` resolves and attempts to run vitest (no integration tests yet)
 
+**Phase 1 commit:** `9ac20ec`
+
 ### Phase 2: Test-Session Endpoint + Env Setup
 
 #### Automated

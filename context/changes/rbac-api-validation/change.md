@@ -3,7 +3,7 @@ change_id: rbac-api-validation
 title: Rbac api validation
 status: implementing
 created: 2026-06-02
-updated: 2026-06-02
+updated: 2026-06-03
 archived_at: null
 ---
 
