@@ -37,7 +37,20 @@ Two files to create (`vitest.config.ts`, `utils/date.test.ts`), one file to modi
 
 ## Critical Implementation Details
 
-**`defineWorkersConfig` vs `defineConfig`**: `@cloudflare/vitest-pool-workers` exports its own config helper — `defineWorkersConfig` from `@cloudflare/vitest-pool-workers/config`. Using plain `defineConfig` from `vitest/config` will not wire the pool correctly. This is the only non-obvious API call in Phase 1.
+**`cloudflarePool` (v0.16.x API)**: As of `@cloudflare/vitest-pool-workers` v0.16.x, the old `defineWorkersConfig` helper and the `@cloudflare/vitest-pool-workers/config` subpath no longer exist. The correct approach is to import `cloudflarePool` from the main package (`@cloudflare/vitest-pool-workers`) and assign it to the `pool` property inside standard `defineConfig` from `vitest/config`. The actual config used in this project:
+
+```ts
+import { defineConfig } from 'vitest/config'
+import { cloudflarePool } from '@cloudflare/vitest-pool-workers'
+
+export default defineConfig({
+  test: {
+    pool: cloudflarePool({
+      wrangler: { configPath: './wrangler.toml' },
+    }),
+  },
+})
+```
 
 **Version compatibility**: `@cloudflare/vitest-pool-workers` has strict peer dependency constraints on the `vitest` version. Check the package's release notes before installing to pick a compatible vitest range — do not install latest vitest independently and assume it matches.
 
@@ -86,7 +99,7 @@ export default defineWorkersConfig({
 #### Automated Verification:
 
 - `npm install` completes without errors
-- `npx vitest run --reporter=verbose` exits 0 with "No test files found" (runner configured, no tests yet)
+- `npx vitest run --reporter=verbose` exits 1 with "No test files found" (vitest standard behavior — non-zero exit when no files match; runner configured, no tests yet)
 - `npm run typecheck` passes — vitest types don't break existing TS
 
 #### Manual Verification:
@@ -111,7 +124,7 @@ Write one smoke test on `utils/date.ts` to prove the Workers V8 runner picks up 
 
 **Intent**: Prove the test runner executes in Workers V8 by testing two pure functions from the date utility module. Covering `formatDate` with a fixed input and `nowUtc` for ISO string format gives confidence the dayjs/UTC setup works in the Workers runtime.
 
-**Contract**: Two `it()` blocks: `formatDate('2026-01-15T10:30:00Z')` must return `'2026-01-15 10:30'` (the default `'YYYY-MM-DD HH:mm'` format); `nowUtc()` must match the regex `/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/`.
+**Contract**: Two `it()` blocks wrapped in a `describe('date utils', ...)` block: `formatDate('2026-01-15T10:30:00Z')` must return `'2026-01-15 10:30'` (the default `'YYYY-MM-DD HH:mm'` format); `nowUtc()` must match the regex `/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}\.\d{3}Z$/`. The `describe()` wrapper is the project convention for all test files.
 
 #### 2. Cookbook update — §6.1
 

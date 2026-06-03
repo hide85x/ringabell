@@ -8,7 +8,10 @@
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare",
-    "test": "vitest run",
+    "test": "vitest run --project unit",
+    "test:unit": "vitest run --project unit",
+    "test:integration": "nuxi build && vitest run --project integration",
+    "test:all": "nuxi build && vitest run",
     "test:watch": "vitest"
   },
   "dependencies": {

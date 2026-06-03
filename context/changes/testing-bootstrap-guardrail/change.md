@@ -1,7 +1,7 @@
 ---
 change_id: testing-bootstrap-guardrail
 title: Bootstrap test runner i integration testy guardrail publikacji gali (Phase 1 rollout)
-status: implemented
+status: impl_reviewed
 created: 2026-06-02
 updated: 2026-06-02
 archived_at: null
