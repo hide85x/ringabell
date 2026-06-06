@@ -299,12 +299,12 @@ Write 5 integration tests (3 RBAC, 2 validation) and fill `test-plan.md ยง6.2, ย
 
 #### Automated
 
-- [ ] 2.1 `npm run test` exits 0 (new route doesn't affect unit tests)
-- [ ] 2.2 `npm run typecheck` passes
+- [x] 2.1 `npm run test` exits 0 (new route doesn't affect unit tests)
+- [x] 2.2 `npm run typecheck` passes
 
 #### Manual
 
-- [ ] 2.3 `curl -X POST localhost:8787/test-session` returns 404 without `NUXT_TEST_MODE`
+- [x] 2.3 `curl -X POST localhost:8787/test-session` returns 404 without `NUXT_TEST_MODE`
 
 ### Phase 3: D1 Seed + Test Helpers
 
