@@ -299,23 +299,23 @@ Write 5 integration tests (3 RBAC, 2 validation) and fill `test-plan.md §6.2, �
 
 #### Automated
 
-- [x] 2.1 `npm run test` exits 0 (new route doesn't affect unit tests)
-- [x] 2.2 `npm run typecheck` passes
+- [x] 2.1 `npm run test` exits 0 (new route doesn't affect unit tests) — 41dc80a
+- [x] 2.2 `npm run typecheck` passes — 41dc80a
 
 #### Manual
 
-- [x] 2.3 `curl -X POST localhost:8787/test-session` returns 404 without `NUXT_TEST_MODE`
+- [x] 2.3 `curl -X POST localhost:8787/test-session` returns 404 without `NUXT_TEST_MODE` — 41dc80a
 
 ### Phase 3: D1 Seed + Test Helpers
 
 #### Automated
 
-- [ ] 3.1 `npm run test:seed` exits 0
-- [ ] 3.2 `npm run typecheck` passes
+- [x] 3.1 `npm run test:seed` exits 0
+- [x] 3.2 `npm run typecheck` passes
 
 #### Manual
 
-- [ ] 3.3 `wrangler d1 execute ringabell --local --command "SELECT id, role FROM users"` shows seeded row
+- [x] 3.3 `wrangler d1 execute ringabell --local --command "SELECT id, role FROM users"` shows seeded row
 
 ### Phase 4: Integration Tests + Cookbook
 

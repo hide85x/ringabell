@@ -10,7 +10,8 @@
     "postinstall": "nuxt prepare",
     "test": "vitest run --project unit",
     "test:unit": "vitest run --project unit",
-    "test:integration": "nuxi build && vitest run --project integration",
+    "test:seed": "wrangler d1 migrations apply ringabell --local && wrangler d1 execute ringabell --local --file test/fixtures/seed.sql",
+    "test:integration": "nuxi build && npm run test:seed && vitest run --project integration",
     "test:all": "nuxi build && vitest run",
     "test:watch": "vitest"
   },
