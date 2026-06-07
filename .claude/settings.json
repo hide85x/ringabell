@@ -6,13 +6,18 @@
         "hooks": [
           {
             "type": "command",
-            "command": "npx eslint --quiet \"$(jq -r '.tool_input.file_path // empty')\" 2>&1 | head -20",
+            "command": "bash .claude/hooks/eslint.sh",
             "timeout": 10000
           },
           {
             "type": "command",
-            "command": "npx nuxi typecheck 2>&1 | grep -E 'error TS' | grep -v 'node_modules' | head -10",
+            "command": "bash .claude/hooks/typecheck.sh",
             "timeout": 30000
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/test-related.sh",
+            "timeout": 60000
           }
         ]
       }

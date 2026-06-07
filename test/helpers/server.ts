@@ -1,9 +1,9 @@
 import { unstable_dev } from 'wrangler'
-import type { UnstableDevWorker } from 'wrangler'
+import type { Unstable_DevWorker } from 'wrangler'
 
 export const TEST_USER_ID = 'test-user-001'
 
-export async function startWorker(): Promise<UnstableDevWorker> {
+export async function startWorker(): Promise<Unstable_DevWorker> {
   return unstable_dev('.output/server/index.mjs', {
     experimental: { disableExperimentalWarning: true },
     local: true,
@@ -15,7 +15,7 @@ export async function startWorker(): Promise<UnstableDevWorker> {
   })
 }
 
-export async function getSession(worker: UnstableDevWorker, role: string): Promise<string> {
+export async function getSession(worker: Unstable_DevWorker, role: string): Promise<string> {
   const res = await worker.fetch('/test-session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
