@@ -321,13 +321,13 @@ Write 5 integration tests (3 RBAC, 2 validation) and fill `test-plan.md §6.2, �
 
 #### Automated
 
-- [x] 4.1 `npm run test:integration` exits 0 with 5 tests passing
-- [x] 4.2 `npm run test` exits 0 with 2 unit tests passing (no regression)
-- [x] 4.3 `npm run typecheck` passes
-- [x] 4.4 `grep "TBD" context/foundation/test-plan.md | grep -E "6\.2|6\.3|6\.4"` returns no output
+- [x] 4.1 `npm run test:integration` exits 0 with 5 tests passing — 80da08f
+- [x] 4.2 `npm run test` exits 0 with 2 unit tests passing (no regression) — 80da08f
+- [x] 4.3 `npm run typecheck` passes — 80da08f
+- [x] 4.4 `grep "TBD" context/foundation/test-plan.md | grep -E "6\.2|6\.3|6\.4"` returns no output — 80da08f
 
 #### Manual
 
-- [x] 4.5 `npm run test:integration -- --reporter=verbose` shows `[integration]` project and 5 named tests
-- [x] 4.6 Breaking one RBAC assertion turns test red
-- [x] 4.7 `test-plan.md §6.2`, `§6.3`, `§6.4` each read as actionable patterns
+- [x] 4.5 `npm run test:integration -- --reporter=verbose` shows `[integration]` project and 5 named tests — 80da08f
+- [x] 4.6 Breaking one RBAC assertion turns test red — 80da08f
+- [x] 4.7 `test-plan.md §6.2`, `§6.3`, `§6.4` each read as actionable patterns — 80da08f
