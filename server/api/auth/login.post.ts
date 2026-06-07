@@ -24,7 +24,7 @@ export default defineEventHandler(async (event) => {
       email: doc.email as string,
       name: doc.name as string,
       avatar: doc.avatar as string,
-      role: doc.role as string,
+      role: doc.role as 'Admin' | 'Manager' | 'Personel',
     },
   })
 
