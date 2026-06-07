@@ -116,8 +116,8 @@ Przeniesienie `auth.d.ts` do `shared/types/`, naprawa `H3Event` import i casty `
 
 #### Automated
 
-- [x] 1.1 Typecheck passes — `npx nuxi typecheck` zero errors TS
-- [x] 1.2 ESLint passes on changed files
+- [x] 1.1 Typecheck passes — `npx nuxi typecheck` zero errors TS — 86ac490
+- [x] 1.2 ESLint passes on changed files — 86ac490
 
 #### Manual
 
