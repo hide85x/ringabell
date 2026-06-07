@@ -69,7 +69,7 @@ Status zmienia się przez: `not started` → `change opened` → `researched` �
 | # | Nazwa fazy | Cel (jedna linia) | Risks | Typy testów | Status | Change folder |
 |---|---|---|---|---|---|---|
 | 1 | Bootstrap + guardrail walidacji | Bootstrap test runner (Vitest) i pierwsze integration testy weryfikujące blokadę publikacji gali | #1, #2 | unit, integration | complete | context/changes/testing-bootstrap-guardrail/ |
-| 2 | RBAC i walidacja wejść API | Integration testy middleware autoryzacji i server-side walidacji wejść | #3, #4 | integration | not started | — |
+| 2 | RBAC i walidacja wejść API | Integration testy middleware autoryzacji i server-side walidacji wejść | #3, #4 | integration | complete | context/changes/rbac-api-validation/ |
 | 3 | Integracja D1 i modele danych | Integration testy schema integrity Assignment/Fight/Person przez lokalny D1 | #5 | integration | not started | — |
 | 4 | Email dispatch i quality gates | Smoke test CPU budget na Workers staging + wiring lint/typecheck/testy do CI | #6 | integration, smoke (staging) | not started | — |
 
@@ -117,15 +117,20 @@ Utwórz plik `*.test.ts` co-located z testowanym modułem (np. `utils/foo.test.t
 
 ### 6.2 Dodawanie integration testu server route (D1)
 
-TBD — see §3 Phase 1 (pattern: Vitest + `@cloudflare/vitest-pool-workers` lub `unstable_dev`, assert request → response + side effects w D1 local).
+Utwórz plik `*.integration.test.ts` co-located z route pod testem (np. `server/api/admin/users/users.rbac.integration.test.ts`). Użyj `startWorker()` / `worker.stop()` z `test/helpers/server.ts` w `beforeAll` / `afterAll` (timeout: `60_000`). Przed uruchomieniem testów upewnij się, że D1 jest zasilone: `npm run test:seed`. Uruchom: `npm run test:integration` (buduje app, seeduje D1, odpala vitest w puli `forks`). Wzorzec referencyjny: `server/api/admin/users/users.rbac.integration.test.ts`.
 
 ### 6.3 Dodawanie integration testu middleware autoryzacji (rola check)
 
-TBD — see §3 Phase 2 (pattern: HTTP request z sesją roli Manager/Personel do endpointu admina, assert 403).
+1. Utwórz sesję przez `getSession(worker, 'Manager')` z `test/helpers/server.ts` — zwraca wartość nagłówka `set-cookie`.
+2. Przekaż cookie w nagłówku `Cookie` przy każdym `worker.fetch(...)`.
+3. Asercje dla trzech ścieżek: brak cookie → `expect(res.status).toBe(401)`, rola Manager → `expect(res.status).toBe(403)`, rola Admin → `expect(res.status).toBe(200)`.
+4. Jeden endpoint wystarczy — guard jest współdzielony przez wszystkie 12 endpointów admin.
+
+Wzorzec referencyjny: `server/api/admin/users/users.rbac.integration.test.ts`.
 
 ### 6.4 Dodawanie testu dla nowego endpointu API
 
-TBD — see §3 Phase 2 (pattern: integration preferred; e2e tylko gdy failure mode wymaga pełnego deployed shape).
+Preferuj integration (HTTP-level via `unstable_dev`) nad unit (import handlera) — integration łapie błędy routingu, auth middleware i D1 w jednym kroku. Użyj e2e (Playwright) tylko gdy failure mode wymaga pełnego deployed shape (CDN, OAuth redirect, real DNS). Wzorzec referencyjny: `server/api/admin/users/users.validation.integration.test.ts`.
 
 ### 6.5 Dodawanie smoke testu na Workers staging (CPU budget)
 
