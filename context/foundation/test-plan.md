@@ -149,6 +149,7 @@ TBD — see §3 Phase 4 (pattern: fetch do deployed stagingu, `wrangler tail` we
 
 ## 8. Freshness Ledger
 
+- Swallowed error audit (M3L5): 2026-06-11 — server/ clean (healthz.get.ts: single try/catch, propagates 503 correctly)
 - Strategy (§1–§5) last reviewed: 2026-06-02
 - Stack versions last verified: 2026-06-02
 - AI-native tool references last verified: 2026-06-02 (brak AI-native narzędzi w obecnym rollout)
