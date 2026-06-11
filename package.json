@@ -26,6 +26,8 @@
   },
   "devDependencies": {
     "@cloudflare/vitest-pool-workers": "^0.16.11",
+    "@playwright/test": "^1.60.0",
+    "@types/node": "^25.9.3",
     "vitest": "^4.1.8",
     "wrangler": "^4.96.0"
   }
