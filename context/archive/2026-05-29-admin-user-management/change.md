@@ -1,10 +1,10 @@
 ---
 change_id: admin-user-management
 title: Admin manages user accounts and assigns system roles
-status: implemented
+status: archived
 created: 2026-05-29
-updated: 2026-05-31
-archived_at: null
+updated: 2026-06-15
+archived_at: 2026-06-15T19:34:19Z
 ---
 
 ## Notes

@@ -29,7 +29,7 @@ Firma promocji bokserskiej zarządza dziesiątkami ludzi w ściśle określonych
 |------|------------------------------|--------------------------------------------------------------------------|--------------------|----------------------------------------|----------|
 | F-01 | auth-scaffold                | (fundament) OAuth social login działa; sesje i role systemowe dostępne   | —                  | Access Control, FR-001, FR-002         | ready    |
 | F-02 | data-scaffold                | (fundament) Cloudflare D1 jako baza danych; modele bazowe zdefiniowane (User, Person, BoxingEvent, Fight, Assignment) | F-01          | FR-001–FR-015, Business Logic          | ready    |
-| S-01 | admin-user-management        | Admin zarządza kontami użytkowników i przypisuje role systemowe          | F-01, F-02         | FR-001, FR-002                         | ready    |
+| S-01 | admin-user-management        | Admin zarządza kontami użytkowników i przypisuje role systemowe          | F-01, F-02         | FR-001, FR-002                         | done     |
 | S-02 | admin-dictionaries           | Admin zarządza słownikami ról personelu i wymagań per walka              | F-01, F-02         | FR-003                                 | done     |
 | S-03 | personnel-management         | Manager dodaje, edytuje i dezaktywuje osoby z bazy personelu             | F-01, F-02         | FR-004, FR-005                         | proposed |
 | S-04 | event-and-fight-management   | Manager tworzy galę, dodaje walki i przypisuje personel z walidacją live | F-01, F-02, S-02, S-03 | FR-006, FR-007, FR-008, FR-009, FR-010, FR-012 | proposed |
@@ -103,7 +103,7 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Usunięcie użytkownika przypisanego do przyszłej gali zostawia lukę w obsadzie — PRD akceptuje to zachowanie (manager widzi błąd walidacji). Upewnić się że cascade delete nie usuwa historycznych przypisań.
-- **Status:** ready
+- **Status:** done
 
 ### S-02: Słowniki ról i wymagań (Admin)
 
@@ -173,7 +173,7 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 |------------|----------------------------|-------------------------------------------------------------|-----------------------|----------------------------------------------|
 | F-01       | auth-scaffold              | [RingAbell] Auth scaffold — OAuth + sesje + role systemowe  | ~~nie~~ **done**      | Zaimplementowane                             |
 | F-02       | data-scaffold              | [RingAbell] Data scaffold — D1 + modele bazowe              | ~~nie~~ **done**      | Zaimplementowane (MongoDB → D1)              |
-| S-01       | admin-user-management      | [RingAbell] Admin — zarządzanie użytkownikami i rolami      | ~~nie~~ **done**      | Zaimplementowane                             |
+| S-01       | admin-user-management      | [RingAbell] Admin — zarządzanie użytkownikami i rolami      | ~~nie~~ **done**      | Zaimplementowane — zarchiwizowane 2026-06-15 |
 | S-02       | admin-dictionaries         | [RingAbell] Admin — słowniki ról i wymagań per walka        | ~~nie~~ **done**      | Zaimplementowane                             |
 | S-03       | personnel-management       | [RingAbell] Manager — baza personelu (CRUD + dezaktywacja)  | tak                   | Prerequisites spełnione (F-01 + F-02 ready) |
 | S-04       | event-and-fight-management | [RingAbell] Manager — gale, walki, obsada, walidacja live   | nie                   | Czeka na S-03                                |
