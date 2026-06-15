@@ -1,10 +1,10 @@
 ---
 change_id: dictionaries-refactor
 title: Dictionaries UI refactor — merge tables, back button, button transforms
-status: implemented
+status: archived
 created: 2026-06-02
-updated: 2026-06-02
-archived_at: null
+updated: 2026-06-15
+archived_at: 2026-06-15T19:34:19Z
 ---
 
 ## Notes

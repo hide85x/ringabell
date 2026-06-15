@@ -1,10 +1,10 @@
 ---
 change_id: data-scaffold
 title: Data scaffold — MongoDB driver connected to Atlas with base models
-status: implemented
+status: archived
 created: 2026-05-29
-updated: 2026-05-29
-archived_at: null
+updated: 2026-06-15
+archived_at: 2026-06-15T19:34:19Z
 ---
 
 ## Notes

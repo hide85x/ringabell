@@ -1,10 +1,10 @@
 ---
 change_id: fix-db-timeout-leak
 title: Fix db timeout leak
-status: cancelled
+status: archived
 created: 2026-06-01
-updated: 2026-06-02
-archived_at: null
+updated: 2026-06-15
+archived_at: 2026-06-15T19:34:19Z
 ---
 
 ## Notes

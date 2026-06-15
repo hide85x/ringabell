@@ -1,11 +1,11 @@
 ---
 change_id: d1-type-definitions
 title: TypeScript types for D1 query results in auth layer
-status: implemented
+status: archived
 created: 2026-06-07
-updated: 2026-06-07
+updated: 2026-06-15
 
-archived_at: null
+archived_at: 2026-06-15T19:34:19Z
 ---
 
 ## Notes
