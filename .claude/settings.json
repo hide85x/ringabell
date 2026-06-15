@@ -1,4 +1,33 @@
 {
+  "permissions": {
+    "allow": [
+      "Bash(npm *)",
+      "Bash(npx *)",
+      "Bash(node *)",
+      "Bash(git add *)",
+      "Bash(git commit *)",
+      "Bash(git diff *)",
+      "Bash(git log *)",
+      "Bash(git status *)",
+      "Bash(git branch *)",
+      "Bash(git checkout *)",
+      "Bash(git stash *)",
+      "Read",
+      "Edit",
+      "Write",
+      "Skill(10x-archive)",
+      "Skill(10x-archive:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf *)"
+    ],
+    "ask": [
+      "Bash(curl *)",
+      "Bash(wget *)",
+      "Bash(git push *)",
+      "Bash(git push)"
+    ]
+  },
   "hooks": {
     "PostToolUse": [
       {
@@ -21,33 +50,6 @@
           }
         ]
       }
-    ]
-  },
-  "permissions": {
-    "allow": [
-      "Bash(npm *)",
-      "Bash(npx *)",
-      "Bash(node *)",
-      "Bash(git add *)",
-      "Bash(git commit *)",
-      "Bash(git diff *)",
-      "Bash(git log *)",
-      "Bash(git status *)",
-      "Bash(git branch *)",
-      "Bash(git checkout *)",
-      "Bash(git stash *)",
-      "Read",
-      "Edit",
-      "Write"
-    ],
-    "ask": [
-      "Bash(curl *)",
-      "Bash(wget *)",
-      "Bash(git push *)",
-      "Bash(git push)"
-    ],
-    "deny": [
-      "Bash(rm -rf *)"
     ]
   }
 }
