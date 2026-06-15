@@ -3,7 +3,7 @@ project: RingAbell
 version: 1
 status: draft
 created: 2026-05-28
-updated: 2026-06-11
+updated: 2026-06-15
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -30,7 +30,7 @@ Firma promocji bokserskiej zarządza dziesiątkami ludzi w ściśle określonych
 | F-01 | auth-scaffold                | (fundament) OAuth social login działa; sesje i role systemowe dostępne   | —                  | Access Control, FR-001, FR-002         | ready    |
 | F-02 | data-scaffold                | (fundament) Cloudflare D1 jako baza danych; modele bazowe zdefiniowane (User, Person, BoxingEvent, Fight, Assignment) | F-01          | FR-001–FR-015, Business Logic          | ready    |
 | S-01 | admin-user-management        | Admin zarządza kontami użytkowników i przypisuje role systemowe          | F-01, F-02         | FR-001, FR-002                         | ready    |
-| S-02 | admin-dictionaries           | Admin zarządza słownikami ról personelu i wymagań per walka              | F-01, F-02         | FR-003                                 | ready    |
+| S-02 | admin-dictionaries           | Admin zarządza słownikami ról personelu i wymagań per walka              | F-01, F-02         | FR-003                                 | done     |
 | S-03 | personnel-management         | Manager dodaje, edytuje i dezaktywuje osoby z bazy personelu             | F-01, F-02         | FR-004, FR-005                         | proposed |
 | S-04 | event-and-fight-management   | Manager tworzy galę, dodaje walki i przypisuje personel z walidacją live | F-01, F-02, S-02, S-03 | FR-006, FR-007, FR-008, FR-009, FR-010, FR-012 | proposed |
 | S-05 | event-publish-and-email      | Manager publikuje galę i cały przypisany personel otrzymuje email        | S-04               | US-01, FR-011                          | proposed |
@@ -115,7 +115,7 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Słownik wymagań per walka jest twardym prerequisite dla logiki walidacji w S-04. Jeśli struktura słownika zmieni się po S-04, refactor walidacji będzie konieczny. Zdefiniować schemat raz, przed S-04.
-- **Status:** ready
+- **Status:** done
 
 ### S-03: Zarządzanie personelem (Manager)
 
@@ -201,4 +201,4 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 | F-01 | auth-scaffold         | OAuth Google + sesje nuxt-auth-utils + middleware RBAC + role Admin/Manager/Personel   | 2026-05-28 |
 | F-02 | data-scaffold         | D1 jako baza (po migracji z MongoDB), modele: User/Person/BoxingEvent/Fight/Assignment | 2026-06-xx |
 | S-01 | admin-user-management | CRUD użytkowników, przypisywanie ról, strona `/admin/users`                            | 2026-06-xx |
-| S-02 | admin-dictionaries    | Słowniki ról personelu i wymagań per walka, strona `/admin/dictionaries`               | 2026-06-xx |
+| S-02 | admin-dictionaries    | Słowniki ról personelu i wymagań per walka, strona `/admin/dictionaries`               | 2026-06-15 |
