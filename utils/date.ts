@@ -7,7 +7,7 @@ dayjs.extend(utc)
  * Format a date to a human-readable string in UTC.
  * Always use this instead of new Date().toISOString() or manual formatting.
  */
-export function formatDate(date: Date | string | number, format = 'YYYY-MM-DD HH:mm'): string {
+export function formatDate(date: dayjs.ConfigType, format = 'YYYY-MM-DD HH:mm'): string {
   return dayjs.utc(date).format(format)
 }
 

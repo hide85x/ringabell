@@ -19,7 +19,7 @@ export default defineOAuthGoogleEventHandler({
         email: doc.email as string,
         name: user.name,
         avatar: user.picture,
-        role: doc.role as string,
+        role: doc.role as 'Admin' | 'Manager' | 'Personel',
       },
     })
     return sendRedirect(event, '/')

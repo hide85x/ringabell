@@ -1,4 +1,28 @@
 {
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/eslint.sh",
+            "timeout": 10000
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/typecheck.sh",
+            "timeout": 30000
+          },
+          {
+            "type": "command",
+            "command": "bash .claude/hooks/test-related.sh",
+            "timeout": 60000
+          }
+        ]
+      }
+    ]
+  },
   "permissions": {
     "allow": [
       "Bash(npm *)",
