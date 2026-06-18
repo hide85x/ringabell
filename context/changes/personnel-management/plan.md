@@ -148,14 +148,14 @@ Pattern: `test-plan.md §6.3` (manager guard uses the same shape as admin guard)
 #### Progress
 
 ##### Automated
-- [x] 1.1 Create server/utils/manager-guard.ts
-- [x] 1.2 Fix server/api/admin/users/[id].delete.ts — last-Admin guard
-- [x] 1.3 Create app/middleware/manager.ts
-- [x] 1.4 RBAC integration test — personnel.rbac.integration.test.ts
+- [x] 1.1 Create server/utils/manager-guard.ts — c72b9c9
+- [x] 1.2 Fix server/api/admin/users/[id].delete.ts — last-Admin guard — c72b9c9
+- [x] 1.3 Create app/middleware/manager.ts — c72b9c9
+- [x] 1.4 RBAC integration test — personnel.rbac.integration.test.ts — c72b9c9
 
 ##### Manual
-- [ ] 1.M1 Verify: `npm run test:integration` passes (RBAC test)
-- [ ] 1.M2 Verify: admin UI can still delete a non-last Admin user normally
+- [x] 1.M1 Verify: `npm run test:integration` passes (RBAC test)
+- [x] 1.M2 Verify: admin UI can still delete a non-last Admin user normally
 
 ---
 
@@ -348,15 +348,15 @@ Minimum test cases:
 #### Progress
 
 ##### Automated
-- [ ] 2.1 GET /api/manager/dictionaries/roles — Manager-accessible
-- [ ] 2.2 GET /api/manager/personnel — active only
-- [ ] 2.3 POST /api/manager/personnel — create + validate
-- [ ] 2.4 PATCH /api/manager/personnel/:id — update any fields
-- [ ] 2.5 DELETE /api/manager/personnel/:id — soft-delete
-- [ ] 2.6 Validation integration tests
+- [x] 2.1 GET /api/manager/dictionaries/roles — Manager-accessible
+- [x] 2.2 GET /api/manager/personnel — active only
+- [x] 2.3 POST /api/manager/personnel — create + validate
+- [x] 2.4 PATCH /api/manager/personnel/:id — update any fields
+- [x] 2.5 DELETE /api/manager/personnel/:id — soft-delete
+- [x] 2.6 Validation integration tests
 
 ##### Manual
-- [ ] 2.M1 Verify: `npm run test:integration` passes (all validation tests)
+- [x] 2.M1 Verify: `npm run test:integration` passes (all validation tests)
 - [ ] 2.M2 Verify: POST a person, GET returns it, DELETE soft-deletes it, GET no longer returns it
 
 ---
