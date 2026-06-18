@@ -21,6 +21,7 @@ const selectedUser = ref<UserDoc | null>(null)
 const selectedRole = ref<'Admin' | 'Manager' | 'Personel'>('Personel')
 const saving = ref(false)
 const deleting = ref(false)
+const deleteError = ref('')
 
 // Invite modal
 const showInvite = ref(false)
@@ -33,10 +34,12 @@ const inviteError = ref('')
 function openModal(user: UserDoc) {
   selectedUser.value = user
   selectedRole.value = user.role
+  deleteError.value = ''
 }
 
 function closeModal() {
   selectedUser.value = null
+  deleteError.value = ''
 }
 
 function openInvite() {
@@ -72,10 +75,20 @@ async function deleteUser() {
   if (!selectedUser.value) return
   if (!window.confirm(`Usuń użytkownika ${selectedUser.value.name || selectedUser.value.email}?`)) return
   deleting.value = true
+  deleteError.value = ''
   try {
     await $fetch(`/api/admin/users/${selectedUser.value.id}`, { method: 'DELETE' })
     await refresh()
     closeModal()
+  }
+  catch (err: unknown) {
+    const status = (err as { statusCode?: number })?.statusCode
+    if (status === 409) {
+      deleteError.value = 'Nie można usunąć ostatniego Admina.'
+    }
+    else {
+      deleteError.value = 'Błąd — spróbuj ponownie.'
+    }
   }
   finally {
     deleting.value = false
@@ -97,8 +110,9 @@ async function inviteUser() {
     await refresh()
     closeInvite()
   }
-  catch (err: any) {
-    if (err?.statusCode === 409) {
+  catch (err: unknown) {
+    const status = (err as { statusCode?: number })?.statusCode
+    if (status === 409) {
       inviteError.value = 'Ten email już istnieje w systemie.'
     }
     else {
@@ -177,6 +191,7 @@ async function inviteUser() {
             <p class="role-note">Zmiana roli wejdzie w życie przy następnym logowaniu użytkownika.</p>
           </div>
         </div>
+        <p v-if="deleteError" class="delete-error">{{ deleteError }}</p>
         <div class="modal-footer">
           <button class="save-btn" :disabled="saving" @click="saveRole">
             {{ saving ? 'ZAPISUJĘ...' : 'ZAPISZ' }}
@@ -458,8 +473,9 @@ async function inviteUser() {
   font-style: italic;
 }
 
-.invite-error {
-  margin: 0;
+.invite-error,
+.delete-error {
+  margin: 0 20px 12px;
   font-size: 0.8rem;
   color: #f20d0d;
   font-weight: 700;

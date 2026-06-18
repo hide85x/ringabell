@@ -20,6 +20,9 @@ export default defineConfig({
           include: ['**/*.integration.test.ts'],
           exclude: ['node_modules/**'],
           pool: 'forks',
+          forks: {
+            maxForks: 1,
+          },
         },
       },
     ],

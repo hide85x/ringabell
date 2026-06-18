@@ -1,7 +1,7 @@
 ---
 change_id: personnel-management
 title: Personnel management
-status: new
+status: implementing
 created: 2026-06-18
 updated: 2026-06-18
 archived_at: null
