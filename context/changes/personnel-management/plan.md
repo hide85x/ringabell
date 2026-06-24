@@ -1,9 +1,9 @@
 ---
 change_id: personnel-management
 title: Personnel management
-status: planned
+status: implemented
 created: 2026-06-18
-updated: 2026-06-18
+updated: 2026-06-24
 ---
 
 # Plan: S-03 Personnel Management
@@ -348,16 +348,16 @@ Minimum test cases:
 #### Progress
 
 ##### Automated
-- [x] 2.1 GET /api/manager/dictionaries/roles — Manager-accessible
-- [x] 2.2 GET /api/manager/personnel — active only
-- [x] 2.3 POST /api/manager/personnel — create + validate
-- [x] 2.4 PATCH /api/manager/personnel/:id — update any fields
-- [x] 2.5 DELETE /api/manager/personnel/:id — soft-delete
-- [x] 2.6 Validation integration tests
+- [x] 2.1 GET /api/manager/dictionaries/roles — Manager-accessible — c99fd88
+- [x] 2.2 GET /api/manager/personnel — active only — c72b9c9
+- [x] 2.3 POST /api/manager/personnel — create + validate — c99fd88
+- [x] 2.4 PATCH /api/manager/personnel/:id — update any fields — c99fd88
+- [x] 2.5 DELETE /api/manager/personnel/:id — soft-delete — c99fd88
+- [x] 2.6 Validation integration tests — c99fd88
 
 ##### Manual
 - [x] 2.M1 Verify: `npm run test:integration` passes (all validation tests)
-- [ ] 2.M2 Verify: POST a person, GET returns it, DELETE soft-deletes it, GET no longer returns it
+- [x] 2.M2 Verify: POST a person, GET returns it, DELETE soft-deletes it, GET no longer returns it
 
 ---
 
@@ -409,12 +409,12 @@ Table columns: `IMIĘ I NAZWISKO`, `ROLA`, `EMAIL`, `TELEFON`, `[EDIT]`
 #### Progress
 
 ##### Automated
-- [ ] 3.1 Create app/components/ManagerNav.vue
-- [ ] 3.2 Create app/pages/manager/personnel.vue
+- [x] 3.1 Create app/components/ManagerNav.vue
+- [x] 3.2 Create app/pages/manager/personnel.vue
 
 ##### Manual
-- [ ] 3.M1 Visual smoke: `/manager/personnel` loads, table shows active persons
-- [ ] 3.M2 Add a new person → appears in table
-- [ ] 3.M3 Edit name/role → change persists after page reload
-- [ ] 3.M4 Deactivate → person disappears from table
-- [ ] 3.M5 Login as Personel → redirected to `/` (middleware works)
+- [x] 3.M1 Visual smoke: `/manager/personnel` loads, table shows active persons
+- [x] 3.M2 Add a new person → appears in table
+- [x] 3.M3 Edit name/role → change persists after page reload
+- [x] 3.M4 Deactivate → person disappears from table
+- [x] 3.M5 Login as Personel → redirected to `/` (middleware works)

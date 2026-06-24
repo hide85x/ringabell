@@ -20,6 +20,7 @@
       </div>
       <button class="btn-logout" @click="clear()">WYLOGUJ</button>
       <a v-if="user?.role === 'Admin'" href="/admin/users" class="btn-admin">ZARZĄDZAJ UŻYTKOWNIKAMI →</a>
+      <a v-if="user?.role === 'Admin' || user?.role === 'Manager'" href="/manager/personnel" class="btn-manager">ZARZĄDZAJ PERSONELEM →</a>
     </div>
 
     <div v-else class="login-section">
@@ -337,5 +338,27 @@ async function loginCredentials() {
 .btn-admin:hover {
   transform: rotate(-2deg);
   box-shadow: 4px 4px 0px white;
+}
+
+.btn-manager {
+  display: block;
+  text-align: center;
+  padding: 12px;
+  background: transparent;
+  color: white;
+  text-decoration: none;
+  font-weight: 900;
+  font-size: 0.85rem;
+  letter-spacing: 0.05em;
+  border: 2px solid white;
+  box-shadow: 4px 4px 0px white;
+  transform: rotate(-2deg);
+  transition: none;
+}
+
+.btn-manager:hover {
+  transform: rotate(2deg);
+  background: white;
+  color: #221010;
 }
 </style>

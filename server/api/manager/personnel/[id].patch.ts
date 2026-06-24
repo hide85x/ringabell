@@ -21,10 +21,16 @@ export default defineEventHandler(async (event) => {
     vals.push(body.name.trim())
   }
   if (body?.email !== undefined) {
+    if (body.email?.trim() && !body.email.includes('@')) {
+      throw createError({ statusCode: 400, statusMessage: 'Invalid email' })
+    }
     sets.push('email = ?')
     vals.push(body.email?.trim() ?? null)
   }
   if (body?.phone !== undefined) {
+    if (body.phone?.trim() && !/^[\d\s()\-+]{7,}$/.test(body.phone.trim())) {
+      throw createError({ statusCode: 400, statusMessage: 'Invalid phone number' })
+    }
     sets.push('phone = ?')
     vals.push(body.phone?.trim() ?? null)
   }

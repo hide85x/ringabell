@@ -11,6 +11,13 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'role is required' })
   }
 
+  if (body.email?.trim() && !body.email.includes('@')) {
+    throw createError({ statusCode: 400, statusMessage: 'Invalid email' })
+  }
+  if (body.phone?.trim() && !/^[\d\s()\-+]{7,}$/.test(body.phone.trim())) {
+    throw createError({ statusCode: 400, statusMessage: 'Invalid phone number' })
+  }
+
   const db = getD1(event)
   const roleRow = await db
     .prepare('SELECT id FROM person_roles WHERE name = ?')
