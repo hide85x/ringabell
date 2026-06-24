@@ -19,7 +19,7 @@ Stack decisions: `@context/foundation/tech-stack.md`
 
 ## Stack
 
-MongoDB via native `mongodb` driver (installed, see `server/utils/db.ts`). Auth via `nuxt-auth-utils` (OAuth social login only, no passwords stored). Deploy target: Cloudflare Workers.
+Cloudflare D1 (SQLite) via native `@cloudflare/workers-types` bindings (see `server/utils/db.ts`). Auth via `nuxt-auth-utils` (OAuth social login only, no passwords stored). Deploy target: Cloudflare Workers.
 
 ## Date handling
 
@@ -36,11 +36,6 @@ Deploy target: Cloudflare Workers (not Pages). Deploy command: `wrangler deploy`
 Agent may run: `wrangler whoami`, `wrangler deployment list`, `wrangler tail`, `wrangler secret list`, `wrangler deploy` (staging/preview only).
 
 Never run without explicit user approval: deleting a project, rotating secrets, changing DNS, any `wrangler delete` or destructive operation. User performs these manually in the Cloudflare dashboard.
-
-## Known gaps (to add)
-
-- No test runner configured yet
-- `package.json` name is still `"bootstrap-scaffold"` — rename to `"ringabell"`
 
 <!-- BEGIN @przeprogramowani/10x-cli -->
 

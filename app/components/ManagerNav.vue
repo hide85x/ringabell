@@ -1,9 +1,11 @@
 <script setup lang="ts">
 const route = useRoute()
+const { user } = useUserSession()
+const isAdmin = computed(() => user.value?.role === 'Admin')
 </script>
 
 <template>
-  <nav class="admin-nav">
+  <nav class="manager-nav">
     <a href="/" class="back-link">
       <svg class="bell-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
         <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9" />
@@ -13,15 +15,17 @@ const route = useRoute()
     </a>
     <a href="/" class="nav-logo">RING<span class="logo-accent">ABELL</span></a>
     <div class="nav-links">
-      <a href="/admin/users" class="nav-link" :class="{ active: route.path === '/admin/users' }">USERS</a>
-      <a href="/admin/dictionaries" class="nav-link" :class="{ active: route.path === '/admin/dictionaries' }">DICTIONARIES</a>
+      <template v-if="isAdmin">
+        <a href="/admin/users" class="nav-link" :class="{ active: route.path === '/admin/users' }">USERS</a>
+        <a href="/admin/dictionaries" class="nav-link" :class="{ active: route.path === '/admin/dictionaries' }">DICTIONARIES</a>
+      </template>
       <a href="/manager/personnel" class="nav-link" :class="{ active: route.path === '/manager/personnel' }">PERSONEL</a>
     </div>
   </nav>
 </template>
 
 <style scoped>
-.admin-nav {
+.manager-nav {
   display: flex;
   align-items: center;
   gap: 24px;

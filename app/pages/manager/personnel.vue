@@ -1,164 +1,188 @@
 <script setup lang="ts">
-definePageMeta({ middleware: 'admin' })
+definePageMeta({ middleware: 'manager' })
 
 useHead({
   link: [{ rel: 'stylesheet', href: 'https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;700;900&display=swap' }],
 })
 
-interface UserDoc {
+interface PersonDoc {
   id: string
-  email: string
   name: string
-  avatar: string
-  role: 'Admin' | 'Manager' | 'Personel'
+  email: string | null
+  phone: string | null
+  role: string
+  isActive: number
   createdAt: string
 }
 
-const { data: users, refresh } = await useFetch<UserDoc[]>('/api/admin/users')
+interface RoleDoc {
+  id: string
+  name: string
+}
+
+const { data: persons, refresh } = await useFetch<PersonDoc[]>('/api/manager/personnel')
+const { data: roles } = await useFetch<RoleDoc[]>('/api/manager/dictionaries/roles')
 
 // Edit modal
-const selectedUser = ref<UserDoc | null>(null)
-const selectedRole = ref<'Admin' | 'Manager' | 'Personel'>('Personel')
+const selectedPerson = ref<PersonDoc | null>(null)
+const editName = ref('')
+const editEmail = ref('')
+const editPhone = ref('')
+const editRole = ref('')
 const saving = ref(false)
-const deleting = ref(false)
-const deleteError = ref('')
+const deactivating = ref(false)
+const editError = ref('')
 
-// Invite modal
-const showInvite = ref(false)
-const inviteEmail = ref('')
-const inviteRole = ref<'Admin' | 'Manager' | 'Personel'>('Personel')
-const invitePassword = ref('')
-const inviting = ref(false)
-const inviteError = ref('')
+// Add modal
+const showAdd = ref(false)
+const addName = ref('')
+const addEmail = ref('')
+const addPhone = ref('')
+const addRole = ref('')
+const adding = ref(false)
+const addError = ref('')
 
-function openModal(user: UserDoc) {
-  selectedUser.value = user
-  selectedRole.value = user.role
-  deleteError.value = ''
+function openModal(person: PersonDoc) {
+  selectedPerson.value = person
+  editName.value = person.name
+  editEmail.value = person.email ?? ''
+  editPhone.value = person.phone ?? ''
+  editRole.value = person.role
+  editError.value = ''
 }
 
 function closeModal() {
-  selectedUser.value = null
-  deleteError.value = ''
+  selectedPerson.value = null
+  editError.value = ''
 }
 
-function openInvite() {
-  inviteEmail.value = ''
-  inviteRole.value = 'Personel'
-  invitePassword.value = ''
-  inviteError.value = ''
-  showInvite.value = true
+function openAdd() {
+  addName.value = ''
+  addEmail.value = ''
+  addPhone.value = ''
+  addRole.value = roles.value?.[0]?.name ?? ''
+  addError.value = ''
+  showAdd.value = true
 }
 
-function closeInvite() {
-  invitePassword.value = ''
-  showInvite.value = false
+function closeAdd() {
+  showAdd.value = false
 }
 
-async function saveRole() {
-  if (!selectedUser.value) return
+async function savePerson() {
+  if (!selectedPerson.value) return
+  if (editEmail.value && !editEmail.value.includes('@')) {
+    editError.value = 'Podaj prawidłowy adres email.'
+    return
+  }
+  if (editPhone.value && !/^[\d\s()\-+]{7,}$/.test(editPhone.value)) {
+    editError.value = 'Podaj prawidłowy numer telefonu.'
+    return
+  }
   saving.value = true
+  editError.value = ''
   try {
-    await $fetch(`/api/admin/users/${selectedUser.value.id}`, {
+    await $fetch(`/api/manager/personnel/${selectedPerson.value.id}`, {
       method: 'PATCH',
-      body: { role: selectedRole.value },
+      body: {
+        name: editName.value,
+        email: editEmail.value || null,
+        phone: editPhone.value || null,
+        role: editRole.value,
+      },
     })
     await refresh()
     closeModal()
+  }
+  catch {
+    editError.value = 'Błąd — sprawdź dane i spróbuj ponownie.'
   }
   finally {
     saving.value = false
   }
 }
 
-async function deleteUser() {
-  if (!selectedUser.value) return
-  if (!window.confirm(`Usuń użytkownika ${selectedUser.value.name || selectedUser.value.email}?`)) return
-  deleting.value = true
-  deleteError.value = ''
+async function deactivatePerson() {
+  if (!selectedPerson.value) return
+  if (!window.confirm(`Dezaktywuj ${selectedPerson.value.name}?`)) return
+  deactivating.value = true
+  editError.value = ''
   try {
-    await $fetch(`/api/admin/users/${selectedUser.value.id}`, { method: 'DELETE' })
+    await $fetch(`/api/manager/personnel/${selectedPerson.value.id}`, { method: 'DELETE' })
     await refresh()
     closeModal()
   }
-  catch (err: unknown) {
-    const status = (err as { statusCode?: number })?.statusCode
-    if (status === 409) {
-      deleteError.value = 'Nie można usunąć ostatniego Admina.'
-    }
-    else {
-      deleteError.value = 'Błąd — spróbuj ponownie.'
-    }
+  catch {
+    editError.value = 'Błąd dezaktywacji — spróbuj ponownie.'
   }
   finally {
-    deleting.value = false
+    deactivating.value = false
   }
 }
 
-async function inviteUser() {
-  inviteError.value = ''
-  inviting.value = true
+async function addPerson() {
+  addError.value = ''
+  if (addEmail.value && !addEmail.value.includes('@')) {
+    addError.value = 'Podaj prawidłowy adres email.'
+    return
+  }
+  if (addPhone.value && !/^[\d\s()\-+]{7,}$/.test(addPhone.value)) {
+    addError.value = 'Podaj prawidłowy numer telefonu.'
+    return
+  }
+  adding.value = true
   try {
-    await $fetch('/api/admin/users', {
+    await $fetch('/api/manager/personnel', {
       method: 'POST',
       body: {
-        email: inviteEmail.value,
-        role: inviteRole.value,
-        ...(invitePassword.value ? { password: invitePassword.value } : {}),
+        name: addName.value,
+        email: addEmail.value || null,
+        phone: addPhone.value || null,
+        role: addRole.value,
       },
     })
     await refresh()
-    closeInvite()
+    closeAdd()
   }
-  catch (err: unknown) {
-    const status = (err as { statusCode?: number })?.statusCode
-    if (status === 409) {
-      inviteError.value = 'Ten email już istnieje w systemie.'
-    }
-    else {
-      inviteError.value = 'Błąd — sprawdź email i spróbuj ponownie.'
-    }
+  catch {
+    addError.value = 'Błąd — sprawdź dane i spróbuj ponownie.'
   }
   finally {
-    inviting.value = false
+    adding.value = false
   }
 }
 </script>
 
 <template>
   <div class="page">
-    <AdminNav />
+    <ManagerNav />
 
     <div class="content">
       <div class="section-header">
-        <div class="title-badge">USERS</div>
-        <button class="add-btn" @click="openInvite">+ DODAJ UŻYTKOWNIKA</button>
+        <div class="title-badge">PERSONEL</div>
+        <button class="add-btn" @click="openAdd">+ DODAJ OSOBĘ</button>
       </div>
 
-      <table class="user-table">
+      <table class="personnel-table">
         <thead>
           <tr>
-            <th>UŻYTKOWNIK</th>
-            <th>EMAIL</th>
+            <th>IMIĘ I NAZWISKO</th>
             <th>ROLA</th>
+            <th>EMAIL</th>
+            <th>TELEFON</th>
             <th />
           </tr>
         </thead>
         <tbody>
-          <tr v-for="user in users" :key="user.id">
+          <tr v-for="person in persons" :key="person.id">
+            <td><strong>{{ person.name }}</strong></td>
             <td>
-              <div class="user-cell">
-                <img v-if="user.avatar" :src="user.avatar" :alt="user.name" class="avatar">
-                <span v-else class="avatar-placeholder">?</span>
-                <strong>{{ user.name || '—' }}</strong>
-              </div>
+              <span class="role-badge">{{ person.role.toUpperCase() }}</span>
             </td>
-            <td>{{ user.email }}</td>
+            <td>{{ person.email || '—' }}</td>
+            <td>{{ person.phone || '—' }}</td>
             <td>
-              <span class="role-badge" :class="user.role.toLowerCase()">{{ user.role.toUpperCase() }}</span>
-            </td>
-            <td>
-              <button class="edit-btn" @click="openModal(user)">EDIT</button>
+              <button class="edit-btn" @click="openModal(person)">EDIT</button>
             </td>
           </tr>
         </tbody>
@@ -166,74 +190,77 @@ async function inviteUser() {
     </div>
 
     <!-- Edit modal -->
-    <div v-if="selectedUser" class="modal-overlay" @click.self="closeModal">
+    <div v-if="selectedPerson" class="modal-overlay" @click.self="closeModal">
       <div class="modal">
         <div class="modal-header">
-          <span>EDIT USER</span>
+          <span>EDYTUJ OSOBĘ</span>
           <button class="close-btn" @click="closeModal">✕</button>
         </div>
         <div class="modal-body">
           <div class="field">
-            <label>NAZWA</label>
-            <p class="field-value">{{ selectedUser.name || '—' }}</p>
-          </div>
-          <div class="field">
-            <label>EMAIL</label>
-            <p class="field-value">{{ selectedUser.email }}</p>
+            <label>IMIĘ I NAZWISKO</label>
+            <input v-model="editName" type="text" class="text-input" placeholder="Jan Kowalski">
           </div>
           <div class="field">
             <label>ROLA</label>
-            <select v-model="selectedRole" class="role-select">
-              <option value="Admin">Admin</option>
-              <option value="Manager">Manager</option>
-              <option value="Personel">Personel</option>
+            <select v-model="editRole" class="role-select">
+              <option v-for="r in roles" :key="r.id" :value="r.name">{{ r.name }}</option>
             </select>
-            <p class="role-note">Zmiana roli wejdzie w życie przy następnym logowaniu użytkownika.</p>
+          </div>
+          <div class="field">
+            <label>EMAIL</label>
+            <input v-model="editEmail" type="email" class="text-input" placeholder="jan@example.com">
+          </div>
+          <div class="field">
+            <label>TELEFON</label>
+            <input v-model="editPhone" type="text" class="text-input" placeholder="+48 600 000 000">
           </div>
         </div>
-        <p v-if="deleteError" class="delete-error">{{ deleteError }}</p>
+        <p v-if="editError" class="modal-error">{{ editError }}</p>
         <div class="modal-footer">
-          <button class="save-btn" :disabled="saving" @click="saveRole">
+          <button class="save-btn" :disabled="saving" @click="savePerson">
             {{ saving ? 'ZAPISUJĘ...' : 'ZAPISZ' }}
           </button>
-          <button class="delete-btn" :disabled="deleting" @click="deleteUser">
-            {{ deleting ? 'USUWAM...' : 'USUŃ' }}
+          <button class="delete-btn" :disabled="deactivating" @click="deactivatePerson">
+            {{ deactivating ? 'DEZAKTYWUJĘ...' : 'DEZAKTYWUJ' }}
           </button>
         </div>
       </div>
     </div>
 
-    <!-- Invite modal -->
-    <div v-if="showInvite" class="modal-overlay" @click.self="closeInvite">
+    <!-- Add modal -->
+    <div v-if="showAdd" class="modal-overlay" @click.self="closeAdd">
       <div class="modal">
         <div class="modal-header">
-          <span>DODAJ UŻYTKOWNIKA</span>
-          <button class="close-btn" @click="closeInvite">✕</button>
+          <span>DODAJ OSOBĘ</span>
+          <button class="close-btn" @click="closeAdd">✕</button>
         </div>
         <div class="modal-body">
           <div class="field">
-            <label>EMAIL</label>
-            <input v-model="inviteEmail" type="email" class="text-input" placeholder="jan@gmail.com">
+            <label>IMIĘ I NAZWISKO</label>
+            <input v-model="addName" type="text" class="text-input" placeholder="Jan Kowalski">
           </div>
           <div class="field">
             <label>ROLA</label>
-            <select v-model="inviteRole" class="role-select">
-              <option value="Admin">Admin</option>
-              <option value="Manager">Manager</option>
-              <option value="Personel">Personel</option>
+            <select v-model="addRole" class="role-select">
+              <option v-for="r in roles" :key="r.id" :value="r.name">{{ r.name }}</option>
             </select>
           </div>
           <div class="field">
-            <label>HASŁO (OPCJONALNE)</label>
-            <input v-model="invitePassword" type="password" class="text-input" placeholder="Opcjonalne">
+            <label>EMAIL</label>
+            <input v-model="addEmail" type="email" class="text-input" placeholder="jan@example.com">
           </div>
-          <p v-if="inviteError" class="invite-error">{{ inviteError }}</p>
+          <div class="field">
+            <label>TELEFON</label>
+            <input v-model="addPhone" type="text" class="text-input" placeholder="+48 600 000 000">
+          </div>
+          <p v-if="addError" class="modal-error">{{ addError }}</p>
         </div>
         <div class="modal-footer">
-          <button class="save-btn" :disabled="inviting || !inviteEmail" @click="inviteUser">
-            {{ inviting ? 'DODAJĘ...' : 'DODAJ' }}
+          <button class="save-btn" :disabled="adding || !addName || !addRole" @click="addPerson">
+            {{ adding ? 'DODAJĘ...' : 'DODAJ' }}
           </button>
-          <button class="delete-btn" @click="closeInvite">ANULUJ</button>
+          <button class="delete-btn" @click="closeAdd">ANULUJ</button>
         </div>
       </div>
     </div>
@@ -293,13 +320,13 @@ async function inviteUser() {
   transform: rotate(-2deg);
 }
 
-.user-table {
+.personnel-table {
   width: 100%;
   border-collapse: collapse;
   border: 2px solid #f20d0d;
 }
 
-.user-table th {
+.personnel-table th {
   background: #f20d0d;
   color: white;
   font-weight: 900;
@@ -309,42 +336,14 @@ async function inviteUser() {
   text-align: left;
 }
 
-.user-table td {
+.personnel-table td {
   padding: 12px 16px;
   border-bottom: 1px solid rgba(242, 13, 13, 0.25);
 }
 
-.user-table tr:hover td {
+.personnel-table tr:hover td {
   background: rgba(242, 13, 13, 0.1);
   transition: none;
-}
-
-.user-cell {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-
-.avatar {
-  width: 32px;
-  height: 32px;
-  border-radius: 2px;
-  object-fit: cover;
-  filter: grayscale(30%);
-}
-
-.avatar-placeholder {
-  width: 32px;
-  height: 32px;
-  border-radius: 2px;
-  background: rgba(242, 13, 13, 0.3);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-weight: 900;
-  font-size: 0.8rem;
-  color: rgba(255,255,255,0.4);
-  flex-shrink: 0;
 }
 
 .role-badge {
@@ -357,11 +356,6 @@ async function inviteUser() {
   border: 1px solid #f20d0d;
   color: #f20d0d;
   transform: skewX(-8deg);
-}
-
-.role-badge.admin {
-  background: #f20d0d;
-  color: white;
 }
 
 .edit-btn {
@@ -441,11 +435,6 @@ async function inviteUser() {
   margin-bottom: 4px;
 }
 
-.field-value {
-  margin: 0;
-  font-weight: 500;
-}
-
 .role-select,
 .text-input {
   width: 100%;
@@ -466,15 +455,7 @@ async function inviteUser() {
   font-weight: 400;
 }
 
-.role-note {
-  margin: 6px 0 0;
-  font-size: 0.72rem;
-  color: rgba(255, 255, 255, 0.4);
-  font-style: italic;
-}
-
-.invite-error,
-.delete-error {
+.modal-error {
   margin: 0 20px 12px;
   font-size: 0.8rem;
   color: #f20d0d;
