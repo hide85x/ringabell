@@ -270,7 +270,7 @@ async function deleteRole() {
   font-size: 1.5rem;
   font-weight: 900;
   font-style: italic;
-  padding: 6px 20px;
+  padding: 8px 24px;
   transform: skewX(-8deg);
   letter-spacing: 0.06em;
   border: 2px solid white;

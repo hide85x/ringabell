@@ -401,16 +401,16 @@ useFetch('/api/manager/dictionaries/roles') → for role display
 
 #### Automated
 
-- [ ] 1.1 GET /api/manager/events — list all events
-- [ ] 1.2 POST /api/manager/events — create draft event
-- [ ] 1.3 GET /api/manager/events/:id — full detail (fights + assignments + persons + conflicts)
-- [ ] 1.4 PATCH /api/manager/events/:id — edit name/date/venue (draft + published)
-- [ ] 1.5 DELETE /api/manager/events/:id — delete draft only
-- [ ] 1.6 POST /api/manager/events/:id/publish — guard + status change
-- [ ] 1.7 POST /api/manager/events/:id/cancel — status change
-- [ ] 1.8 RBAC integration test
-- [ ] 1.9 Publish-guard integration tests
-- [ ] 1.10 Update test/fixtures/seed.sql (events/fights/assignments cleanup + fight_requirement_defaults seed)
+- [x] 1.1 GET /api/manager/events — list all events
+- [x] 1.2 POST /api/manager/events — create draft event
+- [x] 1.3 GET /api/manager/events/:id — full detail (fights + assignments + persons + conflicts)
+- [x] 1.4 PATCH /api/manager/events/:id — edit name/date/venue (draft + published)
+- [x] 1.5 DELETE /api/manager/events/:id — delete draft only
+- [x] 1.6 POST /api/manager/events/:id/publish — guard + status change
+- [x] 1.7 POST /api/manager/events/:id/cancel — status change
+- [x] 1.8 RBAC integration test
+- [x] 1.9 Publish-guard integration tests
+- [x] 1.10 Update test/fixtures/seed.sql (events/fights/assignments cleanup + fight_requirement_defaults seed)
 
 #### Manual
 

@@ -1,7 +1,7 @@
 ---
 change_id: event-and-fight-management
 title: Event and fight management
-status: planned
+status: implementing
 created: 2026-06-24
 updated: 2026-06-24
 archived_at: null
