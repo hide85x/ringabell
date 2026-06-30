@@ -15,6 +15,7 @@ const route = useRoute()
     <div class="nav-links">
       <a href="/admin/users" class="nav-link" :class="{ active: route.path === '/admin/users' }">USERS</a>
       <a href="/admin/dictionaries" class="nav-link" :class="{ active: route.path === '/admin/dictionaries' }">DICTIONARIES</a>
+      <a href="/manager/events" class="nav-link" :class="{ active: route.path.startsWith('/manager/events') }">GALE</a>
       <a href="/manager/personnel" class="nav-link" :class="{ active: route.path === '/manager/personnel' }">PERSONEL</a>
     </div>
   </nav>

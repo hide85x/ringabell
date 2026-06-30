@@ -10,9 +10,18 @@ export default defineEventHandler(async (event) => {
   if (!ev) {
     throw createError({ statusCode: 404, statusMessage: 'Event not found' })
   }
-  if (ev.status !== 'draft') {
-    throw createError({ statusCode: 409, statusMessage: 'Only draft events can be deleted' })
+  if (ev.status !== 'draft' && ev.status !== 'cancelled') {
+    throw createError({ statusCode: 409, statusMessage: 'Only draft or cancelled events can be deleted' })
   }
+
+  // Delete event-level assignments (no CASCADE on event_id)
+  await db.prepare("DELETE FROM assignments WHERE event_id = ?").bind(id).run()
+
+  // Delete fight-level assignments (no CASCADE on fight_id)
+  await db
+    .prepare('DELETE FROM assignments WHERE fight_id IN (SELECT id FROM fights WHERE event_id = ?)')
+    .bind(id)
+    .run()
 
   await db.prepare('DELETE FROM events WHERE id = ?').bind(id).run()
   return { ok: true }

@@ -11,10 +11,16 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 400, statusMessage: 'role is required' })
   }
 
-  if (body.email?.trim() && !body.email.includes('@')) {
+  if (!body?.email?.trim()) {
+    throw createError({ statusCode: 400, statusMessage: 'email is required' })
+  }
+  if (!body.email.includes('@')) {
     throw createError({ statusCode: 400, statusMessage: 'Invalid email' })
   }
-  if (body.phone?.trim() && !/^[\d\s()\-+]{7,}$/.test(body.phone.trim())) {
+  if (!body?.phone?.trim()) {
+    throw createError({ statusCode: 400, statusMessage: 'phone is required' })
+  }
+  if (!/^[\d\s()\-+]{7,}$/.test(body.phone.trim())) {
     throw createError({ statusCode: 400, statusMessage: 'Invalid phone number' })
   }
 

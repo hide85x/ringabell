@@ -421,10 +421,10 @@ useFetch('/api/manager/dictionaries/roles') → for role display
 
 #### Automated
 
-- [ ] 2.1 POST /api/manager/events/:id/fights — create fight + auto-copy requirements
-- [ ] 2.2 DELETE /api/manager/events/:id/fights/:fightId — delete fight (cascade)
-- [ ] 2.3 POST /api/manager/assignments — assign person to fight or event
-- [ ] 2.4 DELETE /api/manager/assignments/:id — remove assignment
+- [x] 2.1 POST /api/manager/events/:id/fights — create fight + auto-copy requirements
+- [x] 2.2 DELETE /api/manager/events/:id/fights/:fightId — delete fight (cascade)
+- [x] 2.3 POST /api/manager/assignments — assign person to fight or event
+- [x] 2.4 DELETE /api/manager/assignments/:id — remove assignment
 
 #### Manual
 
@@ -435,18 +435,18 @@ useFetch('/api/manager/dictionaries/roles') → for role display
 
 #### Automated
 
-- [ ] 3.1 Create app/pages/manager/events.vue
-- [ ] 3.2 Add GALE link to AdminNav.vue and ManagerNav.vue
-- [ ] 3.3 Add ZARZĄDZAJ GALAMI link to index.vue
-- [ ] 3.4 npm run build passes
+- [x] 3.1 Create app/pages/manager/events.vue
+- [x] 3.2 Add GALE link to AdminNav.vue and ManagerNav.vue
+- [x] 3.3 Add ZARZĄDZAJ GALAMI link to index.vue
+- [x] 3.4 npm run build passes
 
 #### Manual
 
-- [ ] 3.M1 /manager/events loads, table visible
-- [ ] 3.M2 Add event → appears in table
-- [ ] 3.M3 Open event → add fight → assignment dropdowns shown
-- [ ] 3.M4 Assign all fight slots → inline validation green
-- [ ] 3.M5 Assign Ratownik + Konferansjer → STWÓRZ GALĘ activates
-- [ ] 3.M6 Publish → status OPUBLIKOWANA
-- [ ] 3.M7 Cancel published event → status ANULOWANA
-- [ ] 3.M8 Publish guard bypass test (422 from server)
+- [x] 3.M1 /manager/events loads, table visible
+- [x] 3.M2 Add event → appears in table
+- [x] 3.M3 Open event → add fight → assignment dropdowns shown
+- [x] 3.M4 Assign all fight slots → inline validation green
+- [x] 3.M5 Assign Ratownik + Konferansjer → STWÓRZ GALĘ activates
+- [x] 3.M6 Publish → status OPUBLIKOWANA
+- [x] 3.M7 Cancel published event → status ANULOWANA
+- [x] 3.M8 Publish guard bypass test (422 from server)

@@ -71,11 +71,19 @@ function closeAdd() {
 
 async function savePerson() {
   if (!selectedPerson.value) return
-  if (editEmail.value && !editEmail.value.includes('@')) {
+  if (!editEmail.value.trim()) {
+    editError.value = 'Email jest wymagany.'
+    return
+  }
+  if (!editEmail.value.includes('@')) {
     editError.value = 'Podaj prawidłowy adres email.'
     return
   }
-  if (editPhone.value && !/^[\d\s()\-+]{7,}$/.test(editPhone.value)) {
+  if (!editPhone.value.trim()) {
+    editError.value = 'Telefon jest wymagany.'
+    return
+  }
+  if (!/^[\d\s()\-+]{7,}$/.test(editPhone.value)) {
     editError.value = 'Podaj prawidłowy numer telefonu.'
     return
   }
@@ -122,11 +130,19 @@ async function deactivatePerson() {
 
 async function addPerson() {
   addError.value = ''
-  if (addEmail.value && !addEmail.value.includes('@')) {
+  if (!addEmail.value.trim()) {
+    addError.value = 'Email jest wymagany.'
+    return
+  }
+  if (!addEmail.value.includes('@')) {
     addError.value = 'Podaj prawidłowy adres email.'
     return
   }
-  if (addPhone.value && !/^[\d\s()\-+]{7,}$/.test(addPhone.value)) {
+  if (!addPhone.value.trim()) {
+    addError.value = 'Telefon jest wymagany.'
+    return
+  }
+  if (!/^[\d\s()\-+]{7,}$/.test(addPhone.value)) {
     addError.value = 'Podaj prawidłowy numer telefonu.'
     return
   }
@@ -198,24 +214,25 @@ async function addPerson() {
         </div>
         <div class="modal-body">
           <div class="field">
-            <label>IMIĘ I NAZWISKO</label>
+            <label>IMIĘ I NAZWISKO <span class="required">*</span></label>
             <input v-model="editName" type="text" class="text-input" placeholder="Jan Kowalski">
           </div>
           <div class="field">
-            <label>ROLA</label>
+            <label>ROLA <span class="required">*</span></label>
             <select v-model="editRole" class="role-select">
               <option v-for="r in roles" :key="r.id" :value="r.name">{{ r.name }}</option>
             </select>
           </div>
           <div class="field">
-            <label>EMAIL</label>
+            <label>EMAIL <span class="required">*</span></label>
             <input v-model="editEmail" type="email" class="text-input" placeholder="jan@example.com">
           </div>
           <div class="field">
-            <label>TELEFON</label>
+            <label>TELEFON <span class="required">*</span></label>
             <input v-model="editPhone" type="text" class="text-input" placeholder="+48 600 000 000">
           </div>
         </div>
+        <p class="required-hint"><span class="required">*</span> pole wymagane</p>
         <p v-if="editError" class="modal-error">{{ editError }}</p>
         <div class="modal-footer">
           <button class="save-btn" :disabled="saving" @click="savePerson">
@@ -237,27 +254,28 @@ async function addPerson() {
         </div>
         <div class="modal-body">
           <div class="field">
-            <label>IMIĘ I NAZWISKO</label>
+            <label>IMIĘ I NAZWISKO <span class="required">*</span></label>
             <input v-model="addName" type="text" class="text-input" placeholder="Jan Kowalski">
           </div>
           <div class="field">
-            <label>ROLA</label>
+            <label>ROLA <span class="required">*</span></label>
             <select v-model="addRole" class="role-select">
               <option v-for="r in roles" :key="r.id" :value="r.name">{{ r.name }}</option>
             </select>
           </div>
           <div class="field">
-            <label>EMAIL</label>
+            <label>EMAIL <span class="required">*</span></label>
             <input v-model="addEmail" type="email" class="text-input" placeholder="jan@example.com">
           </div>
           <div class="field">
-            <label>TELEFON</label>
+            <label>TELEFON <span class="required">*</span></label>
             <input v-model="addPhone" type="text" class="text-input" placeholder="+48 600 000 000">
           </div>
+          <p class="required-hint"><span class="required">*</span> pole wymagane</p>
           <p v-if="addError" class="modal-error">{{ addError }}</p>
         </div>
         <div class="modal-footer">
-          <button class="save-btn" :disabled="adding || !addName || !addRole" @click="addPerson">
+          <button class="save-btn" :disabled="adding || !addName || !addRole || !addEmail || !addPhone" @click="addPerson">
             {{ adding ? 'DODAJĘ...' : 'DODAJ' }}
           </button>
           <button class="delete-btn" @click="closeAdd">ANULUJ</button>
@@ -433,6 +451,17 @@ async function addPerson() {
   letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.5);
   margin-bottom: 4px;
+}
+
+.required {
+  color: #f20d0d;
+}
+
+.required-hint {
+  margin: 0 20px 8px;
+  font-size: 0.65rem;
+  color: rgba(255, 255, 255, 0.35);
+  letter-spacing: 0.05em;
 }
 
 .role-select,
