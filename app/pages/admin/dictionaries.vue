@@ -57,8 +57,8 @@ async function saveAddRole() {
     await refreshRequirements()
     showAddRole.value = false
   }
-  catch (err: any) {
-    addRoleError.value = err?.statusCode === 409 ? 'Taka rola już istnieje.' : 'Błąd — spróbuj ponownie.'
+  catch (err: unknown) {
+    addRoleError.value = (err as { statusCode?: number })?.statusCode === 409 ? 'Taka rola już istnieje.' : 'Błąd — spróbuj ponownie.'
   }
   finally {
     addRoleSaving.value = false
@@ -116,8 +116,8 @@ async function saveEditRole() {
     await refreshRequirements()
     editRole.value = null
   }
-  catch (err: any) {
-    editRoleError.value = err?.statusCode === 409 ? 'Taka rola już istnieje.' : 'Błąd — spróbuj ponownie.'
+  catch (err: unknown) {
+    editRoleError.value = (err as { statusCode?: number })?.statusCode === 409 ? 'Taka rola już istnieje.' : 'Błąd — spróbuj ponownie.'
   }
   finally {
     editRoleSaving.value = false
@@ -134,8 +134,8 @@ async function deleteRole() {
     await refreshRequirements()
     editRole.value = null
   }
-  catch (err: any) {
-    editRoleError.value = err?.statusCode === 409 ? 'Rola jest używana — usuń najpierw osoby z tą rolą.' : 'Błąd — spróbuj ponownie.'
+  catch (err: unknown) {
+    editRoleError.value = (err as { statusCode?: number })?.statusCode === 409 ? 'Rola jest używana — usuń najpierw osoby z tą rolą.' : 'Błąd — spróbuj ponownie.'
   }
   finally {
     editRoleDeleting.value = false
@@ -267,10 +267,10 @@ async function deleteRole() {
   display: inline-block;
   background: #f20d0d;
   color: white;
-  font-size: 1.1rem;
+  font-size: 1.5rem;
   font-weight: 900;
   font-style: italic;
-  padding: 6px 20px;
+  padding: 8px 24px;
   transform: skewX(-8deg);
   letter-spacing: 0.06em;
   border: 2px solid white;

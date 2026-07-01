@@ -19,6 +19,7 @@ const isAdmin = computed(() => user.value?.role === 'Admin')
         <a href="/admin/users" class="nav-link" :class="{ active: route.path === '/admin/users' }">USERS</a>
         <a href="/admin/dictionaries" class="nav-link" :class="{ active: route.path === '/admin/dictionaries' }">DICTIONARIES</a>
       </template>
+      <a href="/manager/events" class="nav-link" :class="{ active: route.path.startsWith('/manager/events') }">GALE</a>
       <a href="/manager/personnel" class="nav-link" :class="{ active: route.path === '/manager/personnel' }">PERSONEL</a>
     </div>
   </nav>
