@@ -414,8 +414,8 @@ useFetch('/api/manager/dictionaries/roles') → for role display
 
 #### Manual
 
-- [ ] 1.M1 GET /api/manager/events returns [] on fresh DB
-- [ ] 1.M2 POST + publish 422 on empty event verified
+- [x] 1.M1 GET /api/manager/events returns [] on fresh DB
+- [x] 1.M2 POST + publish 422 on empty event verified
 
 ### Phase 2: Fights & Assignments API
 
@@ -428,8 +428,8 @@ useFetch('/api/manager/dictionaries/roles') → for role display
 
 #### Manual
 
-- [ ] 2.M1 Create fight → GET event detail shows fight with requirements
-- [ ] 2.M2 Assign person → GET shows assignment; DELETE → gone
+- [x] 2.M1 Create fight → GET event detail shows fight with requirements
+- [x] 2.M2 Assign person → GET shows assignment; DELETE → gone
 
 ### Phase 3: Events UI
 
