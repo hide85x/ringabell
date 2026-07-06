@@ -22,6 +22,7 @@
       <a v-if="user?.role === 'Admin'" href="/admin/users" class="btn-admin">ZARZĄDZAJ UŻYTKOWNIKAMI →</a>
       <a v-if="user?.role === 'Admin' || user?.role === 'Manager'" href="/manager/events" class="btn-manager">ZARZĄDZAJ GALAMI →</a>
       <a v-if="user?.role === 'Admin' || user?.role === 'Manager'" href="/manager/personnel" class="btn-manager">ZARZĄDZAJ PERSONELEM →</a>
+      <a v-if="user?.role === 'Personel'" href="/personel/schedule" class="btn-manager">MOJE GALE →</a>
     </div>
 
     <div v-else class="login-section">

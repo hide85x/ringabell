@@ -279,29 +279,29 @@ Seed: dodać do `test/fixtures/seed.sql` (lub lokalnie w teście) rekord Person 
 
 #### Automated
 
-- [x] 1.1 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 1.1 TypeScript kompiluje się bez błędów: `npm run build` — cfc5599
 
 #### Manual
 
-- [ ] 1.2 GET /api/personel/events jako Personel zwraca 200 z listą gal
-- [ ] 1.3 GET /api/personel/events jako Manager zwraca 403
-- [ ] 1.4 GET /api/personel/events/[id] dla przypisanej gali zwraca dane
-- [ ] 1.5 GET /api/personel/events/[id] dla nieprzypisanej gali zwraca 404
+- [x] 1.2 GET /api/personel/events jako Personel zwraca 200 z listą gal — cfc5599
+- [x] 1.3 GET /api/personel/events jako Manager zwraca 403 — cfc5599
+- [x] 1.4 GET /api/personel/events/[id] dla przypisanej gali zwraca dane — cfc5599
+- [x] 1.5 GET /api/personel/events/[id] dla nieprzypisanej gali zwraca 404 — cfc5599
 
 ### Phase 2: Frontend
 
 #### Automated
 
-- [ ] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
 
 #### Manual
 
-- [ ] 2.2 Personel widzi przycisk "MOJE GALE →" na stronie głównej po zalogowaniu
-- [ ] 2.3 Manager/Admin na /personel/schedule przekierowuje na /
-- [ ] 2.4 Lista gal wyświetla się z rolami i datami
-- [ ] 2.5 Kliknięcie gali pokazuje szczegóły
-- [ ] 2.6 Empty state wyświetla się gdy brak przypisań
-- [ ] 2.7 PersonelNav — wylogowanie działa
+- [x] 2.2 Personel widzi przycisk "MOJE GALE →" na stronie głównej po zalogowaniu
+- [x] 2.3 Manager/Admin na /personel/schedule przekierowuje na /
+- [x] 2.4 Lista gal wyświetla się z rolami i datami
+- [x] 2.5 Kliknięcie gali pokazuje szczegóły
+- [x] 2.6 Empty state wyświetla się gdy brak przypisań
+- [x] 2.7 PersonelNav — wylogowanie działa
 
 ### Phase 3: Tests
 
