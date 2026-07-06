@@ -3,7 +3,7 @@ project: RingAbell
 version: 1
 status: draft
 created: 2026-05-28
-updated: 2026-07-01
+updated: 2026-07-03
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -33,8 +33,8 @@ Firma promocji bokserskiej zarządza dziesiątkami ludzi w ściśle określonych
 | S-02 | admin-dictionaries           | Admin zarządza słownikami ról personelu i wymagań per walka              | F-01, F-02         | FR-003                                 | done     |
 | S-03 | personnel-management         | Manager dodaje, edytuje i dezaktywuje osoby z bazy personelu             | F-01, F-02         | FR-004, FR-005                         | done     |
 | S-04 | event-and-fight-management   | Manager tworzy galę, dodaje walki i przypisuje personel z walidacją live | F-01, F-02, S-02, S-03 | FR-006, FR-007, FR-008, FR-009, FR-010, FR-012 | done     |
-| S-05 | event-publish-and-email      | Manager publikuje galę i cały przypisany personel otrzymuje email        | S-04               | US-01, FR-011                          | proposed |
-| S-06 | personnel-schedule-view      | Personel widzi swój kalendarz i szczegóły przypisanych gal               | F-01, F-02, S-05   | FR-013, FR-014                         | proposed |
+| S-05 | event-publish-and-email      | Manager publikuje galę i cały przypisany personel otrzymuje email        | S-04               | US-01, FR-011                          | parked   |
+| S-06 | personnel-schedule-view      | Personel widzi swój kalendarz i szczegóły przypisanych gal               | S-04               | FR-013, FR-014                         | proposed |
 
 ## Streams
 
@@ -153,18 +153,18 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 - **Unknowns:**
   - Czy wysyłka emaili do całego personelu gali zmieści się w CPU limicie 30ms Workers? — Owner: dev. Block: yes. Jeśli nie — przenieść wysyłkę do Cloudflare Queue Worker (osobny worker, per-message). Rozwiązanie znane, implementacja zależy od testu.
 - **Risk:** nodemailer nie działa na V8 isolates — należy użyć Resend SDK lub MailChannels. To jest znane ograniczenie (infrastructure.md §Risk Register). Nie używać nodemailer pod żadnym pozorem.
-- **Status:** proposed
+- **Status:** parked — odłożone do momentu gdy konto Resend będzie dostępne; S-06 nie blokuje
 
 ### S-06: Widok harmonogramu (Personel)
 
 - **Outcome:** Personel może zalogować się i zobaczyć swój kalendarz nadchodzących gal z datami i rolami oraz szczegóły każdej gali do której jest przypisany.
 - **Change ID:** personnel-schedule-view
 - **PRD refs:** FR-013, FR-014
-- **Prerequisites:** F-01, F-02, S-05
+- **Prerequisites:** S-04
 - **Parallel with:** —
 - **Blockers:** —
 - **Unknowns:** —
-- **Risk:** Ten slice jest użyteczny tylko po S-05 — bez opublikowanej gali nie ma co wyświetlać. Sekwencjonowany ostatni celowo; jeśli zabraknie czasu, MVP jest nadal spójny bez niego (Primary Success Criterion to US-01, nie ten widok).
+- **Risk:** Widok wymaga opublikowanych gal — dane są dostępne po S-04. S-05 (emaile) nie jest prerequisite dla widoku; personel loguje się i widzi swoje przypisania bezpośrednio z bazy.
 - **Status:** proposed
 
 ## Backlog Handoff
