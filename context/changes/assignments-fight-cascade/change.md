@@ -1,7 +1,7 @@
 ---
 change_id: assignments-fight-cascade
 title: Dodanie ON DELETE CASCADE na assignments.fight_id
-status: implementing
+status: implemented
 created: 2026-07-06
 updated: 2026-07-06
 archived_at: null

@@ -130,10 +130,10 @@ Produkcja: po weryfikacji lokalnej użytkownik aplikuje `wrangler d1 migrations 
 
 #### Automated
 
-- [x] 1.1 Migracja aplikuje się bez błędów: `wrangler d1 migrations apply ringabell --local`
+- [x] 1.1 Migracja aplikuje się bez błędów: `wrangler d1 migrations apply ringabell --local` — 47af301
 
 #### Manual
 
-- [x] 1.2 Usunięcie walki z przypisanym bokserem nie rzuca błędu FK
-- [x] 1.3 Usunięcie gali z event-level assignment nie rzuca błędu FK
-- [x] 1.4 Istniejące przypisania są nienaruszone po migracji
+- [x] 1.2 Usunięcie walki z przypisanym bokserem nie rzuca błędu FK — 47af301
+- [x] 1.3 Usunięcie gali z event-level assignment nie rzuca błędu FK — 47af301
+- [x] 1.4 Istniejące przypisania są nienaruszone po migracji — 47af301
