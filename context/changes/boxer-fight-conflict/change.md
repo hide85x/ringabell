@@ -1,7 +1,7 @@
 ---
 change_id: boxer-fight-conflict
 title: Blokada przypisania boksera do dwóch walk tej samej gali
-status: implementing
+status: implemented
 created: 2026-07-06
 updated: 2026-07-06
 archived_at: null

@@ -100,10 +100,10 @@ if (role === 'Bokser' && eventDetail.value) {
 
 #### Automated
 
-- [x] 1.1 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 1.1 TypeScript kompiluje się bez błędów: `npm run build` — b33096c
 
 #### Manual
 
-- [ ] 1.2 Bokser przypisany do walki #1 nie pojawia się w dropdownie walki #2
-- [ ] 1.3 Bokser nieprzypisany do żadnej walki pojawia się we wszystkich dropdownach
-- [ ] 1.4 Bokser wybrany w walce #1 nadal widoczny w swoim slocie po przypisaniu
+- [x] 1.2 Bokser przypisany do walki #1 nie pojawia się w dropdownie walki #2 — b33096c
+- [x] 1.3 Bokser nieprzypisany do żadnej walki pojawia się we wszystkich dropdownach — b33096c
+- [x] 1.4 Bokser wybrany w walce #1 nadal widoczny w swoim slocie po przypisaniu — b33096c
