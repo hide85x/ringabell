@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { formatDate } from '~~/utils/date'
+import { formatDate, nowUtc } from '~~/utils/date'
 
 definePageMeta({ middleware: 'personel' })
 
@@ -42,6 +42,15 @@ interface EventDetail extends EventItem {
 
 const { data: events } = await useFetch<EventItem[]>('/api/personel/events')
 const selectedEvent = ref<EventDetail | null>(null)
+const viewMode = ref<'list' | 'calendar'>('list')
+
+const initialMonth = computed(() => {
+  const list = events.value ?? []
+  const today = nowUtc().slice(0, 10)
+  const upcoming = list.find(e => e.date >= today)
+  const reference = upcoming ?? list[list.length - 1]
+  return (reference?.date ?? today).slice(0, 7)
+})
 
 async function openDetail(id: string) {
   try {
@@ -64,21 +73,49 @@ async function openDetail(id: string) {
       </div>
 
       <div v-else class="layout">
-        <div class="event-list">
-          <div
-            v-for="ev in events"
-            :key="ev.id"
-            class="event-card"
-            :class="{ selected: selectedEvent?.id === ev.id }"
-            @click="openDetail(ev.id)"
-          >
-            <div class="event-date">{{ formatDate(ev.date) }}</div>
-            <div class="event-name">{{ ev.name }}</div>
-            <div class="event-venue">{{ ev.venue }}</div>
-            <div class="event-roles">
-              <span v-for="role in ev.roles" :key="role" class="role-badge">{{ role }}</span>
+        <div class="left-column">
+          <div class="view-toggle">
+            <button
+              type="button"
+              class="toggle-btn"
+              :class="{ active: viewMode === 'list' }"
+              @click="viewMode = 'list'"
+            >
+              LISTA
+            </button>
+            <button
+              type="button"
+              class="toggle-btn"
+              :class="{ active: viewMode === 'calendar' }"
+              @click="viewMode = 'calendar'"
+            >
+              KALENDARZ
+            </button>
+          </div>
+
+          <div v-if="viewMode === 'list'" class="event-list">
+            <div
+              v-for="ev in events"
+              :key="ev.id"
+              class="event-card"
+              :class="{ selected: selectedEvent?.id === ev.id }"
+              @click="openDetail(ev.id)"
+            >
+              <div class="event-date">{{ formatDate(ev.date) }}</div>
+              <div class="event-name">{{ ev.name }}</div>
+              <div class="event-venue">{{ ev.venue }}</div>
+              <div class="event-roles">
+                <span v-for="role in ev.roles" :key="role" class="role-badge">{{ role }}</span>
+              </div>
             </div>
           </div>
+
+          <PersonelCalendarGrid
+            v-else
+            :events="events"
+            :initial-month="initialMonth"
+            @select-event="openDetail"
+          />
         </div>
 
         <div v-if="selectedEvent" class="event-detail">
@@ -156,6 +193,44 @@ async function openDetail(id: string) {
   grid-template-columns: 1fr 1fr;
   gap: 24px;
   align-items: start;
+}
+
+.left-column {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.view-toggle {
+  display: flex;
+  gap: 8px;
+}
+
+.toggle-btn {
+  background: transparent;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  color: rgba(255, 255, 255, 0.6);
+  font-family: 'Space Grotesk', sans-serif;
+  font-weight: 700;
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  padding: 8px 16px;
+  cursor: pointer;
+  transform: rotate(1deg);
+  transition: none;
+}
+
+.toggle-btn:hover {
+  border-color: white;
+  color: white;
+}
+
+.toggle-btn.active {
+  border-color: #f20d0d;
+  background: #f20d0d;
+  color: white;
+  box-shadow: 3px 3px 0px white;
+  transform: rotate(-1deg);
 }
 
 .event-list {
