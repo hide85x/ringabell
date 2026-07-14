@@ -307,8 +307,8 @@ Seed: dodać do `test/fixtures/seed.sql` (lub lokalnie w teście) rekord Person 
 
 #### Automated
 
-- [x] 3.1 Wszystkie testy przechodzą: `npm test test:integration`
+- [x] 3.1 Wszystkie testy przechodzą: `npm test test:integration` — 6c72d1d
 
 #### Manual
 
-- [x] 3.2 Brak regresji w istniejących testach managerskich (8 plików, 32 testy przeszły)
+- [x] 3.2 Brak regresji w istniejących testach managerskich (8 plików, 32 testy przeszły) — 6c72d1d
