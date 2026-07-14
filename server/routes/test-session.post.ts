@@ -6,7 +6,7 @@ export default defineEventHandler(async (event) => {
     throw createError({ statusCode: 404 })
   }
 
-  const { role } = await readBody<{ role: string }>(event)
+  const { role, email } = await readBody<{ role: string; email?: string }>(event)
 
   if (!VALID_ROLES.includes(role as typeof VALID_ROLES[number])) {
     throw createError({ statusCode: 400, statusMessage: 'Invalid role' })
@@ -16,7 +16,7 @@ export default defineEventHandler(async (event) => {
 
   await setUserSession(event, {
     user: {
-      email: `test-${role.toLowerCase()}@test.local`,
+      email: email?.trim() || `test-${role.toLowerCase()}@test.local`,
       name: role,
       avatar: '',
       role: validRole,

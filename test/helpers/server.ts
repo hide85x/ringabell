@@ -15,11 +15,11 @@ export async function startWorker(): Promise<Unstable_DevWorker> {
   })
 }
 
-export async function getSession(worker: Unstable_DevWorker, role: string): Promise<string> {
+export async function getSession(worker: Unstable_DevWorker, role: string, email?: string): Promise<string> {
   const res = await worker.fetch('/test-session', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ role }),
+    body: JSON.stringify({ role, email }),
   })
   const cookie = res.headers.get('set-cookie')
   if (!cookie) throw new Error(`No session cookie for role ${role}`)

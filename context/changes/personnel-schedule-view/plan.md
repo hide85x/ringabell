@@ -292,23 +292,23 @@ Seed: dodać do `test/fixtures/seed.sql` (lub lokalnie w teście) rekord Person 
 
 #### Automated
 
-- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build` — 3723e07
 
 #### Manual
 
-- [x] 2.2 Personel widzi przycisk "MOJE GALE →" na stronie głównej po zalogowaniu
-- [x] 2.3 Manager/Admin na /personel/schedule przekierowuje na /
-- [x] 2.4 Lista gal wyświetla się z rolami i datami
-- [x] 2.5 Kliknięcie gali pokazuje szczegóły
-- [x] 2.6 Empty state wyświetla się gdy brak przypisań
-- [x] 2.7 PersonelNav — wylogowanie działa
+- [x] 2.2 Personel widzi przycisk "MOJE GALE →" na stronie głównej po zalogowaniu — 3723e07
+- [x] 2.3 Manager/Admin na /personel/schedule przekierowuje na / — 3723e07
+- [x] 2.4 Lista gal wyświetla się z rolami i datami — 3723e07
+- [x] 2.5 Kliknięcie gali pokazuje szczegóły — 3723e07
+- [x] 2.6 Empty state wyświetla się gdy brak przypisań — 3723e07
+- [x] 2.7 PersonelNav — wylogowanie działa — 3723e07
 
 ### Phase 3: Tests
 
 #### Automated
 
-- [ ] 3.1 Wszystkie testy przechodzą: `npm test`
+- [x] 3.1 Wszystkie testy przechodzą: `npm test test:integration`
 
 #### Manual
 
-- [ ] 3.2 Brak regresji w istniejących testach managerskich
+- [x] 3.2 Brak regresji w istniejących testach managerskich (8 plików, 32 testy przeszły)
