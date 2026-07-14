@@ -172,7 +172,7 @@ Unit test dla `buildMonthGrid` pokrywający przypadki brzegowe dat (lata przest�
 
 #### Automated
 
-- [x] 1.1 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 1.1 TypeScript kompiluje się bez błędów: `npm run build` — 552aa57
 
 #### Manual
 
@@ -187,8 +187,8 @@ Unit test dla `buildMonthGrid` pokrywający przypadki brzegowe dat (lata przest�
 
 #### Automated
 
-- [x] 2.1 Unit testy przechodzą: `npm run test`
-- [x] 2.2 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 2.1 Unit testy przechodzą: `npm run test` — 552aa57
+- [x] 2.2 TypeScript kompiluje się bez błędów: `npm run build` — 552aa57
 
 #### Manual
 
