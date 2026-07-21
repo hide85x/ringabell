@@ -15,6 +15,7 @@ interface EventItem {
 const props = defineProps<{
   events: EventItem[]
   initialMonth: string
+  selectedEventId: string | null
 }>()
 
 const emit = defineEmits<{
@@ -45,6 +46,11 @@ const eventsByDate = computed(() => {
 
 function eventsForDate(date: string): EventItem[] {
   return eventsByDate.value.get(date) ?? []
+}
+
+function isActiveDate(date: string): boolean {
+  if (!props.selectedEventId) return false
+  return eventsForDate(date).some(ev => ev.id === props.selectedEventId)
 }
 
 function prevMonth() {
@@ -85,7 +91,11 @@ function onDayClick(date: string) {
         v-for="cell in grid"
         :key="cell.date"
         class="calendar-cell"
-        :class="{ 'out-of-month': !cell.inMonth, 'has-events': eventsForDate(cell.date).length > 0 }"
+        :class="{
+          'out-of-month': !cell.inMonth,
+          'has-events': eventsForDate(cell.date).length > 0,
+          active: isActiveDate(cell.date),
+        }"
         @click="onDayClick(cell.date)"
       >
         <span class="day-number">{{ cell.day }}</span>
@@ -192,6 +202,22 @@ function onDayClick(date: string) {
 .calendar-cell.has-events:hover {
   transform: rotate(-1deg);
   box-shadow: 3px 3px 0px #f20d0d;
+}
+
+.calendar-cell.active,
+.calendar-cell.active:hover {
+  background: #f20d0d;
+  border-color: white;
+  box-shadow: 4px 4px 0px white;
+  transform: rotate(-2deg);
+}
+
+.calendar-cell.active .day-number {
+  color: white;
+}
+
+.calendar-cell.active .glove-wrap {
+  color: white;
 }
 
 .day-number {

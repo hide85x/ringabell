@@ -114,6 +114,7 @@ async function openDetail(id: string) {
             v-else
             :events="events"
             :initial-month="initialMonth"
+            :selected-event-id="selectedEvent?.id ?? null"
             @select-event="openDetail"
           />
         </div>
