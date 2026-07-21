@@ -3,7 +3,7 @@ project: RingAbell
 version: 1
 status: draft
 created: 2026-05-28
-updated: 2026-07-03
+updated: 2026-07-21
 prd_version: 1
 main_goal: speed
 top_blocker: time
@@ -204,3 +204,4 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 | S-02 | admin-dictionaries    | Słowniki ról personelu i wymagań per walka, strona `/admin/dictionaries`               | 2026-06-15 |
 | S-03 | personnel-management  | CRUD personelu, dezaktywacja, walidacja email/telefon, strona `/manager/personnel`     | 2026-06-24 |
 | S-04 | event-and-fight-management | Gale, walki, przypisania personelu, walidacja live, publish/cancel/restore, strona `/manager/events` | 2026-07-01 |
+| S-06 | personnel-schedule-view | Lista gal + panel szczegółów dla Personel, strona `/personel/schedule`; + `personnel-calendar-view` (miesięczna siatka kalendarza, przełącznik LISTA/KALENDARZ) | 2026-07-21 |
