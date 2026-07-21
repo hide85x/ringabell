@@ -4,11 +4,14 @@ export default defineEventHandler(async (event) => {
   const db = getD1(event)
 
   const target = await db
-    .prepare('SELECT role FROM users WHERE id = ?')
+    .prepare('SELECT role, email FROM users WHERE id = ?')
     .bind(id)
-    .first() as { role: string } | null
+    .first() as { role: string; email: string } | null
   if (!target) {
     throw createError({ statusCode: 404, statusMessage: 'User not found' })
+  }
+  if (target.email === PROTECTED_ADMIN_EMAIL) {
+    throw createError({ statusCode: 403, statusMessage: 'This account cannot be deleted' })
   }
   if (target.role === 'Admin') {
     const row = await db

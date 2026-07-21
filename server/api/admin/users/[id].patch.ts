@@ -10,6 +10,18 @@ export default defineEventHandler(async (event) => {
   }
 
   const db = getD1(event)
+
+  const target = await db
+    .prepare('SELECT email FROM users WHERE id = ?')
+    .bind(id)
+    .first() as { email: string } | null
+  if (!target) {
+    throw createError({ statusCode: 404, statusMessage: 'User not found' })
+  }
+  if (target.email === PROTECTED_ADMIN_EMAIL && role !== 'Admin') {
+    throw createError({ statusCode: 403, statusMessage: 'This account\'s role cannot be changed' })
+  }
+
   const result = await db.prepare('UPDATE users SET role = ? WHERE id = ?').bind(role, id).run()
   if (result.meta.changes === 0) {
     throw createError({ statusCode: 404, statusMessage: 'User not found' })
