@@ -176,12 +176,12 @@ Unit test dla `buildMonthGrid` pokrywający przypadki brzegowe dat (lata przest�
 
 #### Manual
 
-- [ ] 1.2 Przełącznik LISTA/KALENDARZ działa, domyślny widok to LISTA
-- [ ] 1.3 Kalendarz przy pierwszym otwarciu pokazuje miesiąc najbliższej nadchodzącej gali (lub bieżący)
-- [ ] 1.4 Dni z galą mają ikonę rękawicy, dni z >1 galą mają plakietkę z liczbą
-- [ ] 1.5 Klik dnia z 1 galą otwiera panel szczegółów; klik dnia z >1 galą pokazuje wybór
-- [ ] 1.6 Nawigacja ← / → działa bez ograniczeń, w tym grudzień↔styczeń
-- [ ] 1.7 Styl siatki spójny z resztą aplikacji
+- [x] 1.2 Przełącznik LISTA/KALENDARZ działa, domyślny widok to LISTA — 7495b5f
+- [x] 1.3 Kalendarz przy pierwszym otwarciu pokazuje miesiąc najbliższej nadchodzącej gali (lub bieżący) — 7495b5f
+- [x] 1.4 Dni z galą mają ikonę rękawicy, dni z >1 galą mają plakietkę z liczbą — 7495b5f
+- [x] 1.5 Klik dnia z 1 galą otwiera panel szczegółów; klik dnia z >1 galą pokazuje wybór — 7495b5f
+- [x] 1.6 Nawigacja ← / → działa bez ograniczeń, w tym grudzień↔styczeń — 7495b5f
+- [x] 1.7 Styl siatki spójny z resztą aplikacji — 7495b5f
 
 ### Phase 2: Testy
 
@@ -192,4 +192,4 @@ Unit test dla `buildMonthGrid` pokrywający przypadki brzegowe dat (lata przest�
 
 #### Manual
 
-- [ ] 2.3 Brak regresji w widoku listy na `/personel/schedule`
+- [x] 2.3 Brak regresji w widoku listy na `/personel/schedule` — stan `selectedEvent` poprawnie współdzielony między trybami po przełączeniu
