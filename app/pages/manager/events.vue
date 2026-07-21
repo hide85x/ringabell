@@ -340,10 +340,10 @@ function availableForFightSlot(fight: FightDetail, role: string, slotIndex: numb
     .filter(a => a.role === role)
     .filter((_, idx) => idx !== slotIndex)
     .map(a => a.personId)
-  if (role === 'Bokser' && eventDetail.value) {
+  if (role.toLowerCase() === 'bokser' && eventDetail.value) {
     const boxersInOtherFights = eventDetail.value.fights
       .filter(f => f.id !== fight.id)
-      .flatMap(f => f.assignments.filter(a => a.role === 'Bokser').map(a => a.personId))
+      .flatMap(f => f.assignments.filter(a => a.role.toLowerCase() === 'bokser').map(a => a.personId))
     takenIds.push(...boxersInOtherFights)
   }
   return personsForRole(role).filter(p => !takenIds.includes(p.id) || p.id === currentPersonId)
