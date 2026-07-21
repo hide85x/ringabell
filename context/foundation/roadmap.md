@@ -21,7 +21,7 @@ Firma promocji bokserskiej zarządza dziesiątkami ludzi w ściśle określonych
 
 ## North star
 
-**S-05: Manager tworzy galę z kompletną obsadą i wysyła emaile do personelu** — najważniejszy przepływ end-to-end, który udowadnia że rdzeń produktu działa (czyli: najmniejszy kompletny przepływ, którego powodzenie potwierdza główną hipotezę produktu — że system zastępuje telefon i arkusz w organizacji gali). Jeśli ten flow działa, wszystko inne jest rozszerzeniem.
+~~**S-05: Manager tworzy galę z kompletną obsadą i wysyła emaile do personelu**~~ — **S-05 zdecydowano nie robić** (2026-07-21): wysyłka emaili wykracza poza zakres tego projektu. Faktyczny zrealizowany rdzeń produktu to S-04 (manager tworzy galę z kompletną obsadą, walidacja konfliktów i wymagań na żywo) + S-06 (personel widzi swój harmonogram) — to razem stanowi kompletny, funkcjonalny przepływ end-to-end bez powiadomień email.
 
 ## At a glance
 
@@ -33,7 +33,7 @@ Firma promocji bokserskiej zarządza dziesiątkami ludzi w ściśle określonych
 | S-02 | admin-dictionaries           | Admin zarządza słownikami ról personelu i wymagań per walka              | F-01, F-02         | FR-003                                 | done     |
 | S-03 | personnel-management         | Manager dodaje, edytuje i dezaktywuje osoby z bazy personelu             | F-01, F-02         | FR-004, FR-005                         | done     |
 | S-04 | event-and-fight-management   | Manager tworzy galę, dodaje walki i przypisuje personel z walidacją live | F-01, F-02, S-02, S-03 | FR-006, FR-007, FR-008, FR-009, FR-010, FR-012 | done     |
-| S-05 | event-publish-and-email      | Manager publikuje galę i cały przypisany personel otrzymuje email        | S-04               | US-01, FR-011                          | parked   |
+| S-05 | event-publish-and-email      | Manager publikuje galę i cały przypisany personel otrzymuje email        | S-04               | US-01, FR-011                          | won't do |
 | S-06 | personnel-schedule-view      | Personel widzi swój kalendarz i szczegóły przypisanych gal               | S-04               | FR-013, FR-014                         | done     |
 
 ## Streams
@@ -45,8 +45,8 @@ Pomoc nawigacyjna — grupuje elementy ze wspólnym łańcuchem prerequisites. K
 | A      | Fundamenty               | `F-01` → `F-02`                                      | Prerequisite dla wszystkich slice'ów; główna oś sekwencji       |
 | B      | Panel admina             | `S-01` / `S-02`                                      | Równoległe po F-01+F-02; S-02 prerequisite dla S-04             |
 | C      | Zarządzanie personelem   | `S-03`                                               | Równoległy z S-01/S-02 po F-01+F-02; S-03 prerequisite dla S-04 |
-| D      | Gwiazda przewodnia       | `S-04` → `S-05`                                      | Główna ścieżka walidacji; cel sekwencjonowania `speed`          |
-| E      | Widok personelu          | `S-06`                                               | Secondary Success Criterion; dołącza po S-05                    |
+| D      | Gwiazda przewodnia       | `S-04`                                               | S-05 (email) won't do — S-04 zamyka główną ścieżkę walidacji    |
+| E      | Widok personelu          | `S-06`                                               | Secondary Success Criterion; nie zależy już od S-05 (won't do)  |
 
 ## Baseline
 
@@ -142,18 +142,17 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 - **Risk:** To najszerszy slice — obejmuje 6 must-have FR i całą logikę walidacji biznesowej. Jeśli zabraknie czasu, można podzielić: najpierw CRUD gali/walk bez walidacji (S-04a), potem walidacja live (S-04b). Takie podzielenie robi się przez `/10x-plan`, nie tutaj.
 - **Status:** done
 
-### S-05: Publikacja gali i wysyłka emaili (Manager) ★ GWIAZDA PRZEWODNIA
+### S-05: Publikacja gali i wysyłka emaili (Manager) ~~★ GWIAZDA PRZEWODNIA~~
 
-- **Outcome:** Manager może opublikować galę przyciskiem "STWÓRZ GALĘ" — status gali zmienia się na opublikowaną, każda przypisana osoba otrzymuje email z nazwą gali, datą, miejscem i swoją rolą. Opublikowana gala nie może być usunięta, tylko anulowana.
+- **Outcome:** ~~Manager może opublikować galę przyciskiem "STWÓRZ GALĘ" — status gali zmienia się na opublikowaną, każda przypisana osoba otrzymuje email z nazwą gali, datą, miejscem i swoją rolą.~~ Publikacja gali (zmiana statusu na `published`, blokada usuwania — tylko cancel/restore) już działa, dostarczona jako część S-04. Element wysyłki emaili — **won't do**, poza zakresem projektu.
 - **Change ID:** event-publish-and-email
 - **PRD refs:** US-01, FR-011, FR-007
 - **Prerequisites:** S-04
 - **Parallel with:** —
-- **Blockers:** Konto Resend (lub MailChannels) z skonfigurowanym RESEND_API_KEY w Cloudflare Workers secrets — wymagane przed wdrożeniem tego slice'a
-- **Unknowns:**
-  - Czy wysyłka emaili do całego personelu gali zmieści się w CPU limicie 30ms Workers? — Owner: dev. Block: yes. Jeśli nie — przenieść wysyłkę do Cloudflare Queue Worker (osobny worker, per-message). Rozwiązanie znane, implementacja zależy od testu.
-- **Risk:** nodemailer nie działa na V8 isolates — należy użyć Resend SDK lub MailChannels. To jest znane ograniczenie (infrastructure.md §Risk Register). Nie używać nodemailer pod żadnym pozorem.
-- **Status:** parked — odłożone do momentu gdy konto Resend będzie dostępne; S-06 nie blokuje
+- **Blockers:** —
+- **Unknowns:** —
+- **Risk:** —
+- **Status:** won't do — decyzja produktowa 2026-07-21: wysyłka emaili poza zakresem tego projektu. Publikacja gali (bez powiadomień) już działa jako część S-04; S-06 nie był i nie jest zablokowany przez ten slice.
 
 ### S-06: Widok harmonogramu (Personel)
 
@@ -164,7 +163,7 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 - **Parallel with:** —
 - **Blockers:** —
 - **Unknowns:** —
-- **Risk:** Widok wymaga opublikowanych gal — dane są dostępne po S-04. S-05 (emaile) nie jest prerequisite dla widoku; personel loguje się i widzi swoje przypisania bezpośrednio z bazy.
+- **Risk:** Widok wymaga opublikowanych gal — dane są dostępne po S-04. S-05 (emaile, won't do) nigdy nie był prerequisite dla widoku; personel loguje się i widzi swoje przypisania bezpośrednio z bazy.
 - **Status:** done — zaimplementowane jako `personnel-schedule-view` (lista + szczegóły) i `personnel-calendar-view` (miesięczna siatka kalendarza, przełącznik LISTA/KALENDARZ)
 
 ## Backlog Handoff
@@ -177,13 +176,13 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 | S-02       | admin-dictionaries         | [RingAbell] Admin — słowniki ról i wymagań per walka        | ~~nie~~ **done**      | Zaimplementowane                             |
 | S-03       | personnel-management       | [RingAbell] Manager — baza personelu (CRUD + dezaktywacja)  | tak                   | Prerequisites spełnione (F-01 + F-02 ready) |
 | S-04       | event-and-fight-management | [RingAbell] Manager — gale, walki, obsada, walidacja live   | nie                   | Czeka na S-03                                |
-| S-05       | event-publish-and-email    | [RingAbell] Manager — publikacja gali + wysyłka emaili      | nie                   | Czeka na S-04 + konto Resend                 |
+| S-05       | event-publish-and-email    | [RingAbell] Manager — publikacja gali + wysyłka emaili      | ~~nie~~ **won't do**  | Publikacja już działa (S-04); email poza zakresem |
 | S-06       | personnel-schedule-view    | [RingAbell] Personel — widok kalendarza i szczegółów gali   | ~~nie~~ **done**      | Zaimplementowane (+ personnel-calendar-view) |
 
 ## Open Roadmap Questions
 
 1. ~~**Czy nuxt-auth-utils działa poprawnie na Cloudflare Workers (Web Crypto)?**~~ — Rozwiązane 2026-05-28. Google OAuth + sesje działają na Workers.
-2. **Czy wysyłka emaili do całego personelu gali zmieści się w CPU limicie 30ms Workers?** — Owner: dev. Blokuje: S-05. Rozwiązanie: test po wdrożeniu S-04; jeśli przekroczenie — Cloudflare Queue Worker.
+2. ~~**Czy wysyłka emaili do całego personelu gali zmieści się w CPU limicie 30ms Workers?**~~ — Nieaktualne: S-05 (wysyłka emaili) won't do, decyzja 2026-07-21.
 
 ## Parked
 
