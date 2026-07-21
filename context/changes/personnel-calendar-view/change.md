@@ -1,9 +1,9 @@
 ---
 change_id: personnel-calendar-view
 title: Miesięczna siatka kalendarza dla widoku personelu z nawigacją i ikoną walki
-status: planned
+status: implemented
 created: 2026-07-14
-updated: 2026-07-14
+updated: 2026-07-21
 archived_at: null
 ---
 

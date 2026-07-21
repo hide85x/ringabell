@@ -34,7 +34,7 @@ Firma promocji bokserskiej zarządza dziesiątkami ludzi w ściśle określonych
 | S-03 | personnel-management         | Manager dodaje, edytuje i dezaktywuje osoby z bazy personelu             | F-01, F-02         | FR-004, FR-005                         | done     |
 | S-04 | event-and-fight-management   | Manager tworzy galę, dodaje walki i przypisuje personel z walidacją live | F-01, F-02, S-02, S-03 | FR-006, FR-007, FR-008, FR-009, FR-010, FR-012 | done     |
 | S-05 | event-publish-and-email      | Manager publikuje galę i cały przypisany personel otrzymuje email        | S-04               | US-01, FR-011                          | parked   |
-| S-06 | personnel-schedule-view      | Personel widzi swój kalendarz i szczegóły przypisanych gal               | S-04               | FR-013, FR-014                         | proposed |
+| S-06 | personnel-schedule-view      | Personel widzi swój kalendarz i szczegóły przypisanych gal               | S-04               | FR-013, FR-014                         | done     |
 
 ## Streams
 
@@ -165,7 +165,7 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 - **Blockers:** —
 - **Unknowns:** —
 - **Risk:** Widok wymaga opublikowanych gal — dane są dostępne po S-04. S-05 (emaile) nie jest prerequisite dla widoku; personel loguje się i widzi swoje przypisania bezpośrednio z bazy.
-- **Status:** proposed
+- **Status:** done — zaimplementowane jako `personnel-schedule-view` (lista + szczegóły) i `personnel-calendar-view` (miesięczna siatka kalendarza, przełącznik LISTA/KALENDARZ)
 
 ## Backlog Handoff
 
@@ -178,7 +178,7 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 | S-03       | personnel-management       | [RingAbell] Manager — baza personelu (CRUD + dezaktywacja)  | tak                   | Prerequisites spełnione (F-01 + F-02 ready) |
 | S-04       | event-and-fight-management | [RingAbell] Manager — gale, walki, obsada, walidacja live   | nie                   | Czeka na S-03                                |
 | S-05       | event-publish-and-email    | [RingAbell] Manager — publikacja gali + wysyłka emaili      | nie                   | Czeka na S-04 + konto Resend                 |
-| S-06       | personnel-schedule-view    | [RingAbell] Personel — widok kalendarza i szczegółów gali   | nie                   | Czeka na S-05; Secondary SC, parkuj gdy brak czasu |
+| S-06       | personnel-schedule-view    | [RingAbell] Personel — widok kalendarza i szczegółów gali   | ~~nie~~ **done**      | Zaimplementowane (+ personnel-calendar-view) |
 
 ## Open Roadmap Questions
 
