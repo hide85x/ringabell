@@ -15,7 +15,7 @@ export default defineEventHandler(async (event) => {
          (a.type = 'fight' AND a.fight_id IN (SELECT id FROM fights WHERE event_id = e.id))
        )
        JOIN persons p ON p.id = a.person_id
-       WHERE p.email = ? AND e.status = 'published'
+       WHERE LOWER(p.email) = LOWER(?) AND e.status = 'published'
        GROUP BY e.id
        ORDER BY e.date ASC`,
     )

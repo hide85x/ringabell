@@ -45,6 +45,16 @@ describe('Integration — /api/personel/events', () => {
     expect(ev!.roles.sort()).toEqual(['Ratownik', 'Sędzia'])
   })
 
+  it('matches the Person record case-insensitively by email', async () => {
+    const cookie = await getSession(worker, 'Personel', 'TEST-PERSONEL@TEST.LOCAL')
+    const res = await worker.fetch('/api/personel/events', {
+      headers: { Cookie: cookie },
+    })
+    expect(res.status).toBe(200)
+    const events = await res.json() as EventItem[]
+    expect(events.find(e => e.id === 'test-event-personel-pub')).toBeTruthy()
+  })
+
   it('does not return draft events', async () => {
     const res = await worker.fetch('/api/personel/events', {
       headers: { Cookie: personelCookie },

@@ -19,7 +19,7 @@ export default defineEventHandler(async (event) => {
       `SELECT COUNT(*) AS cnt
        FROM assignments a
        JOIN persons p ON p.id = a.person_id
-       WHERE p.email = ? AND (
+       WHERE LOWER(p.email) = LOWER(?) AND (
          (a.type = 'event' AND a.event_id = ?)
          OR
          (a.type = 'fight' AND a.fight_id IN (SELECT id FROM fights WHERE event_id = ?))
@@ -34,7 +34,7 @@ export default defineEventHandler(async (event) => {
   // 3. All event-level personnel
   const { results: eventPersonnelRows } = await db
     .prepare(
-      `SELECT a.role, p.name AS personName, p.email = ? AS isMe
+      `SELECT a.role, p.name AS personName, LOWER(p.email) = LOWER(?) AS isMe
        FROM assignments a
        JOIN persons p ON p.id = a.person_id
        WHERE a.type = 'event' AND a.event_id = ?
@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
   // 4. All fights with all assignments
   const { results: fightRows } = await db
     .prepare(
-      `SELECT f.id AS fightId, f.order_number AS orderNumber, a.role, p.name AS personName, p.email = ? AS isMe
+      `SELECT f.id AS fightId, f.order_number AS orderNumber, a.role, p.name AS personName, LOWER(p.email) = LOWER(?) AS isMe
        FROM fights f
        LEFT JOIN assignments a ON a.fight_id = f.id AND a.type = 'fight'
        LEFT JOIN persons p ON p.id = a.person_id
