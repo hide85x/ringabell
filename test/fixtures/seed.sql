@@ -1,6 +1,11 @@
 DELETE FROM users WHERE email LIKE '%@test.local';
 INSERT INTO users (id, email, name, avatar, role, created_at)
-VALUES ('test-user-001', 'admin@test.local', 'Test Admin', '', 'Admin', '2026-01-01T00:00:00.000Z');
+VALUES
+  ('test-user-001', 'admin@test.local', 'Test Admin', '', 'Admin', '2026-01-01T00:00:00.000Z'),
+  ('test-user-002', 'test-admin@test.local', 'Test Admin Session', '', 'Admin', '2026-01-01T00:00:00.000Z'),
+  ('test-user-003', 'test-manager@test.local', 'Test Manager Session', '', 'Manager', '2026-01-01T00:00:00.000Z'),
+  ('test-user-004', 'test-personel@test.local', 'Test Personel Session', '', 'Personel', '2026-01-01T00:00:00.000Z'),
+  ('test-user-005', 'test-personel-empty@test.local', 'Test Personel Empty Session', '', 'Personel', '2026-01-01T00:00:00.000Z');
 
 -- Delete children before parents (assignments.person_id has no ON DELETE CASCADE)
 DELETE FROM assignments WHERE id LIKE 'test-%';
