@@ -1,6 +1,5 @@
 import type { H3Event } from 'h3'
-
-type Session = Awaited<ReturnType<typeof requireUserSession>>
+import type { UserSession } from '#auth-utils'
 
 async function lookupRole(db: ReturnType<typeof getD1>, email: string): Promise<{ role: string } | null> {
   return await db
@@ -9,7 +8,8 @@ async function lookupRole(db: ReturnType<typeof getD1>, email: string): Promise<
     .first() as { role: string } | null
 }
 
-export async function isSessionValid(session: Session, event: H3Event): Promise<boolean> {
+export async function isSessionValid(session: UserSession, event: H3Event): Promise<boolean> {
+  if (!session.user?.email || !session.user?.role) return false
   const db = getD1(event)
   let row: { role: string } | null
   try {

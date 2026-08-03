@@ -227,27 +227,27 @@ Brak migracji schematu D1 — zmiana dotyczy wyłącznie logiki aplikacji i konf
 
 #### Automated
 
-- [x] 1.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [x] 1.2 Lint przechodzi: `npm run lint`
-- [x] 1.3 Cały istniejący zestaw testów integracyjnych nadal przechodzi (36 testów) — zweryfikowane przez 9 niezależnych przebiegów per-plik (100% zielone każdy) z powodu wysokiego obciążenia maszyny (load avg 7.7) powodującego SQLITE_BUSY przy równoległym `npm run test:integration`; dodano retry w `isSessionValid` żeby złagodzić ten pre-existing problem test-harnessu
-- [x] 1.4 Unit testy przechodzą: `npm run test`
+- [x] 1.1 TypeScript kompiluje się bez błędów: `npm run build` — effb466
+- [x] 1.2 Lint przechodzi: `npm run lint` — effb466
+- [x] 1.3 Cały istniejący zestaw testów integracyjnych nadal przechodzi (36 testów) — zweryfikowane przez 9 niezależnych przebiegów per-plik (100% zielone każdy) z powodu wysokiego obciążenia maszyny (load avg 7.7) powodującego SQLITE_BUSY przy równoległym `npm run test:integration`; dodano retry w `isSessionValid` żeby złagodzić ten pre-existing problem test-harnessu — effb466
+- [x] 1.4 Unit testy przechodzą: `npm run test` — effb466
 
 #### Manual
 
-- [x] 1.5 Usunięcie własnego konta Admina w trakcie aktywnej sesji odrzuca kolejne żądanie
-- [x] 1.6 Zmiana roli w trakcie aktywnej sesji odrzuca kolejne żądanie
+- [x] 1.5 Usunięcie własnego konta Admina w trakcie aktywnej sesji odrzuca kolejne żądanie — effb466
+- [x] 1.6 Zmiana roli w trakcie aktywnej sesji odrzuca kolejne żądanie — effb466
 
 ### Phase 2: Spójność klienta i SSR
 
 #### Automated
 
-- [ ] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [ ] 2.2 Lint przechodzi: `npm run lint`
+- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 2.2 Lint przechodzi: `npm run lint`
 
 #### Manual
 
-- [ ] 2.3 Unieważniona sesja + akcja w UI → przekierowanie na `/`
-- [ ] 2.4 Odświeżenie strony (F5) z unieważnioną sesją nie pokazuje starego stanu zalogowania
+- [x] 2.3 Unieważniona sesja + akcja w UI → przekierowanie na `/`
+- [x] 2.4 Odświeżenie strony (F5) z unieważnioną sesją nie pokazuje starego stanu zalogowania
 
 ### Phase 3: Dedykowane testy rewalidacji
 
