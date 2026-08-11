@@ -26,6 +26,9 @@ logs
 # Local notes with credentials — never commit
 *.local.md
 
+# Prywatne notatki biznesowe — nie do repo
+business.md
+
 # Wrangler local state
 .wrangler
 
