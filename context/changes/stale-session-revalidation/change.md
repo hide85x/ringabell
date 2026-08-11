@@ -1,9 +1,9 @@
 ---
 change_id: stale-session-revalidation
 title: Guardy nie unieważniają sesji po usunięciu konta lub zmianie roli
-status: implementing
+status: implemented
 created: 2026-07-28
-updated: 2026-07-28
+updated: 2026-08-11
 archived_at: null
 ---
 

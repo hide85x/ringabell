@@ -253,10 +253,10 @@ Brak migracji schematu D1 — zmiana dotyczy wyłącznie logiki aplikacji i konf
 
 #### Automated
 
-- [x] 3.1 Nowe testy przechodzą: `npm run test:integration` — zweryfikowane per-plik (10/10 plików, 38/38 testów), plus 3x powtórzone bez re-seedowania żeby potwierdzić idempotentność nowego testu
-- [x] 3.2 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 3.1 Nowe testy przechodzą: `npm run test:integration` — zweryfikowane per-plik (10/10 plików, 38/38 testów), plus 3x powtórzone bez re-seedowania żeby potwierdzić idempotentność nowego testu — 7e385cf
+- [x] 3.2 TypeScript kompiluje się bez błędów: `npm run build` — 7e385cf
 
 #### Manual
 
-- [x] 3.3 `wrangler tail` po wdrożeniu — czas odpowiedzi bez zauważalnego wzrostu opóźnienia (70-210ms, głównie sieć)
-- [x] 3.4 Brak regresji w innych testach
+- [x] 3.3 `wrangler tail` po wdrożeniu — czas odpowiedzi bez zauważalnego wzrostu opóźnienia (70-210ms, głównie sieć) — 7e385cf
+- [x] 3.4 Brak regresji w innych testach — 7e385cf
