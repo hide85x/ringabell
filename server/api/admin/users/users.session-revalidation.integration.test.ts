@@ -77,5 +77,10 @@ describe('Session revalidation — active sessions rejected after DB change', ()
       headers: { Cookie: managerCookie },
     })
     expect(after.status).toBe(401)
+
+    await worker.fetch(`/api/admin/users/${userId}`, {
+      method: 'DELETE',
+      headers: { Cookie: adminCookie },
+    })
   })
 })

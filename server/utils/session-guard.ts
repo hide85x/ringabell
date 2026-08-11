@@ -15,13 +15,15 @@ export async function isSessionValid(session: UserSession, event: H3Event): Prom
   try {
     row = await lookupRole(db, session.user.email)
   }
-  catch {
+  catch (err) {
     // Transient D1 errors are retried once before failing closed.
+    console.error('isSessionValid: D1 lookup failed, retrying once', err)
     try {
       await new Promise(resolve => setTimeout(resolve, 20))
       row = await lookupRole(db, session.user.email)
     }
-    catch {
+    catch (retryErr) {
+      console.error('isSessionValid: D1 lookup failed again, failing closed', retryErr)
       return false
     }
   }

@@ -61,7 +61,7 @@ Wspólna funkcja rewalidująca sesję względem D1, podpięta pod wszystkie trzy
 **Intent**: Centralna, reużywalna logika sprawdzająca czy sesja nadal odpowiada rzeczywistemu stanowi w `users` — używana zarówno przez guardy API jak i (w Phase 2) przez `sessionHooks`.
 
 **Contract**: Eksportuje dwie funkcje:
-- `isSessionValid(session: UserSession, event: H3Event): Promise<boolean>` — `SELECT role FROM users WHERE LOWER(email) = LOWER(?)` po `session.user.email`; zwraca `true` tylko gdy rekord istnieje i `role` się zgadza; zwraca `false` (fail-closed) jeśli zapytanie rzuci wyjątek.
+- `isSessionValid(session: UserSession, event: H3Event): Promise<boolean>` — `SELECT role FROM users WHERE LOWER(email) = LOWER(?)` po `session.user.email`; zwraca `true` tylko gdy rekord istnieje i `role` się zgadza. Jeśli zapytanie rzuci wyjątek — jedna próba ponowienia po 20ms (przejściowe błędy D1), a jeśli i to zawiedzie — `false` (fail-closed), z `console.error` przy obu niepowodzeniach dla diagnostyki.
 - `requireValidSession(event: H3Event): Promise<UserSession>` — woła `requireUserSession(event)`, następnie `isSessionValid`; jeśli `false` — `clearUserSession(event)` + `createError({ statusCode: 401, statusMessage: 'Session is no longer valid' })`. W przeciwnym razie zwraca sesję (ten sam kontrakt co dotychczasowe `requireUserSession`).
 
 #### 2. Podpięcie guardów
