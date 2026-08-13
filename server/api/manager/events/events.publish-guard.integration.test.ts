@@ -5,13 +5,36 @@ import { startWorker, getSession } from '../../../../test/helpers/server'
 describe('Publish guard — POST /api/manager/events/:id/publish', () => {
   let worker: Unstable_DevWorker
   let managerCookie: string
+  let adminCookie: string
+  let cornerRoleName: string
+  let cornerRoleId: string
+  let cornerRequirementId: string
 
   beforeAll(async () => {
     worker = await startWorker()
     managerCookie = await getSession(worker, 'Manager')
+    adminCookie = await getSession(worker, 'Admin')
+
+    cornerRoleName = `PublishCornerRole-${Date.now()}`
+    const roleRes = await worker.fetch('/api/admin/dictionaries/roles', {
+      method: 'POST',
+      headers: { Cookie: adminCookie, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: cornerRoleName }),
+    })
+    const role = await roleRes.json() as { id: string }
+    cornerRoleId = role.id
+    const reqRes = await worker.fetch('/api/admin/dictionaries/requirements', {
+      method: 'POST',
+      headers: { Cookie: adminCookie, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ roleId: cornerRoleId, count: 2, hasCorner: true }),
+    })
+    const req = await reqRes.json() as { id: string }
+    cornerRequirementId = req.id
   }, 60_000)
 
   afterAll(async () => {
+    await worker.fetch(`/api/admin/dictionaries/requirements/${cornerRequirementId}`, { method: 'DELETE', headers: { Cookie: adminCookie } }).catch(() => {})
+    await worker.fetch(`/api/admin/dictionaries/roles/${cornerRoleId}`, { method: 'DELETE', headers: { Cookie: adminCookie } }).catch(() => {})
     await worker.stop()
   })
 
@@ -84,6 +107,38 @@ describe('Publish guard — POST /api/manager/events/:id/publish', () => {
     expect(res.status).toBe(422)
     const body = await res.json() as { data: { errors: string[] } }
     expect(body.data.errors.some(e => /brakuje ratownik/i.test(e))).toBe(true)
+  })
+
+  it('returns 422 with a corner-specific message when only one corner of a corner-enabled role is filled', async () => {
+    const eventId = await createEvent()
+    const fightRes = await worker.fetch(`/api/manager/events/${eventId}/fights`, {
+      method: 'POST',
+      headers: { Cookie: managerCookie },
+    })
+    const fight = await fightRes.json() as { id: string }
+    await staffFight(eventId, fight.id, cornerRoleName)
+
+    const suffix = `${Date.now()}-${Math.random().toString(36).slice(2)}`
+    const personRes = await worker.fetch('/api/manager/personnel', {
+      method: 'POST',
+      headers: { Cookie: managerCookie, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name: `Corner Red ${suffix}`, role: cornerRoleName, email: `corner-red-${suffix}@test.local`, phone: '123456789' }),
+    })
+    const person = await personRes.json() as { id: string }
+    await worker.fetch('/api/manager/assignments', {
+      method: 'POST',
+      headers: { Cookie: managerCookie, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ personId: person.id, role: cornerRoleName, type: 'fight', fightId: fight.id, corner: 'red' }),
+    })
+
+    const res = await worker.fetch(`/api/manager/events/${eventId}/publish`, {
+      method: 'POST',
+      headers: { Cookie: managerCookie },
+    })
+    expect(res.status).toBe(422)
+    const body = await res.json() as { data: { errors: string[] } }
+    expect(body.data.errors.some(e => e.includes(cornerRoleName) && e.includes('niebieskim'))).toBe(true)
+    expect(body.data.errors.some(e => e.includes(cornerRoleName) && e.includes('czerwonym'))).toBe(false)
   })
 
   it('returns 409 when event is already cancelled', async () => {

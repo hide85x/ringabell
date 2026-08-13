@@ -335,8 +335,8 @@ Migracja `0006_fight_corner_assignment.sql` aplikowana najpierw lokalnie (`--loc
 
 #### Automated
 
-- [x] 3.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [x] 3.2 Lint czysty na zmienionych plikach
+- [x] 3.1 TypeScript kompiluje się bez błędów: `npm run build` — 6cd40ff
+- [x] 3.2 Lint czysty na zmienionych plikach — 6cd40ff
 
 #### Manual
 
@@ -348,10 +348,10 @@ Migracja `0006_fight_corner_assignment.sql` aplikowana najpierw lokalnie (`--loc
 
 #### Automated
 
-- [ ] 4.1 Nowe/rozszerzone testy przechodzą
-- [ ] 4.2 Cały zestaw testów integracyjnych przechodzi bez regresji
-- [ ] 4.3 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 4.1 Nowe/rozszerzone testy przechodzą
+- [x] 4.2 Cały zestaw testów integracyjnych przechodzi bez regresji
+- [x] 4.3 TypeScript kompiluje się bez błędów: `npm run build`
 
 #### Manual
 
-- [ ] 4.4 Brak regresji w Admin/Manager/Personel UI po wszystkich 4 fazach
+- [ ] 4.4 Brak regresji w Admin/Manager/Personel UI po wszystkich 4 fazach — logika w 100% zweryfikowana przez API/testy integracyjne (47/47), wygląd (kolory naroznik, checkbox, prefiks) NIE zweryfikowany wizualnie w przeglądarce
