@@ -16,8 +16,8 @@ const isAdmin = computed(() => user.value?.role === 'Admin')
     <a href="/" class="nav-logo">RING<span class="logo-accent">ABELL</span></a>
     <div class="nav-links">
       <template v-if="isAdmin">
-        <a href="/admin/users" class="nav-link" :class="{ active: route.path === '/admin/users' }">USERS</a>
-        <a href="/admin/dictionaries" class="nav-link" :class="{ active: route.path === '/admin/dictionaries' }">DICTIONARIES</a>
+        <a href="/admin/users" class="nav-link" :class="{ active: route.path === '/admin/users' }">UŻYTKOWNICY</a>
+        <a href="/admin/dictionaries" class="nav-link" :class="{ active: route.path === '/admin/dictionaries' }">SŁOWNIKI</a>
       </template>
       <a href="/manager/events" class="nav-link" :class="{ active: route.path.startsWith('/manager/events') }">GALE</a>
       <a href="/manager/personnel" class="nav-link" :class="{ active: route.path === '/manager/personnel' }">PERSONEL</a>

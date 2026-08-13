@@ -131,7 +131,7 @@ async function inviteUser() {
 
     <div class="content">
       <div class="section-header">
-        <div class="title-badge">USERS</div>
+        <div class="title-badge">UŻYTKOWNICY</div>
         <button class="add-btn" @click="openInvite">+ DODAJ UŻYTKOWNIKA</button>
       </div>
 
@@ -158,7 +158,7 @@ async function inviteUser() {
               <span class="role-badge" :class="user.role.toLowerCase()">{{ user.role.toUpperCase() }}</span>
             </td>
             <td>
-              <button class="edit-btn" @click="openModal(user)">EDIT</button>
+              <button class="edit-btn" @click="openModal(user)">EDYTUJ</button>
             </td>
           </tr>
         </tbody>
@@ -169,7 +169,7 @@ async function inviteUser() {
     <div v-if="selectedUser" class="modal-overlay" @click.self="closeModal">
       <div class="modal">
         <div class="modal-header">
-          <span>EDIT USER</span>
+          <span>EDYTUJ UŻYTKOWNIKA</span>
           <button class="close-btn" @click="closeModal">✕</button>
         </div>
         <div class="modal-body">

@@ -198,7 +198,7 @@ async function addPerson() {
             <td>{{ person.email || '—' }}</td>
             <td>{{ person.phone || '—' }}</td>
             <td>
-              <button class="edit-btn" @click="openModal(person)">EDIT</button>
+              <button class="edit-btn" @click="openModal(person)">EDYTUJ</button>
             </td>
           </tr>
         </tbody>

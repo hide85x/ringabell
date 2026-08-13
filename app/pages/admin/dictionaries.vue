@@ -175,7 +175,7 @@ async function deleteRole() {
                 <span v-else class="count-empty">BRAK</span>
               </td>
               <td>
-                <button class="edit-btn" @click="openEditRole(role)">EDIT</button>
+                <button class="edit-btn" @click="openEditRole(role)">EDYTUJ</button>
               </td>
             </tr>
             <tr v-if="!roles?.length">
