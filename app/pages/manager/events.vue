@@ -66,6 +66,30 @@ interface EventDetail {
 
 const { data: events, refresh: refreshList } = await useFetch<EventListItem[]>('/api/manager/events')
 
+type SortColumn = 'name' | 'date' | 'venue' | 'status' | 'fightCount'
+const sortColumn = ref<SortColumn>('date')
+const sortDirection = ref<'asc' | 'desc'>('desc')
+
+function toggleSort(column: SortColumn) {
+  if (sortColumn.value === column) {
+    sortDirection.value = sortDirection.value === 'asc' ? 'desc' : 'asc'
+  }
+  else {
+    sortColumn.value = column
+    sortDirection.value = 'asc'
+  }
+}
+
+const sortedEvents = computed(() => {
+  if (!events.value) return []
+  const dir = sortDirection.value === 'asc' ? 1 : -1
+  return [...events.value].sort((a, b) => {
+    const col = sortColumn.value
+    if (col === 'fightCount') return (a.fightCount - b.fightCount) * dir
+    return a[col].localeCompare(b[col]) * dir
+  })
+})
+
 // Add event modal
 const showAdd = ref(false)
 const addName = ref('')
@@ -347,16 +371,16 @@ function isConflicting(personId: string): boolean {
       <table class="events-table">
         <thead>
           <tr>
-            <th>NAZWA</th>
-            <th>DATA</th>
-            <th>MIEJSCE</th>
-            <th>STATUS</th>
-            <th>WALKI</th>
+            <th class="sortable" @click="toggleSort('name')">NAZWA{{ sortColumn === 'name' ? (sortDirection === 'asc' ? ' ▲' : ' ▼') : '' }}</th>
+            <th class="sortable" @click="toggleSort('date')">DATA{{ sortColumn === 'date' ? (sortDirection === 'asc' ? ' ▲' : ' ▼') : '' }}</th>
+            <th class="sortable" @click="toggleSort('venue')">MIEJSCE{{ sortColumn === 'venue' ? (sortDirection === 'asc' ? ' ▲' : ' ▼') : '' }}</th>
+            <th class="sortable" @click="toggleSort('status')">STATUS{{ sortColumn === 'status' ? (sortDirection === 'asc' ? ' ▲' : ' ▼') : '' }}</th>
+            <th class="sortable" @click="toggleSort('fightCount')">WALKI{{ sortColumn === 'fightCount' ? (sortDirection === 'asc' ? ' ▲' : ' ▼') : '' }}</th>
             <th />
           </tr>
         </thead>
         <tbody>
-          <tr v-for="ev in events" :key="ev.id">
+          <tr v-for="ev in sortedEvents" :key="ev.id">
             <td><strong>{{ ev.name }}</strong></td>
             <td>{{ ev.date }}</td>
             <td>{{ ev.venue }}</td>
@@ -581,6 +605,15 @@ function isConflicting(personId: string): boolean {
   letter-spacing: 0.1em;
   padding: 12px 16px;
   text-align: left;
+}
+
+.events-table th.sortable {
+  cursor: pointer;
+  user-select: none;
+}
+
+.events-table th.sortable:hover {
+  background: #d10b0b;
 }
 
 .events-table td {
