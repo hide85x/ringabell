@@ -37,11 +37,25 @@ export default defineEventHandler(async (event) => {
 
   if (body.type === 'fight') {
     const fight = await db
-      .prepare('SELECT id FROM fights WHERE id = ?')
+      .prepare('SELECT id, event_id FROM fights WHERE id = ?')
       .bind(body.fightId!.trim())
-      .first()
+      .first() as { id: string; event_id: string } | null
     if (!fight) {
       throw createError({ statusCode: 404, statusMessage: 'Fight not found' })
+    }
+    if (body.role.trim().toLowerCase() === 'bokser') {
+      const conflict = await db
+        .prepare(
+          `SELECT COUNT(*) AS cnt FROM assignments a
+           JOIN fights f ON f.id = a.fight_id
+           WHERE a.type = 'fight' AND LOWER(a.role) = 'bokser' AND a.person_id = ?
+           AND f.event_id = ? AND a.fight_id != ?`,
+        )
+        .bind(body.personId.trim(), fight.event_id, fight.id)
+        .first() as { cnt: number }
+      if (conflict.cnt > 0) {
+        throw createError({ statusCode: 409, statusMessage: 'Person already assigned as bokser to another fight in this event' })
+      }
     }
   } else {
     const ev = await db
