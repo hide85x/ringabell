@@ -254,25 +254,25 @@ Migracja `0004_event_requirement_defaults.sql` musi być zastosowana na produkcy
 
 #### Automated
 
-- [x] 1.1 Migracja aplikuje się bez błędów lokalnie: `wrangler d1 migrations apply ringabell --local`
-- [x] 1.2 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 1.1 Migracja aplikuje się bez błędów lokalnie: `wrangler d1 migrations apply ringabell --local` — af79ebc
+- [x] 1.2 TypeScript kompiluje się bez błędów: `npm run build` — af79ebc
 
 #### Manual
 
-- [x] 1.3 `event_requirement_defaults` ma dokładnie 2 wiersze (Ratownik, Konferansjer, count=1) — zweryfikowane zapytaniem, potwierdzone dokładnie 2 wiersze
-- [x] 1.4 `event_requirements` ma `2 × (liczba istniejących gal)` wierszy — zweryfikowane: 58 gal lokalnie × 2 = 116, zgodne
+- [x] 1.3 `event_requirement_defaults` ma dokładnie 2 wiersze (Ratownik, Konferansjer, count=1) — zweryfikowane zapytaniem, potwierdzone dokładnie 2 wiersze — af79ebc
+- [x] 1.4 `event_requirements` ma `2 × (liczba istniejących gal)` wierszy — zweryfikowane: 58 gal lokalnie × 2 = 116, zgodne — af79ebc
 
 ### Phase 2: Admin — słownik API + UI
 
 #### Automated
 
-- [ ] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [ ] 2.2 Lint przechodzi: `npm run lint`
+- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 2.2 Lint przechodzi: `npm run lint`
 
 #### Manual
 
-- [ ] 2.3 Kolumna "MIN. NA GALĘ" widoczna z wartościami Ratownik=1, Konferansjer=1
-- [ ] 2.4 Dodanie/edycja/usunięcie wymagania per-gala działa
+- [x] 2.3 Kolumna "MIN. NA GALĘ" widoczna z wartościami Ratownik=1, Konferansjer=1 — dane zweryfikowane przez API (GET zwraca dokładnie te wartości); wizualne rozmieszczenie kolumny w tabeli nie zweryfikowane w przeglądarce (brak narzędzia) — do rzucenia okiem jak będzie okazja
+- [x] 2.4 Dodanie/edycja/usunięcie wymagania per-gala działa — zweryfikowane end-to-end przez API: POST (201), duplikat (409), PATCH (200), DELETE (200), po DELETE z powrotem 2 wiersze; Manager poprawnie dostaje 403
 
 ### Phase 3: Manager — auto-copy, dynamiczne UI, generyczna walidacja publikacji
 
