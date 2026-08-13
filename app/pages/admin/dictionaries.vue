@@ -16,6 +16,7 @@ interface Requirement {
   roleId: string
   roleName: string
   count: number
+  hasCorner: number
 }
 
 const { data: roles, refresh: refreshRoles } = await useFetch<Role[]>('/api/admin/dictionaries/roles')
@@ -29,12 +30,16 @@ function requirementForRole(roleId: string) {
 const showAddRole = ref(false)
 const addRoleName = ref('')
 const addRoleCount = ref<string>('')
+const addRoleHasCorner = ref(false)
 const addRoleError = ref('')
 const addRoleSaving = ref(false)
+
+const addRoleCountInvalid = computed(() => addRoleHasCorner.value && Number(addRoleCount.value) % 2 !== 0)
 
 function openAddRole() {
   addRoleName.value = ''
   addRoleCount.value = ''
+  addRoleHasCorner.value = false
   addRoleError.value = ''
   showAddRole.value = true
 }
@@ -50,7 +55,7 @@ async function saveAddRole() {
     if (addRoleCount.value && Number(addRoleCount.value) >= 1) {
       await $fetch('/api/admin/dictionaries/requirements', {
         method: 'POST',
-        body: { roleId: result.id, count: Number(addRoleCount.value) },
+        body: { roleId: result.id, count: Number(addRoleCount.value), hasCorner: addRoleHasCorner.value },
       })
     }
     await refreshRoles()
@@ -69,15 +74,19 @@ async function saveAddRole() {
 const editRole = ref<Role | null>(null)
 const editRoleName = ref('')
 const editRoleCount = ref<string>('')
+const editRoleHasCorner = ref(false)
 const editRoleError = ref('')
 const editRoleSaving = ref(false)
 const editRoleDeleting = ref(false)
+
+const editRoleCountInvalid = computed(() => editRoleHasCorner.value && Number(editRoleCount.value) % 2 !== 0)
 
 function openEditRole(role: Role) {
   editRole.value = role
   editRoleName.value = role.name
   const existing = requirementForRole(role.id)
   editRoleCount.value = existing ? String(existing.count) : ''
+  editRoleHasCorner.value = existing ? !!existing.hasCorner : false
   editRoleError.value = ''
 }
 
@@ -98,13 +107,13 @@ async function saveEditRole() {
       if (existing) {
         await $fetch(`/api/admin/dictionaries/requirements/${existing.id}`, {
           method: 'PATCH',
-          body: { count: newCount },
+          body: { count: newCount, hasCorner: editRoleHasCorner.value },
         })
       }
       else {
         await $fetch('/api/admin/dictionaries/requirements', {
           method: 'POST',
-          body: { roleId: editRole.value.id, count: newCount },
+          body: { roleId: editRole.value.id, count: newCount, hasCorner: editRoleHasCorner.value },
         })
       }
     }
@@ -171,6 +180,9 @@ async function deleteRole() {
               <td>
                 <span v-if="requirementForRole(role.id)" class="count-badge">
                   {{ requirementForRole(role.id)?.count }}
+                  <template v-if="requirementForRole(role.id)?.hasCorner">
+                    ({{ (requirementForRole(role.id)?.count ?? 0) / 2 }}+{{ (requirementForRole(role.id)?.count ?? 0) / 2 }})
+                  </template>
                 </span>
                 <span v-else class="count-empty">BRAK</span>
               </td>
@@ -202,10 +214,14 @@ async function deleteRole() {
             <label>MIN. NA WALKĘ (OPCJONALNE)</label>
             <input v-model="addRoleCount" type="number" min="1" class="text-input" placeholder="np. 2">
           </div>
+          <div class="field field-checkbox">
+            <label><input v-model="addRoleHasCorner" type="checkbox"> NAROŻNIK (podział czerwony/niebieski)</label>
+          </div>
+          <p v-if="addRoleCountInvalid" class="form-error">Liczba musi być parzysta gdy zaznaczony jest narożnik.</p>
           <p v-if="addRoleError" class="form-error">{{ addRoleError }}</p>
         </div>
         <div class="modal-footer">
-          <button class="save-btn" :disabled="addRoleSaving || !addRoleName.trim()" @click="saveAddRole">
+          <button class="save-btn" :disabled="addRoleSaving || !addRoleName.trim() || addRoleCountInvalid" @click="saveAddRole">
             {{ addRoleSaving ? 'DODAJĘ...' : 'DODAJ' }}
           </button>
           <button class="cancel-btn" @click="showAddRole = false">ANULUJ</button>
@@ -229,10 +245,14 @@ async function deleteRole() {
             <label>MIN. NA WALKĘ (OPCJONALNE)</label>
             <input v-model="editRoleCount" type="number" min="1" class="text-input" placeholder="zostaw puste = BRAK">
           </div>
+          <div class="field field-checkbox">
+            <label><input v-model="editRoleHasCorner" type="checkbox"> NAROŻNIK (podział czerwony/niebieski)</label>
+          </div>
+          <p v-if="editRoleCountInvalid" class="form-error">Liczba musi być parzysta gdy zaznaczony jest narożnik.</p>
           <p v-if="editRoleError" class="form-error">{{ editRoleError }}</p>
         </div>
         <div class="modal-footer">
-          <button class="save-btn" :disabled="editRoleSaving || !editRoleName.trim()" @click="saveEditRole">
+          <button class="save-btn" :disabled="editRoleSaving || !editRoleName.trim() || editRoleCountInvalid" @click="saveEditRole">
             {{ editRoleSaving ? 'ZAPISUJĘ...' : 'ZAPISZ' }}
           </button>
           <button class="cancel-btn" :disabled="editRoleDeleting" @click="deleteRole">
@@ -431,6 +451,19 @@ async function deleteRole() {
   letter-spacing: 0.1em;
   color: rgba(255, 255, 255, 0.5);
   margin-bottom: 4px;
+}
+
+.field-checkbox label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.field-checkbox input[type='checkbox'] {
+  width: 16px;
+  height: 16px;
+  accent-color: #f20d0d;
 }
 
 .text-input {

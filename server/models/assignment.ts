@@ -5,5 +5,6 @@ export interface Assignment {
   fightId?: string
   eventId?: string
   role: string
+  corner?: 'red' | 'blue' | null
   createdAt: string
 }

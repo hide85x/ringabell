@@ -1,12 +1,15 @@
 export default defineEventHandler(async (event) => {
   await requireAdmin(event)
-  const { roleId, count } = await readBody<{ roleId: string; count: number }>(event)
+  const { roleId, count, hasCorner } = await readBody<{ roleId: string; count: number; hasCorner?: boolean }>(event)
 
   if (!roleId) {
     throw createError({ statusCode: 400, statusMessage: 'roleId is required' })
   }
   if (!count || count < 1 || !Number.isInteger(count)) {
     throw createError({ statusCode: 400, statusMessage: 'count must be a positive integer' })
+  }
+  if (hasCorner && count % 2 !== 0) {
+    throw createError({ statusCode: 400, statusMessage: 'count must be even when hasCorner is enabled' })
   }
 
   const db = getD1(event)
@@ -23,8 +26,8 @@ export default defineEventHandler(async (event) => {
 
   const id = crypto.randomUUID()
   await db.prepare(
-    'INSERT INTO fight_requirement_defaults (id, role_id, count) VALUES (?, ?, ?)'
-  ).bind(id, roleId, count).run()
+    'INSERT INTO fight_requirement_defaults (id, role_id, count, has_corner) VALUES (?, ?, ?, ?)'
+  ).bind(id, roleId, count, hasCorner ? 1 : 0).run()
 
   setResponseStatus(event, 201)
   return { ok: true, id }
