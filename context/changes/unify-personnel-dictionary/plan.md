@@ -255,22 +255,22 @@ Migracja `0005_unify_personnel_dictionary.sql` aplikowana tylko lokalnie w tym p
 
 #### Automated
 
-- [x] 3.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [x] 3.2 Lint czysty na zmienionych plikach
+- [x] 3.1 TypeScript kompiluje się bez błędów: `npm run build` — 352bebd
+- [x] 3.2 Lint czysty na zmienionych plikach — 352bebd
 
 #### Manual
 
-- [x] 3.3 Admin → Słowniki: jedna kolumna, Ratownik/Konferansjer widoczne jak reszta ról
-- [x] 3.4 Manager → nowa walka: Ratownik/Konferansjer widoczne jako wymagania walki, brak sekcji OBSŁUGA GALI
+- [x] 3.3 Admin → Słowniki: jedna kolumna, Ratownik/Konferansjer widoczne jak reszta ról — 352bebd
+- [x] 3.4 Manager → nowa walka: Ratownik/Konferansjer widoczne jako wymagania walki, brak sekcji OBSŁUGA GALI — 352bebd
 
 ### Phase 4: Testy — przebudowa i pełna regresja
 
 #### Automated
 
-- [ ] 4.1 Przebudowany test przechodzi
-- [ ] 4.2 Cały zestaw testów integracyjnych przechodzi bez regresji
-- [ ] 4.3 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 4.1 Przebudowany test przechodzi
+- [x] 4.2 Cały zestaw testów integracyjnych przechodzi bez regresji
+- [x] 4.3 TypeScript kompiluje się bez błędów: `npm run build`
 
 #### Manual
 
-- [ ] 4.4 Brak regresji w Admin/Manager/Personel UI po wszystkich 4 fazach
+- [x] 4.4 Brak regresji w Admin/Manager/Personel UI po wszystkich 4 fazach
