@@ -239,17 +239,17 @@ Migracja `0005_unify_personnel_dictionary.sql` aplikowana tylko lokalnie w tym p
 
 #### Automated
 
-- [x] 1.1 Migracja aplikuje się bez błędów lokalnie: `wrangler d1 migrations apply ringabell --local`
-- [x] 1.2 `fight_requirement_defaults` ma wpisy Ratownik(1)/Konferansjer(1)
-- [x] 1.3 `event_requirement_defaults`/`event_requirements` nie istnieją (DROP potwierdzony)
-- [x] 1.4 Każda istniejąca walka ma backfillowane `fight_requirements` dla obu ról
+- [x] 1.1 Migracja aplikuje się bez błędów lokalnie: `wrangler d1 migrations apply ringabell --local` — f08986f
+- [x] 1.2 `fight_requirement_defaults` ma wpisy Ratownik(1)/Konferansjer(1) — f08986f
+- [x] 1.3 `event_requirement_defaults`/`event_requirements` nie istnieją (DROP potwierdzony) — f08986f
+- [x] 1.4 Każda istniejąca walka ma backfillowane `fight_requirements` dla obu ról — f08986f
 
 ### Phase 2: Backend — usunięcie event-level API i walidacji
 
 #### Automated
 
-- [ ] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [ ] 2.2 Lint czysty na zmienionych plikach
+- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 2.2 Lint czysty na zmienionych plikach
 
 ### Phase 3: Frontend — usunięcie kolumny i sekcji
 

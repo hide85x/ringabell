@@ -52,24 +52,7 @@ export default defineEventHandler(async (event) => {
     }
   }
 
-  // 3. Event-level: all required roles filled (dictionary-driven)
-  const { results: eventReqs } = await db
-    .prepare('SELECT role, count FROM event_requirements WHERE event_id = ?')
-    .bind(id)
-    .all() as { results: { role: string; count: number }[] }
-
-  for (const req of eventReqs) {
-    const row = await db
-      .prepare(`SELECT COUNT(*) AS count FROM assignments WHERE event_id = ? AND type = 'event' AND role = ?`)
-      .bind(id, req.role)
-      .first() as { count: number } | null
-    const assigned = row?.count ?? 0
-    if (assigned < req.count) {
-      errors.push(`Brak ${req.role.toLowerCase()} na gali`)
-    }
-  }
-
-  // 4. Date conflicts — two separate queries to avoid UNION issues in D1
+  // 3. Date conflicts — two separate queries to avoid UNION issues in D1
   const { results: fightConflicts } = await db
     .prepare(
       `SELECT DISTINCT a.person_id AS personId, p.name AS personName

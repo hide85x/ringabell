@@ -58,12 +58,6 @@ export default defineEventHandler(async (event) => {
     .bind(id)
     .all() as { results: { id: string; personId: string; personName: string; role: string }[] }
 
-  // 5b. Event requirements (dictionary-driven, from event_requirement_defaults)
-  const { results: eventRequirements } = await db
-    .prepare('SELECT id, event_id AS eventId, role, count FROM event_requirements WHERE event_id = ?')
-    .bind(id)
-    .all() as { results: { id: string; eventId: string; role: string; count: number }[] }
-
   // 6. Available persons (active only)
   const { results: availablePersons } = await db
     .prepare('SELECT id, name, role FROM persons WHERE is_active = 1 ORDER BY name ASC')
@@ -98,7 +92,6 @@ export default defineEventHandler(async (event) => {
     ...ev,
     fights: fightsWithData,
     eventAssignments,
-    eventRequirements,
     availablePersons,
     conflictingPersonIds,
   }
