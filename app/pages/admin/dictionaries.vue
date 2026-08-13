@@ -20,28 +20,21 @@ interface Requirement {
 
 const { data: roles, refresh: refreshRoles } = await useFetch<Role[]>('/api/admin/dictionaries/roles')
 const { data: requirements, refresh: refreshRequirements } = await useFetch<Requirement[]>('/api/admin/dictionaries/requirements')
-const { data: eventRequirements, refresh: refreshEventRequirements } = await useFetch<Requirement[]>('/api/admin/dictionaries/event-requirements')
 
 function requirementForRole(roleId: string) {
   return requirements.value?.find(r => r.roleId === roleId) ?? null
-}
-
-function eventRequirementForRole(roleId: string) {
-  return eventRequirements.value?.find(r => r.roleId === roleId) ?? null
 }
 
 // --- Add role modal ---
 const showAddRole = ref(false)
 const addRoleName = ref('')
 const addRoleCount = ref<string>('')
-const addRoleEventCount = ref<string>('')
 const addRoleError = ref('')
 const addRoleSaving = ref(false)
 
 function openAddRole() {
   addRoleName.value = ''
   addRoleCount.value = ''
-  addRoleEventCount.value = ''
   addRoleError.value = ''
   showAddRole.value = true
 }
@@ -60,15 +53,8 @@ async function saveAddRole() {
         body: { roleId: result.id, count: Number(addRoleCount.value) },
       })
     }
-    if (addRoleEventCount.value && Number(addRoleEventCount.value) >= 1) {
-      await $fetch('/api/admin/dictionaries/event-requirements', {
-        method: 'POST',
-        body: { roleId: result.id, count: Number(addRoleEventCount.value) },
-      })
-    }
     await refreshRoles()
     await refreshRequirements()
-    await refreshEventRequirements()
     showAddRole.value = false
   }
   catch (err: unknown) {
@@ -83,7 +69,6 @@ async function saveAddRole() {
 const editRole = ref<Role | null>(null)
 const editRoleName = ref('')
 const editRoleCount = ref<string>('')
-const editRoleEventCount = ref<string>('')
 const editRoleError = ref('')
 const editRoleSaving = ref(false)
 const editRoleDeleting = ref(false)
@@ -93,8 +78,6 @@ function openEditRole(role: Role) {
   editRoleName.value = role.name
   const existing = requirementForRole(role.id)
   editRoleCount.value = existing ? String(existing.count) : ''
-  const existingEvent = eventRequirementForRole(role.id)
-  editRoleEventCount.value = existingEvent ? String(existingEvent.count) : ''
   editRoleError.value = ''
 }
 
@@ -129,30 +112,8 @@ async function saveEditRole() {
       await $fetch(`/api/admin/dictionaries/requirements/${existing.id}`, { method: 'DELETE' })
     }
 
-    const existingEvent = eventRequirementForRole(editRole.value.id)
-    const newEventCount = editRoleEventCount.value ? Number(editRoleEventCount.value) : null
-
-    if (newEventCount && newEventCount >= 1) {
-      if (existingEvent) {
-        await $fetch(`/api/admin/dictionaries/event-requirements/${existingEvent.id}`, {
-          method: 'PATCH',
-          body: { count: newEventCount },
-        })
-      }
-      else {
-        await $fetch('/api/admin/dictionaries/event-requirements', {
-          method: 'POST',
-          body: { roleId: editRole.value.id, count: newEventCount },
-        })
-      }
-    }
-    else if (!newEventCount && existingEvent) {
-      await $fetch(`/api/admin/dictionaries/event-requirements/${existingEvent.id}`, { method: 'DELETE' })
-    }
-
     await refreshRoles()
     await refreshRequirements()
-    await refreshEventRequirements()
     editRole.value = null
   }
   catch (err: unknown) {
@@ -171,7 +132,6 @@ async function deleteRole() {
     await $fetch(`/api/admin/dictionaries/roles/${editRole.value.id}`, { method: 'DELETE' })
     await refreshRoles()
     await refreshRequirements()
-    await refreshEventRequirements()
     editRole.value = null
   }
   catch (err: unknown) {
@@ -199,7 +159,6 @@ async function deleteRole() {
             <tr>
               <th>NAZWA</th>
               <th>MIN. NA WALKĘ</th>
-              <th>MIN. NA GALĘ</th>
               <th />
             </tr>
           </thead>
@@ -216,17 +175,11 @@ async function deleteRole() {
                 <span v-else class="count-empty">BRAK</span>
               </td>
               <td>
-                <span v-if="eventRequirementForRole(role.id)" class="count-badge">
-                  {{ eventRequirementForRole(role.id)?.count }}
-                </span>
-                <span v-else class="count-empty">BRAK</span>
-              </td>
-              <td>
                 <button class="edit-btn" @click="openEditRole(role)">EDIT</button>
               </td>
             </tr>
             <tr v-if="!roles?.length">
-              <td colspan="4" class="empty-row">Brak ról. Dodaj pierwszą →</td>
+              <td colspan="3" class="empty-row">Brak ról. Dodaj pierwszą →</td>
             </tr>
           </tbody>
         </table>
@@ -248,10 +201,6 @@ async function deleteRole() {
           <div class="field">
             <label>MIN. NA WALKĘ (OPCJONALNE)</label>
             <input v-model="addRoleCount" type="number" min="1" class="text-input" placeholder="np. 2">
-          </div>
-          <div class="field">
-            <label>MIN. NA GALĘ (OPCJONALNE)</label>
-            <input v-model="addRoleEventCount" type="number" min="1" class="text-input" placeholder="np. 1">
           </div>
           <p v-if="addRoleError" class="form-error">{{ addRoleError }}</p>
         </div>
@@ -279,10 +228,6 @@ async function deleteRole() {
           <div class="field">
             <label>MIN. NA WALKĘ (OPCJONALNE)</label>
             <input v-model="editRoleCount" type="number" min="1" class="text-input" placeholder="zostaw puste = BRAK">
-          </div>
-          <div class="field">
-            <label>MIN. NA GALĘ (OPCJONALNE)</label>
-            <input v-model="editRoleEventCount" type="number" min="1" class="text-input" placeholder="zostaw puste = BRAK">
           </div>
           <p v-if="editRoleError" class="form-error">{{ editRoleError }}</p>
         </div>

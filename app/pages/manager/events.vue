@@ -37,13 +37,6 @@ interface EventAssignment {
   role: string
 }
 
-interface EventRequirement {
-  id: string
-  eventId: string
-  role: string
-  count: number
-}
-
 interface AvailablePerson {
   id: string
   name: string
@@ -67,7 +60,6 @@ interface EventDetail {
   createdAt: string
   fights: FightDetail[]
   eventAssignments: EventAssignment[]
-  eventRequirements: EventRequirement[]
   availablePersons: AvailablePerson[]
   conflictingPersonIds: string[]
 }
@@ -216,27 +208,8 @@ async function handleFightSlotChange(fight: FightDetail, role: string, slotIndex
   await refreshDetail()
 }
 
-async function handleEventSlotChange(role: string, newPersonId: string) {
-  if (!eventDetail.value) return
-  const existing = eventDetail.value.eventAssignments.find(a => a.role === role)
-  if (existing) {
-    await $fetch(`/api/manager/assignments/${existing.id}`, { method: 'DELETE' })
-  }
-  if (newPersonId) {
-    await $fetch('/api/manager/assignments', {
-      method: 'POST',
-      body: { personId: newPersonId, role, type: 'event', eventId: eventDetail.value.id },
-    })
-  }
-  await refreshDetail()
-}
-
 function getFightSlotPersonId(fight: FightDetail, role: string, slotIndex: number): string {
   return fight.assignments.filter(a => a.role === role)[slotIndex]?.personId ?? ''
-}
-
-function getEventSlotPersonId(role: string): string {
-  return eventDetail.value?.eventAssignments.find(a => a.role === role)?.personId ?? ''
 }
 
 function fightMissingRoles(fight: FightDetail): string[] {
@@ -248,26 +221,15 @@ function fightMissingRoles(fight: FightDetail): string[] {
   return missing
 }
 
-function eventMissingRoles(): string[] {
-  if (!eventDetail.value) return []
-  const missing: string[] = []
-  for (const req of eventDetail.value.eventRequirements) {
-    const filled = eventDetail.value.eventAssignments.filter(a => a.role === req.role).length
-    if (filled < req.count) missing.push(req.role)
-  }
-  return missing
-}
-
 const canPublish = computed(() => {
   if (!eventDetail.value || eventDetail.value.fights.length === 0) return false
   const allFightsValid = eventDetail.value.fights.every(f => fightMissingRoles(f).length === 0)
-  const eventLevelValid = eventMissingRoles().length === 0
   const assignedIds = [
     ...eventDetail.value.fights.flatMap(f => f.assignments.map(a => a.personId)),
     ...eventDetail.value.eventAssignments.map(a => a.personId),
   ]
   const noConflicts = !assignedIds.some(id => eventDetail.value!.conflictingPersonIds.includes(id))
-  return allFightsValid && eventLevelValid && noConflicts
+  return allFightsValid && noConflicts
 })
 
 const publishing = ref(false)
@@ -517,32 +479,6 @@ function isConflicting(personId: string): boolean {
           >
             {{ addingFight ? '...' : '+ DODAJ WALKĘ' }}
           </button>
-
-          <!-- Event-level assignments -->
-          <template v-if="eventDetail.eventRequirements.length">
-            <div class="section-label">OBSŁUGA GALI</div>
-
-            <div class="event-assignments">
-              <div v-for="req in eventDetail.eventRequirements" :key="req.role" class="slot-row">
-                <div class="req-label">{{ req.role.toUpperCase() }}</div>
-                <select
-                  class="person-select"
-                  :disabled="eventDetail.status !== 'draft'"
-                  :value="getEventSlotPersonId(req.role)"
-                  @change="handleEventSlotChange(req.role, ($event.target as HTMLSelectElement).value)"
-                >
-                  <option value="">— wybierz —</option>
-                  <option
-                    v-for="p in personsForRole(req.role)"
-                    :key="p.id"
-                    :value="p.id"
-                  >
-                    {{ p.name }}{{ isConflicting(p.id) ? ' (KONFLIKT)' : '' }}
-                  </option>
-                </select>
-              </div>
-            </div>
-          </template>
 
           <p v-if="detailError" class="modal-error">{{ detailError }}</p>
         </div>
@@ -1003,28 +939,6 @@ function isConflicting(personId: string): boolean {
 .add-fight-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
-}
-
-.event-assignments {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.event-assignments .slot-row {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  margin: 0;
-}
-
-.event-assignments .req-label {
-  flex: 0 0 110px;
-  margin: 0;
-}
-
-.event-assignments .person-select {
-  flex: 1;
 }
 
 .modal-body {

@@ -248,20 +248,20 @@ Migracja `0005_unify_personnel_dictionary.sql` aplikowana tylko lokalnie w tym p
 
 #### Automated
 
-- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [x] 2.2 Lint czysty na zmienionych plikach
+- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build` — fa96898
+- [x] 2.2 Lint czysty na zmienionych plikach — fa96898
 
 ### Phase 3: Frontend — usunięcie kolumny i sekcji
 
 #### Automated
 
-- [ ] 3.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [ ] 3.2 Lint czysty na zmienionych plikach
+- [x] 3.1 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 3.2 Lint czysty na zmienionych plikach
 
 #### Manual
 
-- [ ] 3.3 Admin → Słowniki: jedna kolumna, Ratownik/Konferansjer widoczne jak reszta ról
-- [ ] 3.4 Manager → nowa walka: Ratownik/Konferansjer widoczne jako wymagania walki, brak sekcji OBSŁUGA GALI
+- [x] 3.3 Admin → Słowniki: jedna kolumna, Ratownik/Konferansjer widoczne jak reszta ról
+- [x] 3.4 Manager → nowa walka: Ratownik/Konferansjer widoczne jako wymagania walki, brak sekcji OBSŁUGA GALI
 
 ### Phase 4: Testy — przebudowa i pełna regresja
 
