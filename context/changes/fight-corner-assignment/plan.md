@@ -315,9 +315,9 @@ Migracja `0006_fight_corner_assignment.sql` aplikowana najpierw lokalnie (`--loc
 
 #### Automated
 
-- [x] 1.1 Migracja aplikuje się bez błędów lokalnie: `wrangler d1 migrations apply ringabell --local`
-- [x] 1.2 TypeScript kompiluje się bez błędów: `npm run build`
-- [x] 1.3 Lint czysty na zmienionych plikach
+- [x] 1.1 Migracja aplikuje się bez błędów lokalnie: `wrangler d1 migrations apply ringabell --local` — af91215
+- [x] 1.2 TypeScript kompiluje się bez błędów: `npm run build` — af91215
+- [x] 1.3 Lint czysty na zmienionych plikach — af91215
 
 #### Manual
 
@@ -328,8 +328,8 @@ Migracja `0006_fight_corner_assignment.sql` aplikowana najpierw lokalnie (`--loc
 
 #### Automated
 
-- [ ] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [ ] 2.2 Lint czysty na zmienionych plikach
+- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 2.2 Lint czysty na zmienionych plikach
 
 ### Phase 3: Frontend — Manager (czerwony/niebieski/inne) i Personel (prefiks)
 

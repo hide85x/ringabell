@@ -31,16 +31,16 @@ export default defineEventHandler(async (event) => {
   // Auto-copy fight_requirement_defaults
   const { results: defaults } = await db
     .prepare(
-      `SELECT pr.name AS role, frd.count
+      `SELECT pr.name AS role, frd.count, frd.has_corner AS hasCorner
        FROM fight_requirement_defaults frd
        JOIN person_roles pr ON pr.id = frd.role_id`,
     )
-    .all() as { results: { role: string; count: number }[] }
+    .all() as { results: { role: string; count: number; hasCorner: number }[] }
 
   for (const def of defaults) {
     await db
-      .prepare('INSERT INTO fight_requirements (id, fight_id, role, count) VALUES (?, ?, ?, ?)')
-      .bind(crypto.randomUUID(), fightId, def.role, def.count)
+      .prepare('INSERT INTO fight_requirements (id, fight_id, role, count, has_corner) VALUES (?, ?, ?, ?, ?)')
+      .bind(crypto.randomUUID(), fightId, def.role, def.count, def.hasCorner)
       .run()
   }
 

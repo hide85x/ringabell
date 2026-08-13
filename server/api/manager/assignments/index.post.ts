@@ -8,6 +8,7 @@ export default defineEventHandler(async (event) => {
     type?: string
     fightId?: string
     eventId?: string
+    corner?: string
   }>(event)
   const db = getD1(event)
 
@@ -57,7 +58,36 @@ export default defineEventHandler(async (event) => {
         throw createError({ statusCode: 409, statusMessage: 'Person already assigned as bokser to another fight in this event' })
       }
     }
+
+    const requirement = await db
+      .prepare('SELECT has_corner AS hasCorner FROM fight_requirements WHERE fight_id = ? AND LOWER(role) = LOWER(?) LIMIT 1')
+      .bind(fight.id, body.role.trim())
+      .first() as { hasCorner: number } | null
+    const hasCorner = !!requirement?.hasCorner
+
+    if (hasCorner) {
+      if (body.corner !== 'red' && body.corner !== 'blue') {
+        throw createError({ statusCode: 400, statusMessage: 'corner must be red or blue for this role' })
+      }
+      const oppositeCorner = body.corner === 'red' ? 'blue' : 'red'
+      const duplicate = await db
+        .prepare(
+          `SELECT COUNT(*) AS cnt FROM assignments
+           WHERE fight_id = ? AND LOWER(role) = LOWER(?) AND person_id = ? AND corner = ?`,
+        )
+        .bind(fight.id, body.role.trim(), body.personId.trim(), oppositeCorner)
+        .first() as { cnt: number }
+      if (duplicate.cnt > 0) {
+        throw createError({ statusCode: 409, statusMessage: 'Person already assigned to the other corner of this fight for this role' })
+      }
+    }
+    else if (body.corner) {
+      throw createError({ statusCode: 400, statusMessage: 'corner must not be set for a role without a corner' })
+    }
   } else {
+    if (body.corner) {
+      throw createError({ statusCode: 400, statusMessage: 'corner must not be set for event-level assignments' })
+    }
     const ev = await db
       .prepare('SELECT id FROM events WHERE id = ?')
       .bind(body.eventId!.trim())
@@ -70,7 +100,7 @@ export default defineEventHandler(async (event) => {
   const id = crypto.randomUUID()
   await db
     .prepare(
-      'INSERT INTO assignments (id, person_id, type, fight_id, event_id, role, created_at) VALUES (?, ?, ?, ?, ?, ?, ?)',
+      'INSERT INTO assignments (id, person_id, type, fight_id, event_id, role, corner, created_at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)',
     )
     .bind(
       id,
@@ -79,6 +109,7 @@ export default defineEventHandler(async (event) => {
       body.type === 'fight' ? body.fightId!.trim() : null,
       body.type === 'event' ? body.eventId!.trim() : null,
       body.role.trim(),
+      body.corner ?? null,
       nowUtc(),
     )
     .run()

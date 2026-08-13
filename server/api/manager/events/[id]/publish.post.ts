@@ -35,18 +35,34 @@ export default defineEventHandler(async (event) => {
 
     for (const fight of fights) {
       const { results: reqs } = await db
-        .prepare('SELECT role, count FROM fight_requirements WHERE fight_id = ?')
+        .prepare('SELECT role, count, has_corner AS hasCorner FROM fight_requirements WHERE fight_id = ?')
         .bind(fight.id)
-        .all() as { results: { role: string; count: number }[] }
+        .all() as { results: { role: string; count: number; hasCorner: number }[] }
 
       for (const req of reqs) {
-        const row = await db
-          .prepare('SELECT COUNT(*) AS count FROM assignments WHERE fight_id = ? AND role = ?')
-          .bind(fight.id, req.role)
-          .first() as { count: number } | null
-        const assigned = row?.count ?? 0
-        if (assigned < req.count) {
-          errors.push(`Walka #${fights.indexOf(fight) + 1}: brakuje ${req.role} (${assigned}/${req.count})`)
+        if (req.hasCorner) {
+          const perCorner = req.count / 2
+          for (const corner of ['red', 'blue'] as const) {
+            const row = await db
+              .prepare('SELECT COUNT(*) AS count FROM assignments WHERE fight_id = ? AND role = ? AND corner = ?')
+              .bind(fight.id, req.role, corner)
+              .first() as { count: number } | null
+            const assigned = row?.count ?? 0
+            if (assigned < perCorner) {
+              const cornerLabel = corner === 'red' ? 'czerwonym' : 'niebieskim'
+              errors.push(`Walka #${fights.indexOf(fight) + 1}: brakuje ${req.role} w ${cornerLabel} narożniku (${assigned}/${perCorner})`)
+            }
+          }
+        }
+        else {
+          const row = await db
+            .prepare('SELECT COUNT(*) AS count FROM assignments WHERE fight_id = ? AND role = ?')
+            .bind(fight.id, req.role)
+            .first() as { count: number } | null
+          const assigned = row?.count ?? 0
+          if (assigned < req.count) {
+            errors.push(`Walka #${fights.indexOf(fight) + 1}: brakuje ${req.role} (${assigned}/${req.count})`)
+          }
         }
       }
     }
