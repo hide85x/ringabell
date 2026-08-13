@@ -267,10 +267,10 @@ Migracja `0005_unify_personnel_dictionary.sql` aplikowana tylko lokalnie w tym p
 
 #### Automated
 
-- [x] 4.1 Przebudowany test przechodzi
-- [x] 4.2 Cały zestaw testów integracyjnych przechodzi bez regresji
-- [x] 4.3 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 4.1 Przebudowany test przechodzi — 384a81b
+- [x] 4.2 Cały zestaw testów integracyjnych przechodzi bez regresji — 384a81b
+- [x] 4.3 TypeScript kompiluje się bez błędów: `npm run build` — 384a81b
 
 #### Manual
 
-- [x] 4.4 Brak regresji w Admin/Manager/Personel UI po wszystkich 4 fazach
+- [x] 4.4 Brak regresji w Admin/Manager/Personel UI po wszystkich 4 fazach — 384a81b

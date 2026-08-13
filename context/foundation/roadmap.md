@@ -131,7 +131,7 @@ Fundamenty poniżej zakładają że te warstwy są obecne i NIE re-scaffoldują 
 
 ### S-04: Tworzenie gali, walk i przypisanie personelu (Manager)
 
-- **Outcome:** Manager może tworzyć galę (data, miejsce), dodawać walki, przypisywać personel do walk i gali, z walidacją live na dwóch poziomach: per walka (brak sędziego, konflikt dat) i per gala (brak ratownika, konferansjera). Ostrzeżenia widoczne na bieżąco; przypisanie możliwe mimo ostrzeżenia. Publikacja zablokowana przy aktywnych błędach.
+- **Outcome:** Manager może tworzyć galę (data, miejsce), dodawać walki, przypisywać personel do walk, z walidacją live per walka (brak wymaganej roli — łącznie z ratownikiem/konferansjerem, dziś skonfigurowanymi w tym samym słowniku co Bokser/Trener/Sędzia — oraz konflikt dat). Ostrzeżenia widoczne na bieżąco; przypisanie możliwe mimo ostrzeżenia. Publikacja zablokowana przy aktywnych błędach. (Update 2026-08-13: krótkotrwały eksperyment z osobnym słownikiem event-level dla ratownika/konferansjera — `event-level-requirements-dictionary` — wycofany w `unify-personnel-dictionary` z powrotem do jednego wspólnego słownika per walka.)
 - **Change ID:** event-and-fight-management
 - **PRD refs:** FR-006, FR-007, FR-008, FR-009, FR-010, FR-012
 - **Prerequisites:** F-01, F-02, S-02, S-03

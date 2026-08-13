@@ -1,7 +1,7 @@
 ---
 change_id: unify-personnel-dictionary
 title: Usunąć event-level dictionary — Ratownik/Konferansjer wracają do jednego wspólnego słownika (per walka)
-status: implementing
+status: implemented
 created: 2026-08-13
 updated: 2026-08-13
 archived_at: null
