@@ -20,6 +20,7 @@ interface FightRequirement {
   fightId: string
   role: string
   count: number
+  hasCorner: number
 }
 
 interface FightAssignment {
@@ -28,6 +29,7 @@ interface FightAssignment {
   personId: string
   personName: string
   role: string
+  corner: 'red' | 'blue' | null
 }
 
 interface EventAssignment {
@@ -237,11 +239,38 @@ function getFightSlotPersonId(fight: FightDetail, role: string, slotIndex: numbe
   return fight.assignments.filter(a => a.role === role)[slotIndex]?.personId ?? ''
 }
 
+async function handleCornerSlotChange(fight: FightDetail, role: string, corner: 'red' | 'blue', slotIndex: number, newPersonId: string) {
+  const existing = fight.assignments.filter(a => a.role === role && a.corner === corner)[slotIndex]
+  if (existing) {
+    await $fetch(`/api/manager/assignments/${existing.id}`, { method: 'DELETE' })
+  }
+  if (newPersonId) {
+    await $fetch('/api/manager/assignments', {
+      method: 'POST',
+      body: { personId: newPersonId, role, type: 'fight', fightId: fight.id, corner },
+    })
+  }
+  await refreshDetail()
+}
+
+function getCornerSlotPersonId(fight: FightDetail, role: string, corner: 'red' | 'blue', slotIndex: number): string {
+  return fight.assignments.filter(a => a.role === role && a.corner === corner)[slotIndex]?.personId ?? ''
+}
+
 function fightMissingRoles(fight: FightDetail): string[] {
   const missing: string[] = []
   for (const req of fight.requirements) {
-    const filled = fight.assignments.filter(a => a.role === req.role).length
-    if (filled < req.count) missing.push(req.role)
+    if (req.hasCorner) {
+      const perCorner = req.count / 2
+      for (const corner of ['red', 'blue'] as const) {
+        const filled = fight.assignments.filter(a => a.role === req.role && a.corner === corner).length
+        if (filled < perCorner) missing.push(`${req.role} (${corner === 'red' ? 'czerwony' : 'niebieski'})`)
+      }
+    }
+    else {
+      const filled = fight.assignments.filter(a => a.role === req.role).length
+      if (filled < req.count) missing.push(req.role)
+    }
   }
   return missing
 }
@@ -344,6 +373,23 @@ function availableForFightSlot(fight: FightDetail, role: string, slotIndex: numb
     .filter(a => a.role === role)
     .filter((_, idx) => idx !== slotIndex)
     .map(a => a.personId)
+  if (role.toLowerCase() === 'bokser' && eventDetail.value) {
+    const boxersInOtherFights = eventDetail.value.fights
+      .filter(f => f.id !== fight.id)
+      .flatMap(f => f.assignments.filter(a => a.role.toLowerCase() === 'bokser').map(a => a.personId))
+    takenIds.push(...boxersInOtherFights)
+  }
+  return personsForRole(role).filter(p => !takenIds.includes(p.id) || p.id === currentPersonId)
+}
+
+function availableForCornerSlot(fight: FightDetail, role: string, corner: 'red' | 'blue', slotIndex: number): AvailablePerson[] {
+  const currentPersonId = getCornerSlotPersonId(fight, role, corner, slotIndex)
+  const takenIds = fight.assignments
+    .filter(a => a.role === role && a.corner === corner)
+    .filter((_, idx) => idx !== slotIndex)
+    .map(a => a.personId)
+  const oppositeCorner = corner === 'red' ? 'blue' : 'red'
+  takenIds.push(...fight.assignments.filter(a => a.role === role && a.corner === oppositeCorner).map(a => a.personId))
   if (role.toLowerCase() === 'bokser' && eventDetail.value) {
     const boxersInOtherFights = eventDetail.value.fights
       .filter(f => f.id !== fight.id)
@@ -474,24 +520,77 @@ function isConflicting(personId: string): boolean {
               <button v-if="eventDetail.status === 'draft'" class="remove-btn" @click="removeFight(fight.id)">USUŃ</button>
             </div>
 
-            <div v-for="req in fight.requirements" :key="req.id" class="req-block">
-              <div class="req-label">{{ req.role.toUpperCase() }} ×{{ req.count }}</div>
-              <div v-for="slotIdx in req.count" :key="slotIdx" class="slot-row">
-                <select
-                  class="person-select"
-                  :disabled="eventDetail.status !== 'draft'"
-                  :value="getFightSlotPersonId(fight, req.role, slotIdx - 1)"
-                  @change="handleFightSlotChange(fight, req.role, slotIdx - 1, ($event.target as HTMLSelectElement).value)"
-                >
-                  <option value="">— wybierz —</option>
-                  <option
-                    v-for="p in availableForFightSlot(fight, req.role, slotIdx - 1)"
-                    :key="p.id"
-                    :value="p.id"
+            <div v-if="fight.requirements.some(r => r.hasCorner)" class="corner-grid">
+              <div class="corner-block corner-red">
+                <div class="corner-label">CZERWONY NAROŻNIK</div>
+                <div v-for="req in fight.requirements.filter(r => r.hasCorner)" :key="req.id" class="req-block">
+                  <div class="req-label">{{ req.role.toUpperCase() }} ×{{ req.count / 2 }}</div>
+                  <div v-for="slotIdx in req.count / 2" :key="slotIdx" class="slot-row">
+                    <select
+                      class="person-select"
+                      :disabled="eventDetail.status !== 'draft'"
+                      :value="getCornerSlotPersonId(fight, req.role, 'red', slotIdx - 1)"
+                      @change="handleCornerSlotChange(fight, req.role, 'red', slotIdx - 1, ($event.target as HTMLSelectElement).value)"
+                    >
+                      <option value="">— wybierz —</option>
+                      <option
+                        v-for="p in availableForCornerSlot(fight, req.role, 'red', slotIdx - 1)"
+                        :key="p.id"
+                        :value="p.id"
+                      >
+                        {{ p.name }}{{ isConflicting(p.id) ? ' (KONFLIKT)' : '' }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+
+              <div class="corner-block corner-blue">
+                <div class="corner-label">NIEBIESKI NAROŻNIK</div>
+                <div v-for="req in fight.requirements.filter(r => r.hasCorner)" :key="req.id" class="req-block">
+                  <div class="req-label">{{ req.role.toUpperCase() }} ×{{ req.count / 2 }}</div>
+                  <div v-for="slotIdx in req.count / 2" :key="slotIdx" class="slot-row">
+                    <select
+                      class="person-select"
+                      :disabled="eventDetail.status !== 'draft'"
+                      :value="getCornerSlotPersonId(fight, req.role, 'blue', slotIdx - 1)"
+                      @change="handleCornerSlotChange(fight, req.role, 'blue', slotIdx - 1, ($event.target as HTMLSelectElement).value)"
+                    >
+                      <option value="">— wybierz —</option>
+                      <option
+                        v-for="p in availableForCornerSlot(fight, req.role, 'blue', slotIdx - 1)"
+                        :key="p.id"
+                        :value="p.id"
+                      >
+                        {{ p.name }}{{ isConflicting(p.id) ? ' (KONFLIKT)' : '' }}
+                      </option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div v-if="fight.requirements.some(r => !r.hasCorner)" class="other-roles">
+              <div class="req-label other-roles-label">INNE</div>
+              <div v-for="req in fight.requirements.filter(r => !r.hasCorner)" :key="req.id" class="req-block">
+                <div class="req-label">{{ req.role.toUpperCase() }} ×{{ req.count }}</div>
+                <div v-for="slotIdx in req.count" :key="slotIdx" class="slot-row">
+                  <select
+                    class="person-select"
+                    :disabled="eventDetail.status !== 'draft'"
+                    :value="getFightSlotPersonId(fight, req.role, slotIdx - 1)"
+                    @change="handleFightSlotChange(fight, req.role, slotIdx - 1, ($event.target as HTMLSelectElement).value)"
                   >
-                    {{ p.name }}{{ isConflicting(p.id) ? ' (KONFLIKT)' : '' }}
-                  </option>
-                </select>
+                    <option value="">— wybierz —</option>
+                    <option
+                      v-for="p in availableForFightSlot(fight, req.role, slotIdx - 1)"
+                      :key="p.id"
+                      :value="p.id"
+                    >
+                      {{ p.name }}{{ isConflicting(p.id) ? ' (KONFLIKT)' : '' }}
+                    </option>
+                  </select>
+                </div>
               </div>
             </div>
           </div>
@@ -949,6 +1048,56 @@ function isConflicting(personId: string): boolean {
 .person-select:disabled {
   opacity: 0.6;
   cursor: default;
+}
+
+.corner-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.corner-block {
+  border: 2px solid;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.corner-red {
+  border-color: #e02020;
+  background: rgba(224, 32, 32, 0.08);
+}
+
+.corner-blue {
+  border-color: #2060e0;
+  background: rgba(32, 96, 224, 0.08);
+}
+
+.corner-label {
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.corner-red .corner-label {
+  color: #e02020;
+}
+
+.corner-blue .corner-label {
+  color: #2060e0;
+}
+
+.other-roles {
+  margin-bottom: 8px;
+}
+
+.other-roles-label {
+  font-size: 0.68rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 8px;
 }
 
 .add-fight-btn {

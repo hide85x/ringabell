@@ -18,7 +18,9 @@ interface EventItem {
 }
 
 interface FightPerson {
+  assignmentId: string
   role: string
+  corner: string | null
   personName: string
   isMe: boolean
 }
@@ -59,6 +61,12 @@ async function openDetail(id: string) {
   catch (err) {
     console.error('Failed to load event detail:', err)
   }
+}
+
+function cornerPrefix(corner: string | null): string {
+  if (corner === 'red') return 'CZERWONY: '
+  if (corner === 'blue') return 'NIEBIESKI: '
+  return ''
 }
 </script>
 
@@ -144,12 +152,12 @@ async function openDetail(id: string) {
               <div class="fight-header">Walka {{ fight.orderNumber }}</div>
               <div
                 v-for="person in fight.persons"
-                :key="person.role + person.personName"
+                :key="person.assignmentId"
                 class="fight-row"
                 :class="{ 'is-me': person.isMe }"
               >
                 <span class="fight-number">{{ person.personName }}</span>
-                <span class="fight-role">{{ person.role }}</span>
+                <span class="fight-role">{{ cornerPrefix(person.corner) }}{{ person.role }}</span>
               </div>
             </div>
           </div>

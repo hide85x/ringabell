@@ -328,21 +328,21 @@ Migracja `0006_fight_corner_assignment.sql` aplikowana najpierw lokalnie (`--loc
 
 #### Automated
 
-- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [x] 2.2 Lint czysty na zmienionych plikach
+- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build` — 0eeafb8
+- [x] 2.2 Lint czysty na zmienionych plikach — 0eeafb8
 
 ### Phase 3: Frontend — Manager (czerwony/niebieski/inne) i Personel (prefiks)
 
 #### Automated
 
-- [ ] 3.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [ ] 3.2 Lint czysty na zmienionych plikach
+- [x] 3.1 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 3.2 Lint czysty na zmienionych plikach
 
 #### Manual
 
-- [ ] 3.3 Manager → walka z rolą narożnikową: dwie stylizowane sekcje + sekcja "INNE"
-- [ ] 3.4 Manager → przypisanie tej samej osoby do obu narożników tej samej roli → błąd
-- [ ] 3.5 Personel → rola narożnikowa ma prefiks "CZERWONY:"/"NIEBIESKI:"
+- [ ] 3.3 Manager → walka z rolą narożnikową: dwie stylizowane sekcje + sekcja "INNE" — logika i dane zweryfikowane przez API (Faza 2), wygląd CSS (kolory/ramki) NIE zweryfikowany wizualnie
+- [ ] 3.4 Manager → przypisanie tej samej osoby do obu narożników tej samej roli → błąd — backend 409 zweryfikowany (Faza 2), UI reakcja na błąd NIE zweryfikowana wizualnie
+- [ ] 3.5 Personel → rola narożnikowa ma prefiks "CZERWONY:"/"NIEBIESKI:" — dane (corner, assignmentId) zweryfikowane przez API, wygląd tekstu w przeglądarce NIE zweryfikowany
 
 ### Phase 4: Testy — nowe scenariusze + pełna regresja
 

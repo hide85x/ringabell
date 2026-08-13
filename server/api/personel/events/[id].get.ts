@@ -46,7 +46,7 @@ export default defineEventHandler(async (event) => {
   // 4. All fights with all assignments
   const { results: fightRows } = await db
     .prepare(
-      `SELECT f.id AS fightId, f.order_number AS orderNumber, a.role, p.name AS personName, LOWER(p.email) = LOWER(?) AS isMe
+      `SELECT f.id AS fightId, f.order_number AS orderNumber, a.id AS assignmentId, a.role, a.corner, p.name AS personName, LOWER(p.email) = LOWER(?) AS isMe
        FROM fights f
        LEFT JOIN assignments a ON a.fight_id = f.id AND a.type = 'fight'
        LEFT JOIN persons p ON p.id = a.person_id
@@ -54,16 +54,16 @@ export default defineEventHandler(async (event) => {
        ORDER BY f.order_number ASC, a.role ASC`,
     )
     .bind(email, id)
-    .all() as { results: { fightId: string; orderNumber: number; role: string | null; personName: string | null; isMe: number | null }[] }
+    .all() as { results: { fightId: string; orderNumber: number; assignmentId: string | null; role: string | null; corner: string | null; personName: string | null; isMe: number | null }[] }
 
   // Group fight rows by fight
-  const fightsMap = new Map<string, { id: string; orderNumber: number; persons: { role: string; personName: string; isMe: boolean }[] }>()
+  const fightsMap = new Map<string, { id: string; orderNumber: number; persons: { assignmentId: string; role: string; corner: string | null; personName: string; isMe: boolean }[] }>()
   for (const row of fightRows) {
     if (!fightsMap.has(row.fightId)) {
       fightsMap.set(row.fightId, { id: row.fightId, orderNumber: row.orderNumber, persons: [] })
     }
-    if (row.role && row.personName) {
-      fightsMap.get(row.fightId)!.persons.push({ role: row.role, personName: row.personName, isMe: !!row.isMe })
+    if (row.role && row.personName && row.assignmentId) {
+      fightsMap.get(row.fightId)!.persons.push({ assignmentId: row.assignmentId, role: row.role, corner: row.corner, personName: row.personName, isMe: !!row.isMe })
     }
   }
 
