@@ -278,23 +278,23 @@ Migracja `0004_event_requirement_defaults.sql` musi być zastosowana na produkcy
 
 #### Automated
 
-- [x] 3.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [x] 3.2 Lint przechodzi: `npm run lint`
-- [x] 3.3 Wszystkie istniejące testy integracyjne nadal przechodzą: `npm run test:integration`
+- [x] 3.1 TypeScript kompiluje się bez błędów: `npm run build` — 9b40040
+- [x] 3.2 Lint przechodzi: `npm run lint` — 9b40040
+- [x] 3.3 Wszystkie istniejące testy integracyjne nadal przechodzą: `npm run test:integration` — 9b40040
 
 #### Manual
 
-- [x] 3.4 Nowa gala dziedziczy Ratownik+Konferansjer ze słownika — zweryfikowane API: POST /api/manager/events → GET zwraca eventRequirements=[Ratownik×1, Konferansjer×1]
-- [x] 3.5 Publikacja bez wymaganych osób blokuje z tym samym komunikatem co dziś — zweryfikowane API: 422 z "Brak ratownik na gali"/"Brak konferansjer na gali" (mianownik zamiast dopełniacza "ratownika"/"konferansjera" — zaakceptowana zmiana z Contract fazy 3, dot. tylko sformułowania błędu, nie logiki)
-- [x] 3.6 Zmiana słownika (dodanie/usunięcie roli) wpływa na NOWE gale, nie na już backfillowane — zweryfikowane API: po dodaniu wymogu Bokser do słownika, stara gala nadal ma 2 wymagania, nowa gala ma 3 (incl. Bokser)
+- [x] 3.4 Nowa gala dziedziczy Ratownik+Konferansjer ze słownika — zweryfikowane API: POST /api/manager/events → GET zwraca eventRequirements=[Ratownik×1, Konferansjer×1] — 9b40040
+- [x] 3.5 Publikacja bez wymaganych osób blokuje z tym samym komunikatem co dziś — zweryfikowane API: 422 z "Brak ratownik na gali"/"Brak konferansjer na gali" (mianownik zamiast dopełniacza "ratownika"/"konferansjera" — zaakceptowana zmiana z Contract fazy 3, dot. tylko sformułowania błędu, nie logiki) — 9b40040
+- [x] 3.6 Zmiana słownika (dodanie/usunięcie roli) wpływa na NOWE gale, nie na już backfillowane — zweryfikowane API: po dodaniu wymogu Bokser do słownika, stara gala nadal ma 2 wymagania, nowa gala ma 3 (incl. Bokser) — 9b40040
 
 ### Phase 4: Test zamykający dziurę w pokryciu
 
 #### Automated
 
-- [ ] 4.1 Nowy test przechodzi: `npm run test:integration`
-- [ ] 4.2 Cały zestaw testów integracyjnych nadal przechodzi bez regresji
-- [ ] 4.3 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 4.1 Nowy test przechodzi: `npm run test:integration`
+- [x] 4.2 Cały zestaw testów integracyjnych nadal przechodzi bez regresji
+- [x] 4.3 TypeScript kompiluje się bez błędów: `npm run build`
 
 #### Manual
 
