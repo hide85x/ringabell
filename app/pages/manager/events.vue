@@ -90,12 +90,13 @@ async function addEvent() {
   addError.value = ''
   adding.value = true
   try {
-    await $fetch('/api/manager/events', {
+    const result = await $fetch<{ ok: boolean; id: string }>('/api/manager/events', {
       method: 'POST',
       body: { name: addName.value, date: addDate.value, venue: addVenue.value },
     })
     await refreshList()
     closeAdd()
+    await openDetail(result.id)
   }
   catch {
     addError.value = 'Błąd — sprawdź dane i spróbuj ponownie.'
