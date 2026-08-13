@@ -1,10 +1,10 @@
 ---
 change_id: event-level-multi-slot
 title: Event-level dropdown w Managerze nie wspiera count > 1 z event_requirement_defaults
-status: preparing
+status: archived
 created: 2026-08-13
 updated: 2026-08-13
-archived_at: null
+archived_at: 2026-08-13T12:46:50Z
 ---
 
 ## Notes
