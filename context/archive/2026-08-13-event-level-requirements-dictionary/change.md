@@ -1,10 +1,10 @@
 ---
 change_id: event-level-requirements-dictionary
 title: Role wymagane na poziomie gali powinny być konfigurowalne przez słownik
-status: implementing
+status: archived
 created: 2026-08-13
 updated: 2026-08-13
-archived_at: null
+archived_at: 2026-08-13T12:46:07Z
 ---
 
 ## Notes
