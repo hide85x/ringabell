@@ -37,6 +37,13 @@ interface EventAssignment {
   role: string
 }
 
+interface EventRequirement {
+  id: string
+  eventId: string
+  role: string
+  count: number
+}
+
 interface AvailablePerson {
   id: string
   name: string
@@ -60,6 +67,7 @@ interface EventDetail {
   createdAt: string
   fights: FightDetail[]
   eventAssignments: EventAssignment[]
+  eventRequirements: EventRequirement[]
   availablePersons: AvailablePerson[]
   conflictingPersonIds: string[]
 }
@@ -240,17 +248,26 @@ function fightMissingRoles(fight: FightDetail): string[] {
   return missing
 }
 
+function eventMissingRoles(): string[] {
+  if (!eventDetail.value) return []
+  const missing: string[] = []
+  for (const req of eventDetail.value.eventRequirements) {
+    const filled = eventDetail.value.eventAssignments.filter(a => a.role === req.role).length
+    if (filled < req.count) missing.push(req.role)
+  }
+  return missing
+}
+
 const canPublish = computed(() => {
   if (!eventDetail.value || eventDetail.value.fights.length === 0) return false
   const allFightsValid = eventDetail.value.fights.every(f => fightMissingRoles(f).length === 0)
-  const hasRatownik = eventDetail.value.eventAssignments.some(a => a.role === 'Ratownik')
-  const hasKonferansjer = eventDetail.value.eventAssignments.some(a => a.role === 'Konferansjer')
+  const eventLevelValid = eventMissingRoles().length === 0
   const assignedIds = [
     ...eventDetail.value.fights.flatMap(f => f.assignments.map(a => a.personId)),
     ...eventDetail.value.eventAssignments.map(a => a.personId),
   ]
   const noConflicts = !assignedIds.some(id => eventDetail.value!.conflictingPersonIds.includes(id))
-  return allFightsValid && hasRatownik && hasKonferansjer && noConflicts
+  return allFightsValid && eventLevelValid && noConflicts
 })
 
 const publishing = ref(false)
@@ -502,28 +519,30 @@ function isConflicting(personId: string): boolean {
           </button>
 
           <!-- Event-level assignments -->
-          <div class="section-label">OBSŁUGA GALI</div>
+          <template v-if="eventDetail.eventRequirements.length">
+            <div class="section-label">OBSŁUGA GALI</div>
 
-          <div class="event-assignments">
-            <div v-for="role in ['Ratownik', 'Konferansjer']" :key="role" class="slot-row">
-              <div class="req-label">{{ role.toUpperCase() }}</div>
-              <select
-                class="person-select"
-                :disabled="eventDetail.status !== 'draft'"
-                :value="getEventSlotPersonId(role)"
-                @change="handleEventSlotChange(role, ($event.target as HTMLSelectElement).value)"
-              >
-                <option value="">— wybierz —</option>
-                <option
-                  v-for="p in personsForRole(role)"
-                  :key="p.id"
-                  :value="p.id"
+            <div class="event-assignments">
+              <div v-for="req in eventDetail.eventRequirements" :key="req.role" class="slot-row">
+                <div class="req-label">{{ req.role.toUpperCase() }}</div>
+                <select
+                  class="person-select"
+                  :disabled="eventDetail.status !== 'draft'"
+                  :value="getEventSlotPersonId(req.role)"
+                  @change="handleEventSlotChange(req.role, ($event.target as HTMLSelectElement).value)"
                 >
-                  {{ p.name }}{{ isConflicting(p.id) ? ' (KONFLIKT)' : '' }}
-                </option>
-              </select>
+                  <option value="">— wybierz —</option>
+                  <option
+                    v-for="p in personsForRole(req.role)"
+                    :key="p.id"
+                    :value="p.id"
+                  >
+                    {{ p.name }}{{ isConflicting(p.id) ? ' (KONFLIKT)' : '' }}
+                  </option>
+                </select>
+              </div>
             </div>
-          </div>
+          </template>
 
           <p v-if="detailError" class="modal-error">{{ detailError }}</p>
         </div>

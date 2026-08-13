@@ -47,7 +47,7 @@ export default defineEventHandler(async (event) => {
     fightAssignments = results
   }
 
-  // 5. Event assignments (ratownik, konferansjer)
+  // 5. Event assignments (event-level roles, e.g. ratownik, konferansjer)
   const { results: eventAssignments } = await db
     .prepare(
       `SELECT a.id, a.person_id AS personId, p.name AS personName, a.role
@@ -57,6 +57,12 @@ export default defineEventHandler(async (event) => {
     )
     .bind(id)
     .all() as { results: { id: string; personId: string; personName: string; role: string }[] }
+
+  // 5b. Event requirements (dictionary-driven, from event_requirement_defaults)
+  const { results: eventRequirements } = await db
+    .prepare('SELECT id, event_id AS eventId, role, count FROM event_requirements WHERE event_id = ?')
+    .bind(id)
+    .all() as { results: { id: string; eventId: string; role: string; count: number }[] }
 
   // 6. Available persons (active only)
   const { results: availablePersons } = await db
@@ -92,6 +98,7 @@ export default defineEventHandler(async (event) => {
     ...ev,
     fights: fightsWithData,
     eventAssignments,
+    eventRequirements,
     availablePersons,
     conflictingPersonIds,
   }

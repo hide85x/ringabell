@@ -23,6 +23,22 @@ export default defineEventHandler(async (event) => {
     .bind(id, body.name.trim(), body.date.trim(), body.venue.trim(), 'draft', nowUtc())
     .run()
 
+  // Auto-copy event_requirement_defaults
+  const { results: defaults } = await db
+    .prepare(
+      `SELECT pr.name AS role, erd.count
+       FROM event_requirement_defaults erd
+       JOIN person_roles pr ON pr.id = erd.role_id`,
+    )
+    .all() as { results: { role: string; count: number }[] }
+
+  for (const def of defaults) {
+    await db
+      .prepare('INSERT INTO event_requirements (id, event_id, role, count) VALUES (?, ?, ?, ?)')
+      .bind(crypto.randomUUID(), id, def.role, def.count)
+      .run()
+  }
+
   setResponseStatus(event, 201)
   return { ok: true, id }
 })

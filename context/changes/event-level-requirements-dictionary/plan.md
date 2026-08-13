@@ -266,27 +266,27 @@ Migracja `0004_event_requirement_defaults.sql` musi być zastosowana na produkcy
 
 #### Automated
 
-- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [x] 2.2 Lint przechodzi: `npm run lint`
+- [x] 2.1 TypeScript kompiluje się bez błędów: `npm run build` — d846a9a
+- [x] 2.2 Lint przechodzi: `npm run lint` — d846a9a
 
 #### Manual
 
-- [x] 2.3 Kolumna "MIN. NA GALĘ" widoczna z wartościami Ratownik=1, Konferansjer=1 — dane zweryfikowane przez API (GET zwraca dokładnie te wartości); wizualne rozmieszczenie kolumny w tabeli nie zweryfikowane w przeglądarce (brak narzędzia) — do rzucenia okiem jak będzie okazja
-- [x] 2.4 Dodanie/edycja/usunięcie wymagania per-gala działa — zweryfikowane end-to-end przez API: POST (201), duplikat (409), PATCH (200), DELETE (200), po DELETE z powrotem 2 wiersze; Manager poprawnie dostaje 403
+- [x] 2.3 Kolumna "MIN. NA GALĘ" widoczna z wartościami Ratownik=1, Konferansjer=1 — dane zweryfikowane przez API (GET zwraca dokładnie te wartości); wizualne rozmieszczenie kolumny w tabeli nie zweryfikowane w przeglądarce (brak narzędzia) — do rzucenia okiem jak będzie okazja — d846a9a
+- [x] 2.4 Dodanie/edycja/usunięcie wymagania per-gala działa — zweryfikowane end-to-end przez API: POST (201), duplikat (409), PATCH (200), DELETE (200), po DELETE z powrotem 2 wiersze; Manager poprawnie dostaje 403 — d846a9a
 
 ### Phase 3: Manager — auto-copy, dynamiczne UI, generyczna walidacja publikacji
 
 #### Automated
 
-- [ ] 3.1 TypeScript kompiluje się bez błędów: `npm run build`
-- [ ] 3.2 Lint przechodzi: `npm run lint`
-- [ ] 3.3 Wszystkie istniejące testy integracyjne nadal przechodzą: `npm run test:integration`
+- [x] 3.1 TypeScript kompiluje się bez błędów: `npm run build`
+- [x] 3.2 Lint przechodzi: `npm run lint`
+- [x] 3.3 Wszystkie istniejące testy integracyjne nadal przechodzą: `npm run test:integration`
 
 #### Manual
 
-- [ ] 3.4 Nowa gala dziedziczy Ratownik+Konferansjer ze słownika
-- [ ] 3.5 Publikacja bez wymaganych osób blokuje z tym samym komunikatem co dziś
-- [ ] 3.6 Zmiana słownika (dodanie/usunięcie roli) wpływa na NOWE gale, nie na już backfillowane
+- [x] 3.4 Nowa gala dziedziczy Ratownik+Konferansjer ze słownika — zweryfikowane API: POST /api/manager/events → GET zwraca eventRequirements=[Ratownik×1, Konferansjer×1]
+- [x] 3.5 Publikacja bez wymaganych osób blokuje z tym samym komunikatem co dziś — zweryfikowane API: 422 z "Brak ratownik na gali"/"Brak konferansjer na gali" (mianownik zamiast dopełniacza "ratownika"/"konferansjera" — zaakceptowana zmiana z Contract fazy 3, dot. tylko sformułowania błędu, nie logiki)
+- [x] 3.6 Zmiana słownika (dodanie/usunięcie roli) wpływa na NOWE gale, nie na już backfillowane — zweryfikowane API: po dodaniu wymogu Bokser do słownika, stara gala nadal ma 2 wymagania, nowa gala ma 3 (incl. Bokser)
 
 ### Phase 4: Test zamykający dziurę w pokryciu
 
