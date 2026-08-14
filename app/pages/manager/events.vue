@@ -257,6 +257,21 @@ function getCornerSlotPersonId(fight: FightDetail, role: string, corner: 'red' |
   return fight.assignments.filter(a => a.role === role && a.corner === corner)[slotIndex]?.personId ?? ''
 }
 
+const CORNER_ROLE_ORDER = ['bokser', 'trener', 'cutman']
+
+function cornerRequirements(fight: FightDetail): FightRequirement[] {
+  return fight.requirements
+    .filter(r => r.hasCorner)
+    .sort((a, b) => {
+      const rankA = CORNER_ROLE_ORDER.indexOf(a.role.toLowerCase())
+      const rankB = CORNER_ROLE_ORDER.indexOf(b.role.toLowerCase())
+      if (rankA === -1 && rankB === -1) return a.role.localeCompare(b.role)
+      if (rankA === -1) return 1
+      if (rankB === -1) return -1
+      return rankA - rankB
+    })
+}
+
 function fightMissingRoles(fight: FightDetail): string[] {
   const missing: string[] = []
   for (const req of fight.requirements) {
@@ -523,7 +538,7 @@ function isConflicting(personId: string): boolean {
             <div v-if="fight.requirements.some(r => r.hasCorner)" class="corner-grid">
               <div class="corner-block corner-red">
                 <div class="corner-label">CZERWONY NAROŻNIK</div>
-                <div v-for="req in fight.requirements.filter(r => r.hasCorner)" :key="req.id" class="req-block">
+                <div v-for="req in cornerRequirements(fight)" :key="req.id" class="req-block">
                   <div class="req-label">{{ req.role.toUpperCase() }} ×{{ req.count / 2 }}</div>
                   <div v-for="slotIdx in req.count / 2" :key="slotIdx" class="slot-row">
                     <select
@@ -547,7 +562,7 @@ function isConflicting(personId: string): boolean {
 
               <div class="corner-block corner-blue">
                 <div class="corner-label">NIEBIESKI NAROŻNIK</div>
-                <div v-for="req in fight.requirements.filter(r => r.hasCorner)" :key="req.id" class="req-block">
+                <div v-for="req in cornerRequirements(fight)" :key="req.id" class="req-block">
                   <div class="req-label">{{ req.role.toUpperCase() }} ×{{ req.count / 2 }}</div>
                   <div v-for="slotIdx in req.count / 2" :key="slotIdx" class="slot-row">
                     <select
@@ -791,7 +806,7 @@ function isConflicting(personId: string): boolean {
 }
 
 .detail-modal {
-  width: 680px;
+  width: 1020px;
   max-height: 90vh;
   display: flex;
   flex-direction: column;
@@ -1055,6 +1070,12 @@ function isConflicting(personId: string): boolean {
   grid-template-columns: 1fr 1fr;
   gap: 12px;
   margin-bottom: 12px;
+}
+
+@media (max-width: 500px) {
+  .corner-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .corner-block {

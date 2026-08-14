@@ -63,10 +63,27 @@ async function openDetail(id: string) {
   }
 }
 
-function cornerPrefix(corner: string | null): string {
-  if (corner === 'red') return 'CZERWONY: '
-  if (corner === 'blue') return 'NIEBIESKI: '
-  return ''
+const CORNER_ROLE_ORDER = ['bokser', 'trener', 'cutman']
+
+function personsForCorner(fight: FightDetail, corner: 'red' | 'blue'): FightPerson[] {
+  return fight.persons
+    .filter(p => p.corner === corner)
+    .sort((a, b) => {
+      const rankA = CORNER_ROLE_ORDER.indexOf(a.role.toLowerCase())
+      const rankB = CORNER_ROLE_ORDER.indexOf(b.role.toLowerCase())
+      if (rankA === -1 && rankB === -1) return a.role.localeCompare(b.role)
+      if (rankA === -1) return 1
+      if (rankB === -1) return -1
+      return rankA - rankB
+    })
+}
+
+function otherPersons(fight: FightDetail): FightPerson[] {
+  return fight.persons.filter(p => !p.corner)
+}
+
+function hasCorners(fight: FightDetail): boolean {
+  return fight.persons.some(p => p.corner)
 }
 </script>
 
@@ -150,14 +167,45 @@ function cornerPrefix(corner: string | null): string {
             <div class="section-label">WALKI</div>
             <div v-for="fight in selectedEvent.fights" :key="fight.id" class="fight-block">
               <div class="fight-header">Walka {{ fight.orderNumber }}</div>
-              <div
-                v-for="person in fight.persons"
-                :key="person.assignmentId"
-                class="fight-row"
-                :class="{ 'is-me': person.isMe }"
-              >
-                <span class="fight-number">{{ person.personName }}</span>
-                <span class="fight-role">{{ cornerPrefix(person.corner) }}{{ person.role }}</span>
+
+              <div v-if="hasCorners(fight)" class="corner-grid">
+                <div class="corner-block corner-red">
+                  <div class="corner-label">CZERWONY NAROŻNIK</div>
+                  <div
+                    v-for="person in personsForCorner(fight, 'red')"
+                    :key="person.assignmentId"
+                    class="fight-row"
+                    :class="{ 'is-me': person.isMe }"
+                  >
+                    <span class="fight-number">{{ person.personName }}</span>
+                    <span class="fight-role">{{ person.role }}</span>
+                  </div>
+                </div>
+                <div class="corner-block corner-blue">
+                  <div class="corner-label">NIEBIESKI NAROŻNIK</div>
+                  <div
+                    v-for="person in personsForCorner(fight, 'blue')"
+                    :key="person.assignmentId"
+                    class="fight-row"
+                    :class="{ 'is-me': person.isMe }"
+                  >
+                    <span class="fight-number">{{ person.personName }}</span>
+                    <span class="fight-role">{{ person.role }}</span>
+                  </div>
+                </div>
+              </div>
+
+              <div v-if="otherPersons(fight).length" class="other-roles">
+                <div v-if="hasCorners(fight)" class="other-roles-label">INNE</div>
+                <div
+                  v-for="person in otherPersons(fight)"
+                  :key="person.assignmentId"
+                  class="fight-row"
+                  :class="{ 'is-me': person.isMe }"
+                >
+                  <span class="fight-number">{{ person.personName }}</span>
+                  <span class="fight-role">{{ person.role }}</span>
+                </div>
               </div>
             </div>
           </div>
@@ -169,16 +217,26 @@ function cornerPrefix(corner: string | null): string {
 
 <style scoped>
 .page {
-  min-height: 100vh;
+  height: 100vh;
+  overflow: hidden;
   background: #221010;
   color: white;
   font-family: 'Space Grotesk', sans-serif;
+  display: flex;
+  flex-direction: column;
 }
 
 .content {
+  flex: 1;
+  min-height: 0;
   max-width: 1000px;
+  width: 100%;
+  box-sizing: border-box;
   margin: 0 auto;
   padding: 40px 32px;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
 }
 
 .page-title {
@@ -187,6 +245,7 @@ function cornerPrefix(corner: string | null): string {
   font-style: italic;
   letter-spacing: 0.05em;
   margin: 0 0 32px;
+  flex-shrink: 0;
 }
 
 .empty-state {
@@ -198,21 +257,30 @@ function cornerPrefix(corner: string | null): string {
 }
 
 .layout {
+  flex: 1;
+  min-height: 0;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1fr 2fr;
   gap: 24px;
-  align-items: start;
+}
+
+@media (max-width: 900px) {
+  .layout {
+    grid-template-columns: 1fr;
+  }
 }
 
 .left-column {
   display: flex;
   flex-direction: column;
   gap: 16px;
+  min-height: 0;
 }
 
 .view-toggle {
   display: flex;
   gap: 8px;
+  flex-shrink: 0;
 }
 
 .toggle-btn {
@@ -243,6 +311,9 @@ function cornerPrefix(corner: string | null): string {
 }
 
 .event-list {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
   display: flex;
   flex-direction: column;
   gap: 12px;
@@ -305,8 +376,8 @@ function cornerPrefix(corner: string | null): string {
   background: #1a0808;
   border: 2px solid rgba(255, 255, 255, 0.15);
   padding: 20px;
-  position: sticky;
-  top: 24px;
+  min-height: 0;
+  overflow-y: auto;
 }
 
 .detail-header {
@@ -341,16 +412,27 @@ function cornerPrefix(corner: string | null): string {
 }
 
 .fight-block {
-  margin-bottom: 12px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 2px solid rgba(255, 255, 255, 0.15);
+  padding: 12px 14px;
+  margin-bottom: 16px;
+}
+
+.fight-block:last-child {
+  margin-bottom: 0;
 }
 
 .fight-header {
+  display: inline-block;
   font-size: 0.7rem;
-  font-weight: 700;
+  font-weight: 900;
   letter-spacing: 0.1em;
-  color: rgba(255, 255, 255, 0.4);
-  margin-bottom: 4px;
+  color: white;
+  background: #f20d0d;
+  padding: 3px 10px;
+  margin-bottom: 10px;
   text-transform: uppercase;
+  transform: rotate(-1deg);
 }
 
 .fight-row {
@@ -360,6 +442,52 @@ function cornerPrefix(corner: string | null): string {
   padding: 8px 0;
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
   font-size: 0.85rem;
+}
+
+.corner-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 12px;
+}
+
+.corner-block {
+  border: 2px solid;
+  padding: 10px;
+  border-radius: 4px;
+}
+
+.corner-red {
+  border-color: #e02020;
+  background: rgba(224, 32, 32, 0.08);
+}
+
+.corner-blue {
+  border-color: #2060e0;
+  background: rgba(32, 96, 224, 0.08);
+}
+
+.corner-label {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  margin-bottom: 8px;
+}
+
+.corner-red .corner-label {
+  color: #e02020;
+}
+
+.corner-blue .corner-label {
+  color: #2060e0;
+}
+
+.other-roles-label {
+  font-size: 0.65rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  color: rgba(255, 255, 255, 0.4);
+  margin-bottom: 8px;
 }
 
 .fight-row.is-me {
@@ -377,5 +505,52 @@ function cornerPrefix(corner: string | null): string {
 .fight-role {
   font-weight: 700;
   color: white;
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 16px 12px;
+  }
+
+  .page-title {
+    font-size: 1.3rem;
+    margin: 0 0 16px;
+  }
+
+  .layout {
+    gap: 14px;
+  }
+
+  .event-card {
+    padding: 10px;
+  }
+
+  .event-detail {
+    padding: 12px;
+  }
+
+  .detail-name {
+    font-size: 0.95rem;
+  }
+
+  .fight-block {
+    padding: 8px 10px;
+  }
+
+  .fight-row {
+    flex-wrap: wrap;
+    gap: 2px 8px;
+    font-size: 0.78rem;
+    padding: 6px 0;
+  }
+
+  .corner-grid {
+    grid-template-columns: 1fr;
+    gap: 8px;
+  }
+
+  .corner-block {
+    padding: 8px;
+  }
 }
 </style>

@@ -28,11 +28,35 @@ async function logout() {
 .personel-nav {
   display: flex;
   align-items: center;
-  gap: 24px;
+  flex-wrap: wrap;
+  gap: 12px 24px;
   background: #1a0808;
   border-bottom: 3px solid #f20d0d;
   padding: 14px 32px;
   font-family: 'Space Grotesk', sans-serif;
+}
+
+@media (max-width: 600px) {
+  .personel-nav {
+    padding: 10px 14px;
+    gap: 8px 14px;
+  }
+
+  .nav-logo {
+    font-size: 1rem;
+    order: -1;
+    flex-basis: 100%;
+  }
+
+  .back-link,
+  .btn-logout {
+    font-size: 0.65rem;
+    padding: 4px 8px;
+  }
+
+  .user-name {
+    font-size: 0.7rem;
+  }
 }
 
 .back-link {
