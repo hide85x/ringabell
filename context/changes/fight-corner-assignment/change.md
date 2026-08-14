@@ -1,9 +1,9 @@
 ---
 change_id: fight-corner-assignment
 title: Podział ról walki na czerwony i niebieski narożnik (Bokser+Trener+Cutman per bokser)
-status: implementing
+status: implemented
 created: 2026-08-13
-updated: 2026-08-13
+updated: 2026-08-14
 archived_at: null
 ---
 
