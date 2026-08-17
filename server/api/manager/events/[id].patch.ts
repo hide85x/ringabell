@@ -11,8 +11,8 @@ export default defineEventHandler(async (event) => {
   if (!ev) {
     throw createError({ statusCode: 404, statusMessage: 'Event not found' })
   }
-  if (ev.status === 'cancelled') {
-    throw createError({ statusCode: 409, statusMessage: 'Cannot edit a cancelled event' })
+  if (ev.status !== 'draft') {
+    throw createError({ statusCode: 409, statusMessage: 'Only draft events can be edited' })
   }
 
   const sets: string[] = []

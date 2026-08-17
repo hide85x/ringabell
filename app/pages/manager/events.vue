@@ -429,6 +429,7 @@ function isConflicting(personId: string): boolean {
         <button class="add-btn" @click="openAdd">+ DODAJ GALĘ</button>
       </div>
 
+      <div class="table-scroll">
       <table class="events-table">
         <thead>
           <tr>
@@ -455,6 +456,7 @@ function isConflicting(personId: string): boolean {
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
 
     <!-- Add event modal -->
@@ -497,22 +499,22 @@ function isConflicting(personId: string): boolean {
           <button class="close-btn" @click="closeDetail">✕</button>
         </div>
 
-        <!-- Edit fields (draft + published only) -->
+        <!-- Edit fields (draft only) -->
         <div v-if="eventDetail.status !== 'cancelled'" class="edit-section">
           <div class="edit-row">
             <div class="field field-grow">
               <label>NAZWA</label>
-              <input v-model="editName" type="text" class="text-input">
+              <input v-model="editName" type="text" class="text-input" :disabled="eventDetail.status !== 'draft'">
             </div>
             <div class="field field-date">
               <label>DATA</label>
-              <input v-model="editDate" type="date" class="text-input">
+              <input v-model="editDate" type="date" class="text-input" :disabled="eventDetail.status !== 'draft'">
             </div>
             <div class="field field-grow">
               <label>MIEJSCE</label>
-              <input v-model="editVenue" type="text" class="text-input">
+              <input v-model="editVenue" type="text" class="text-input" :disabled="eventDetail.status !== 'draft'">
             </div>
-            <button class="save-btn-sm" :disabled="editSaving" @click="saveEventEdit">
+            <button v-if="eventDetail.status === 'draft'" class="save-btn-sm" :disabled="editSaving" @click="saveEventEdit">
               {{ editSaving ? '...' : 'ZAPISZ' }}
             </button>
           </div>
@@ -705,8 +707,15 @@ function isConflicting(personId: string): boolean {
   transform: rotate(-2deg);
 }
 
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .events-table {
   width: 100%;
+  min-width: 640px;
   border-collapse: collapse;
   border: 2px solid #f20d0d;
 }
@@ -810,6 +819,19 @@ function isConflicting(personId: string): boolean {
   max-height: 90vh;
   display: flex;
   flex-direction: column;
+}
+
+@media (max-width: 700px) {
+  .modal-overlay {
+    padding: 15px;
+    box-sizing: border-box;
+  }
+
+  .detail-modal {
+    width: 100%;
+    height: 100%;
+    max-height: 100%;
+  }
 }
 
 .modal-header {
@@ -1227,5 +1249,36 @@ function isConflicting(personId: string): boolean {
   font-size: 0.75rem;
   color: rgba(255, 255, 255, 0.35);
   letter-spacing: 0.05em;
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 16px 12px;
+  }
+
+  .section-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .title-badge {
+    font-size: 1.1rem;
+    padding: 6px 16px;
+  }
+
+  .events-table th,
+  .events-table td {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: calc(100vw - 30px);
+  }
+
+  .edit-row {
+    flex-wrap: wrap;
+  }
 }
 </style>

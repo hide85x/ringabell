@@ -135,6 +135,7 @@ async function inviteUser() {
         <button class="add-btn" @click="openInvite">+ DODAJ UŻYTKOWNIKA</button>
       </div>
 
+      <div class="table-scroll">
       <table class="user-table">
         <thead>
           <tr>
@@ -163,6 +164,7 @@ async function inviteUser() {
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
 
     <!-- Edit modal -->
@@ -293,8 +295,15 @@ async function inviteUser() {
   transform: rotate(-2deg);
 }
 
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .user-table {
   width: 100%;
+  min-width: 480px;
   border-collapse: collapse;
   border: 2px solid #f20d0d;
 }
@@ -534,5 +543,32 @@ async function inviteUser() {
 .delete-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 16px 12px;
+  }
+
+  .section-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .title-badge {
+    font-size: 1.1rem;
+    padding: 6px 16px;
+  }
+
+  .user-table th,
+  .user-table td {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: calc(100vw - 30px);
+  }
 }
 </style>

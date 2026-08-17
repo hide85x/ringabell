@@ -163,6 +163,7 @@ async function deleteRole() {
           <button class="add-btn" @click="openAddRole">+ DODAJ ROLĘ</button>
         </div>
 
+        <div class="table-scroll">
         <table class="data-table">
           <thead>
             <tr>
@@ -195,6 +196,7 @@ async function deleteRole() {
             </tr>
           </tbody>
         </table>
+        </div>
       </div>
     </div>
 
@@ -317,8 +319,15 @@ async function deleteRole() {
   transform: rotate(-2deg);
 }
 
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .data-table {
   width: 100%;
+  min-width: 480px;
   border-collapse: collapse;
   border: 2px solid #f20d0d;
 }
@@ -544,5 +553,32 @@ async function deleteRole() {
 .cancel-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 16px 12px;
+  }
+
+  .section-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .section-badge {
+    font-size: 1.1rem;
+    padding: 6px 16px;
+  }
+
+  .data-table th,
+  .data-table td {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: calc(100vw - 30px);
+  }
 }
 </style>

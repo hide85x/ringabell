@@ -9,6 +9,7 @@ export default defineNuxtConfig({
       ],
     },
   },
+  css: ['~/assets/css/nav.css'],
   modules: ['nuxt-auth-utils', '@nuxt/eslint'],
   nitro: {
     preset: 'cloudflare-module',

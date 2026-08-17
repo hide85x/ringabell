@@ -179,6 +179,7 @@ async function addPerson() {
         <button class="add-btn" @click="openAdd">+ DODAJ OSOBĘ</button>
       </div>
 
+      <div class="table-scroll">
       <table class="personnel-table">
         <thead>
           <tr>
@@ -203,6 +204,7 @@ async function addPerson() {
           </tr>
         </tbody>
       </table>
+      </div>
     </div>
 
     <!-- Edit modal -->
@@ -338,8 +340,15 @@ async function addPerson() {
   transform: rotate(-2deg);
 }
 
+.table-scroll {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .personnel-table {
   width: 100%;
+  min-width: 560px;
   border-collapse: collapse;
   border: 2px solid #f20d0d;
 }
@@ -544,5 +553,32 @@ async function addPerson() {
 .delete-btn:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+@media (max-width: 600px) {
+  .content {
+    padding: 16px 12px;
+  }
+
+  .section-header {
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .title-badge {
+    font-size: 1.1rem;
+    padding: 6px 16px;
+  }
+
+  .personnel-table th,
+  .personnel-table td {
+    padding: 8px 10px;
+    font-size: 0.8rem;
+  }
+
+  .modal {
+    width: 100%;
+    max-width: calc(100vw - 30px);
+  }
 }
 </style>
