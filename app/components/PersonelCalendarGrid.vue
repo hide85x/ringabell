@@ -98,9 +98,10 @@ function onDayClick(date: string) {
         }"
         @click="onDayClick(cell.date)"
       >
-        <span class="day-number">{{ cell.day }}</span>
-        <div v-if="eventsForDate(cell.date).length > 0" class="glove-wrap">
+        <span v-if="eventsForDate(cell.date).length === 0" class="day-number">{{ cell.day }}</span>
+        <div v-else class="glove-wrap">
           <BoxingGloveIcon class="glove" />
+          <span class="day-number-on-glove">{{ cell.day }}</span>
           <span v-if="eventsForDate(cell.date).length > 1" class="count-badge">{{ eventsForDate(cell.date).length }}</span>
         </div>
 
@@ -174,7 +175,7 @@ function onDayClick(date: string) {
 .grid {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  gap: 4px;
+  gap: 8px;
 }
 
 .calendar-cell {
@@ -208,7 +209,7 @@ function onDayClick(date: string) {
 .calendar-cell.active:hover {
   background: #f20d0d;
   border-color: white;
-  box-shadow: 4px 4px 0px white;
+  box-shadow: 2px 2px 0px white;
   transform: rotate(-2deg);
 }
 
@@ -227,11 +228,25 @@ function onDayClick(date: string) {
 }
 
 .glove-wrap {
-  position: relative;
-  margin-top: 4px;
-  width: 18px;
-  height: 18px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: 28px;
+  height: 28px;
   color: #f20d0d;
+}
+
+.day-number-on-glove {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-size: 0.65rem;
+  font-weight: 900;
+  color: white;
+  line-height: 1;
+  pointer-events: none;
 }
 
 .glove {
